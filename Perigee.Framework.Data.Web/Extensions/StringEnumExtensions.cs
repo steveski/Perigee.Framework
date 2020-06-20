@@ -1,4 +1,4 @@
-﻿namespace Perigee.Web.Extensions
+﻿namespace Perigee.Framework.Data.Web.Extensions
 {
     using System;
     using System.ComponentModel;

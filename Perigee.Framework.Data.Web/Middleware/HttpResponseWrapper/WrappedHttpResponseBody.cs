@@ -1,4 +1,4 @@
-﻿namespace Perigee.Web.Middleware.HttpResponseWrapper
+﻿namespace Perigee.Framework.Data.Web.Middleware.HttpResponseWrapper
 {
     using System.Runtime.Serialization;
 

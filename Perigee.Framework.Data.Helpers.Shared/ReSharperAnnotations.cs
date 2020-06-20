@@ -6,7 +6,7 @@
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace Perigee.Helpers.Shared
+namespace Perigee.Framework.Data.Helpers.Shared
 {
     using System;
 

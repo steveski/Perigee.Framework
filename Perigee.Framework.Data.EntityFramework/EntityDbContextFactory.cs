@@ -1,4 +1,4 @@
-﻿namespace Perigee.EntityFramework
+﻿namespace Perigee.Framework.Data.EntityFramework
 {
     using System.IO;
     using Microsoft.EntityFrameworkCore;

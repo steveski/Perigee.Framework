@@ -1,11 +1,11 @@
-﻿namespace Perigee.Services.Cqrs.Decorators
+﻿namespace Perigee.Framework.Data.Services.Cqrs.Decorators
 {
     using System;
     using System.Data.Common;
     using System.Threading;
     using System.Threading.Tasks;
-    using Perigee.Cqrs.Base.Database;
-    using Perigee.Cqrs.Base.Transactions;
+    using Data.Cqrs.Database;
+    using Data.Cqrs.Transactions;
 
     public class DeadlockRetryCommandHandlerDecorator<TCommand> : IHandleCommand<TCommand>
         where TCommand : IDefineCommand

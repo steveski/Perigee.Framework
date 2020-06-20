@@ -1,4 +1,4 @@
-﻿namespace Perigee.Cqrs.Base.Validation
+﻿namespace Perigee.Framework.Data.Cqrs.Validation
 {
     using FluentValidation.Results;
     using Transactions;

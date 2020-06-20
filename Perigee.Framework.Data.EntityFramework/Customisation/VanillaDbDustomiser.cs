@@ -1,4 +1,4 @@
-﻿namespace Perigee.EntityFramework.Customisation
+﻿namespace Perigee.Framework.Data.EntityFramework.Customisation
 {
     using Helpers.Shared;
     using Microsoft.EntityFrameworkCore;

@@ -1,9 +1,9 @@
-﻿namespace Perigee.Services.Cqrs.Processors
+﻿namespace Perigee.Framework.Data.Services.Cqrs.Processors
 {
     using System.Diagnostics;
     using System.Threading.Tasks;
+    using Data.Cqrs.Transactions;
     using Helpers.Shared;
-    using Perigee.Cqrs.Base.Transactions;
     using SimpleInjector;
 
     [UsedImplicitly]

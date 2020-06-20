@@ -1,7 +1,7 @@
-﻿namespace Perigee.EntityFramework
+﻿namespace Perigee.Framework.Data.EntityFramework
 {
     using System.Reflection;
-    using Cqrs.Base.Database;
+    using Cqrs.Database;
     using Microsoft.EntityFrameworkCore;
     using ModelCreation;
     using SimpleInjector;

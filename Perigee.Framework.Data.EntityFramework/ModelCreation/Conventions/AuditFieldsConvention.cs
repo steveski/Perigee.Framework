@@ -1,4 +1,4 @@
-﻿namespace Perigee.EntityFramework.ModelCreation.Conventions
+﻿namespace Perigee.Framework.Data.EntityFramework.ModelCreation.Conventions
 {
     using System.Linq;
     using Microsoft.EntityFrameworkCore;

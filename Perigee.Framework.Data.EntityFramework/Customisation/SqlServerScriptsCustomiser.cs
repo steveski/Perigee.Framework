@@ -1,4 +1,4 @@
-﻿namespace Perigee.EntityFramework.Customisation
+﻿namespace Perigee.Framework.Data.EntityFramework.Customisation
 {
     //[UsedImplicitly]
     //public class SqlServerScriptsCustomiser : ICustomiseDb

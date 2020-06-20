@@ -1,4 +1,4 @@
-﻿namespace Perigee.Cqrs.Base.Transactions
+﻿namespace Perigee.Framework.Data.Cqrs.Transactions
 {
     using System.Collections.ObjectModel;
 

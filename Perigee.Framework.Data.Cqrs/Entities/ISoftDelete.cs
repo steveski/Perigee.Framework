@@ -1,4 +1,4 @@
-﻿namespace Perigee.Cqrs.Base.Entities
+﻿namespace Perigee.Framework.Data.Cqrs.Entities
 {
     public interface ISoftDelete
     {

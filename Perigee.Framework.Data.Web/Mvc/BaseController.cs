@@ -1,7 +1,7 @@
-﻿namespace Perigee.Web.Mvc
+﻿namespace Perigee.Framework.Data.Web.Mvc
 {
+    using Cqrs.Transactions;
     using Microsoft.AspNetCore.Mvc;
-    using Cqrs.Base.Transactions;
 
     public class BaseController : ControllerBase
     {

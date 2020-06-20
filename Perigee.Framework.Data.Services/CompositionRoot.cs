@@ -1,10 +1,10 @@
-﻿namespace Perigee.Services
+﻿namespace Perigee.Framework.Data.Services
 {
     using System;
     using System.Reflection;
     using Cqrs.Decorators;
     using Cqrs.Processors;
-    using Perigee.Cqrs.Base.Transactions;
+    using Data.Cqrs.Transactions;
     using SimpleInjector;
 
     public static class CompositionRoot

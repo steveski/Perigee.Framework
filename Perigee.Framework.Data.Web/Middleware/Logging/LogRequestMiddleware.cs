@@ -1,4 +1,4 @@
-﻿namespace Perigee.Web.Middleware.Logging
+﻿namespace Perigee.Framework.Data.Web.Middleware.Logging
 {
     using System;
     using System.IO;

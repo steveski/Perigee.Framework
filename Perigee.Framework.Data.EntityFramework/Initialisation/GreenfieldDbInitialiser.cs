@@ -1,4 +1,4 @@
-﻿namespace Perigee.EntityFramework.Initialisation
+﻿namespace Perigee.Framework.Data.EntityFramework.Initialisation
 {
     using Customisation;
     using Helpers.Shared;

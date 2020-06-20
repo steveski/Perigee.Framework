@@ -1,4 +1,4 @@
-﻿namespace Perigee.Cqrs.Base.Database
+﻿namespace Perigee.Framework.Data.Cqrs.Database
 {
     using System.Linq;
     using System.Threading.Tasks;

@@ -1,4 +1,4 @@
-﻿namespace Perigee.EntityFramework.Migrations
+﻿namespace Perigee.Framework.Data.EntityFramework.Migrations
 {
     using System;
     using Microsoft.EntityFrameworkCore.Metadata;

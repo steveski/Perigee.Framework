@@ -1,4 +1,4 @@
-﻿namespace Perigee.EntityFramework.ModelCreation
+﻿namespace Perigee.Framework.Data.EntityFramework.ModelCreation
 {
     using System;
     using System.Collections.Generic;

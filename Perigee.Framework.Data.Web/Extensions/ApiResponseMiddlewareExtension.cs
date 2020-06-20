@@ -1,4 +1,4 @@
-﻿namespace Perigee.Web.Extensions
+﻿namespace Perigee.Framework.Data.Web.Extensions
 {
     using Microsoft.AspNetCore.Builder;
     using Middleware.HttpResponseWrapper;

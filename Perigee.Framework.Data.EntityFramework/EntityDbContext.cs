@@ -1,4 +1,4 @@
-﻿namespace Perigee.EntityFramework
+﻿namespace Perigee.Framework.Data.EntityFramework
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,8 @@
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using Cqrs.Base.Database;
-    using Cqrs.Base.Entities;
+    using Cqrs.Database;
+    using Cqrs.Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using ModelCreation;

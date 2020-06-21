@@ -24,7 +24,9 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal      
     - name: Pack with dotnet
-      run: dotnet pack Perigee.Framework.Data.Helpers.Shared/Perigee.Framework.Data.Helpers.Shared.csproj --output nuget-packages --configuration Release   
+      run: dotnet pack Perigee.Framework.Data.Helpers.Shared/Perigee.Framework.Data.Helpers.Shared.csproj --output nuget-packages --configuration Release      
+    - name: Pack with dotnet
+      run: dotnet pack Perigee.Framework.Data.Cqrs/Perigee.Framework.Data.Cqrs.csproj --output nuget-packages --configuration Release      
     - name: Pack with dotnet
       run: dotnet pack Perigee.Framework.Data.EntityFramework/Perigee.Framework.Data.EntityFramework.csproj --output nuget-packages --configuration Release      
     - name: Pack with dotnet

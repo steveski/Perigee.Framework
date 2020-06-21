@@ -25,7 +25,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.Data.Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.Data.Web.UnitTests", "Tests\Perigee.Framework.Data.Web.UnitTests\Perigee.Framework.Data.Web.UnitTests.csproj", "{7FF61D46-F62E-4C27-815A-B42EAD2C6E7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perigee.Framework.Data.AcceptanceTests", "Tests\Perigee.Framework.Data.AcceptanceTests\Perigee.Framework.Data.AcceptanceTests.csproj", "{D8B495B2-0589-40FD-BEAB-997B50F24BE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.Data.AcceptanceTests", "Tests\Perigee.Framework.Data.AcceptanceTests\Perigee.Framework.Data.AcceptanceTests.csproj", "{D8B495B2-0589-40FD-BEAB-997B50F24BE1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{29D1608A-1563-4BE6-9856-009F4F92DE9E}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

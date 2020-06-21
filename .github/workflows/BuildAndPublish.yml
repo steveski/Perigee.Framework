@@ -1,4 +1,4 @@
-name: .NET Core
+name: Build and Publish NuGet
 
 on:
   push:
@@ -22,9 +22,13 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal      
     - name: Pack with dotnet
+      run: dotnet pack Perigee.Framework.Data.Helpers.Shared/Perigee.Framework.Data.Helpers.Shared.csproj --output nuget-packages --configuration Release
       run: dotnet pack Perigee.Framework.Data.Cqrs/Perigee.Framework.Data.Cqrs.csproj --output nuget-packages --configuration Release
+      run: dotnet pack Perigee.Framework.Data.EntityFramework/Perigee.Framework.Data.EntityFramework.csproj --output nuget-packages --configuration Release
+      run: dotnet pack Perigee.Framework.Data.Services/Perigee.Framework.Data.Services.csproj --output nuget-packages --configuration Release
+      run: dotnet pack Perigee.Framework.Data.Web/Perigee.Framework.Data.Web.csproj --output nuget-packages --configuration Release
     - name: Push with dotnet
       run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
 

@@ -21,11 +21,11 @@
         {
             //using (unitOfWork)
             //{
-            await decorated.Handle(command);
+            await decorated.Handle(command).ConfigureAwait(false);
             var killIt = false;
             if (killIt)
-                await unitOfWork.DiscardChangesAsync();
-            await unitOfWork.SaveChangesAsync();
+                await unitOfWork.DiscardChangesAsync().ConfigureAwait(false);
+            await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
             //}
         }

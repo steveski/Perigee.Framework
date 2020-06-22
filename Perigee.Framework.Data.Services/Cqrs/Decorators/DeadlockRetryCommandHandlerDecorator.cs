@@ -21,14 +21,14 @@
 
         public async Task Handle(TCommand command)
         {
-            await HandleWithRetry(command, 5);
+            await HandleWithRetry(command, 5).ConfigureAwait(false);
         }
 
         private async Task HandleWithRetry(TCommand command, int retries)
         {
             try
             {
-                await _decorated.Handle(command);
+                await _decorated.Handle(command).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@
                     throw;
 
                 Thread.Sleep(300);
-                await HandleWithRetry(command, retries - 1);
+                await HandleWithRetry(command, retries - 1).ConfigureAwait(false);
             }
         }
 

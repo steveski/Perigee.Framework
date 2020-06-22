@@ -21,13 +21,13 @@
                 PopulateAction(command);
 
 
-            await Task.FromResult(1);
+            await Task.FromResult(1).ConfigureAwait(false);
         }
 
         public async Task<bool> HandlePopulate(TCommand command)
         {
             if (!_isPopulated)
-                await Populate(command);
+                await Populate(command).ConfigureAwait(false);
 
             _isPopulated = true;
             return true;

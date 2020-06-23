@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Perigee.Framework.Data.Cqrs.Entities;
 
-    public class Customer : EntityWithId<int>, IAuditedEntity, ITimestampEnabled
+    public class Customer : EntityWithId<int>, IAuditedEntity
     {
         public Customer()
         {
@@ -27,11 +27,6 @@
 
         #endregion
 
-        #region IAuditedEntity Implementation
-    
-        public byte[] Version { get; set; }
-
-        #endregion
 
     }
 }

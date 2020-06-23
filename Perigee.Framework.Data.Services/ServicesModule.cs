@@ -1,6 +1,7 @@
 ﻿namespace Perigee.Framework.Data.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using Autofac;
@@ -14,23 +15,20 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            RegisterQueryTransactions(builder);
-            RegisterCommandTransactions(builder);
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            RegisterQueryTransactions(builder, assemblies);
+            RegisterCommandTransactions(builder, assemblies);
 
         }
 
 
-        public void RegisterQueryTransactions(ContainerBuilder builder)
+        public void RegisterQueryTransactions(ContainerBuilder builder, Assembly[] assemblies)
         {
             builder.RegisterType<QueryProcessor>().As<IProcessQueries>().SingleInstance();
 
-            var assemblies = new[] { Assembly.GetAssembly(typeof(IHandleQuery<,>)) };
-            builder.RegisterAssemblyTypes(assemblies)
-                .Where(t =>
-                    t.IsClass &&
-                    t.IsAbstract == false &&
-                    t == typeof(IHandleQuery<,>));
-            
+            builder.RegisterAssemblyTypes(assemblies).AsClosedTypesOf(typeof(IHandleQuery<,>));
+
             //container.Collection.Register(typeof(IHandleQuery<,>), assemblies);
             //container.RegisterDecorator(
             //    typeof(IHandleQuery<,>),
@@ -48,24 +46,19 @@
             //);
         }
 
-        public void RegisterCommandTransactions(ContainerBuilder builder)
+        public void RegisterCommandTransactions(ContainerBuilder builder, Assembly[] assemblies)
         {
             builder.RegisterType<CommandProcessor>().As<IProcessCommands>().SingleInstance();
 
-            var assemblies = new[] { Assembly.GetAssembly(typeof(IHandleCommand<>)) };
-            builder.RegisterAssemblyTypes(assemblies)
-                .Where(t =>
-                    t.IsClass &&
-                    t.IsAbstract == false &&
-                    t == typeof(IHandleCommand<>));
+            builder.RegisterAssemblyTypes(assemblies).AsClosedTypesOf(typeof(IHandleCommand<>));
 
-            builder.RegisterDecorator(
+            builder.RegisterGenericDecorator(
                 typeof(TransactionCommandHandlerDecorator<>),
                 typeof(IHandleCommand<>));
 
-            builder.RegisterDecorator(
-                typeof(DeadlockRetryCommandHandlerDecorator<>),
-                typeof(IHandleCommand<>));
+            //////////builder.RegisterDecorator(
+            //////////    typeof(DeadlockRetryCommandHandlerDecorator<>),
+            //////////    typeof(IHandleCommand<>));
 
             //builder.RegisterSingleDecorator(
             //    typeof(IHandleCommand<>),

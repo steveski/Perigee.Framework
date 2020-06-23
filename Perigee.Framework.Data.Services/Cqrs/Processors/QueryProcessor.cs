@@ -3,25 +3,25 @@
     using System.Diagnostics;
     using System.Threading.Tasks;
     using Autofac;
-    using Autofac.Core;
     using Data.Cqrs.Transactions;
     using Helpers.Shared;
 
     [UsedImplicitly]
     internal sealed class QueryProcessor : IProcessQueries
     {
-        private readonly Container _container;
+        private readonly ILifetimeScope _lifetimeScope;
 
-        public QueryProcessor(Container container)
+        public QueryProcessor(ILifetimeScope lifetimeScope)
         {
-            _container = container;
+            _lifetimeScope = lifetimeScope;
+
         }
 
         [DebuggerStepThrough]
         public Task<TResult> Execute<TResult>(IDefineQuery<TResult> query)
         {
             var handlerType = typeof(IHandleQuery<,>).MakeGenericType(query.GetType(), typeof(TResult));
-            dynamic handler = _container.Resolve(handlerType);
+            dynamic handler = _lifetimeScope.Resolve(handlerType);
             return handler.Handle((dynamic) query);
         }
     }

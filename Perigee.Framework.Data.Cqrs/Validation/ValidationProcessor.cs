@@ -1,10 +1,10 @@
 ﻿namespace Perigee.Framework.Data.Cqrs.Validation
 {
     using System.Diagnostics;
+    using Autofac.Core;
     using FluentValidation;
     using FluentValidation.Results;
     using Helpers.Shared;
-    using SimpleInjector;
     using Transactions;
 
     [UsedImplicitly]
@@ -21,7 +21,7 @@
         public ValidationResult Validate<TResult>(IDefineQuery<TResult> query)
         {
             var validatedType = typeof(IValidator<>).MakeGenericType(query.GetType());
-            dynamic validator = _container.GetInstance(validatedType);
+            dynamic validator = _container.GetService(validatedType);
             return validator.Validate((dynamic) query);
         }
 
@@ -29,7 +29,7 @@
         public ValidationResult Validate(IDefineCommand command)
         {
             var validatedType = typeof(IValidator<>).MakeGenericType(command.GetType());
-            dynamic validator = _container.GetInstance(validatedType);
+            dynamic validator = _container.GetService(validatedType);
             return validator.Validate((dynamic) command);
         }
     }

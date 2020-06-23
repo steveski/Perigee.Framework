@@ -2,9 +2,10 @@
 {
     using System.Diagnostics;
     using System.Threading.Tasks;
+    using Autofac;
+    using Autofac.Core;
     using Data.Cqrs.Transactions;
     using Helpers.Shared;
-    using SimpleInjector;
 
     [UsedImplicitly]
     internal sealed class QueryProcessor : IProcessQueries
@@ -20,7 +21,7 @@
         public Task<TResult> Execute<TResult>(IDefineQuery<TResult> query)
         {
             var handlerType = typeof(IHandleQuery<,>).MakeGenericType(query.GetType(), typeof(TResult));
-            dynamic handler = _container.GetInstance(handlerType);
+            dynamic handler = _container.Resolve(handlerType);
             return handler.Handle((dynamic) query);
         }
     }

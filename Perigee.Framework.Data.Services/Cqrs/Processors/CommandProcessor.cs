@@ -2,9 +2,10 @@
 {
     using System.Diagnostics;
     using System.Threading.Tasks;
+    using Autofac;
+    using Autofac.Core;
     using Data.Cqrs.Transactions;
     using Helpers.Shared;
-    using SimpleInjector;
 
     [UsedImplicitly]
     internal sealed class CommandProcessor : IProcessCommands
@@ -20,7 +21,7 @@
         public Task Execute(IDefineCommand command)
         {
             var handlerType = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
-            dynamic handler = _container.GetInstance(handlerType);
+            dynamic handler = _container.Resolve(handlerType);
             return handler.Handle((dynamic) command);
         }
     }

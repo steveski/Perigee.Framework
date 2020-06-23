@@ -2,25 +2,25 @@
 {
     using System.Diagnostics;
     using System.Threading.Tasks;
+    using Autofac;
     using Data.Cqrs.Transactions;
     using Helpers.Shared;
-    using SimpleInjector;
 
     [UsedImplicitly]
     internal sealed class CommandProcessor : IProcessCommands
     {
-        private readonly Container _container;
+        private readonly ILifetimeScope _lifetimeScope;
 
-        public CommandProcessor(Container container)
+        public CommandProcessor(ILifetimeScope lifetimeScope)
         {
-            _container = container;
+            _lifetimeScope = lifetimeScope;
         }
 
         [DebuggerStepThrough]
         public Task Execute(IDefineCommand command)
         {
             var handlerType = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
-            dynamic handler = _container.GetInstance(handlerType);
+            dynamic handler = _lifetimeScope.Resolve(handlerType);
             return handler.Handle((dynamic) command);
         }
     }

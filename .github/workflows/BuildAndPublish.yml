@@ -1,10 +1,16 @@
 name: Build and Publish NuGet
 
 on:
+  # Trigger the workflow on push or pull request,
+  # for any branch or version tag
   push:
-    branches: [ master ]
+    branches:
+      - '**'
+    tags:
+      - 'v*.*.*'
   pull_request:
-    branches: [ master ]
+    branches:
+      - '**'
 
 jobs:
   build:
@@ -13,34 +19,48 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
+      
+    - name: Setup .NET Core 3.1
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
+        
     - name: Install dependencies
       run: dotnet restore
+      
     - name: Build
       run: dotnet build --configuration Release --no-restore
+      
     - name: Test
-      run: dotnet test --no-restore --verbosity normal      
+      run: dotnet test -c Release --no-build --verbosity normal 
+           
     - name: Pack with dotnet
       run: dotnet pack Perigee.Framework.Data.Helpers.Shared/Perigee.Framework.Data.Helpers.Shared.csproj --output nuget-packages --configuration Release  
+      
     - name: Push with dotnet
       run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      
     - name: Pack with dotnet
       run: dotnet pack Perigee.Framework.Data.Cqrs/Perigee.Framework.Data.Cqrs.csproj --output nuget-packages --configuration Release   
+      
     - name: Push with dotnet
       run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      
     - name: Pack with dotnet
       run: dotnet pack Perigee.Framework.Data.EntityFramework/Perigee.Framework.Data.EntityFramework.csproj --output nuget-packages --configuration Release      
+      
     - name: Push with dotnet
       run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      
     - name: Pack with dotnet
       run: dotnet pack Perigee.Framework.Data.Services/Perigee.Framework.Data.Services.csproj --output nuget-packages --configuration Release    
+      
     - name: Push with dotnet
       run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      
     - name: Pack with dotnet
       run: dotnet pack Perigee.Framework.Data.Web/Perigee.Framework.Data.Web.csproj --output nuget-packages --configuration Release
+      
     - name: Push with dotnet
       run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
 

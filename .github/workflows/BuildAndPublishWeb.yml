@@ -1,0 +1,46 @@
+name: Build and Publish NuGet
+
+on:
+  # Trigger the workflow on push or pull request,
+  # for any branch or version tag
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Setup .NET Core 3.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+        
+    - name: Install dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Test
+      run: dotnet test -c Release --no-build --verbosity normal 
+           
+    - name: Publish on version change Web
+      id: publish_nuget
+      uses: rohith/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Data.Web/Perigee.Framework.Data.Web.csproj
+        PACKAGE_NAME: PerigeePerigeePerigee.Framework.Data.Web
+        VERSION_STATIC: 1.1.0
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+

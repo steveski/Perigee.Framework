@@ -35,12 +35,52 @@ jobs:
       run: dotnet test -c Release --no-build --verbosity normal 
            
 
-    - name: Publish on version change
+    - name: Publish on version change Helpers.Shared
       id: publish_nuget
       uses: rohith/publish-nuget@v2
       with:
         PROJECT_FILE_PATH: Perigee.Framework.Data.Helpers.Shared/Perigee.Framework.Data.Helpers.Shared.csproj
         PACKAGE_NAME: Perigee.Framework.Data.Helpers.Shared
+        VERSION_STATIC: 1.1.0
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish on version change CQRS
+      id: publish_nuget
+      uses: rohith/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Data.Cqrs/Perigee.Framework.Data.Cqrs.csproj
+        PACKAGE_NAME: Perigee.Framework.Data.Cqrs
+        VERSION_STATIC: 1.1.0
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish on version change EntityFramework
+      id: publish_nuget
+      uses: rohith/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Data.EntityFramework/Perigee.Framework.Data.EntityFramework.csproj
+        PACKAGE_NAME: Perigee.Framework.Data.EntityFramework
+        VERSION_STATIC: 1.1.0
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish on version change Services
+      id: publish_nuget
+      uses: rohith/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Data.Services/Perigee.Framework.Data.Services.csproj
+        PACKAGE_NAME: PerigeePerigee.Framework.Data.Services
+        VERSION_STATIC: 1.1.0
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish on version change Web
+      id: publish_nuget
+      uses: rohith/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Data.Web/Perigee.Framework.Data.Web.csproj
+        PACKAGE_NAME: PerigeePerigeePerigee.Framework.Data.Web
         VERSION_STATIC: 1.1.0
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org

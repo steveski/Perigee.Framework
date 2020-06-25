@@ -22,13 +22,42 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    - name: Publish NuGet
+    - name: Publish NuGet CQRS
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
         PROJECT_FILE_PATH: Perigee.Framework.Data.Cqrs/Perigee.Framework.Data.Cqrs.csproj
         PACKAGE_NAME: Perigee.Framework.Data.Cqrs
-        TAG_COMMIT: true
-        TAG_FORMAT: v*
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org
 
+    - name: Publish NuGet EF
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Data.EntityFramework/Perigee.Framework.Data.EntityFramework.csproj
+        PACKAGE_NAME: Perigee.Framework.Data.EntityFramework
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish NuGet Shared
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Data.Helpers.Shared/Perigee.Framework.Data.Helpers.Shared.csproj
+        PACKAGE_NAME: PerigeePerigee.Framework.Data.Helpers.Shared
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish NuGet Services
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Data.Services/Perigee.Framework.Data.Services.csproj
+        PACKAGE_NAME: PerigeePerigee.Framework.Data.Services
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish NuGet Web
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Data.Web/Perigee.Framework.Data.Web.csproj
+        PACKAGE_NAME: PerigeePerigee.Framework.Data.Web
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org

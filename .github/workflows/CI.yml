@@ -21,6 +21,20 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+      
+    - name: Setup .NET Core 3.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+        
+    - name: Install dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Test
+      run: dotnet test -c Release --no-build --verbosity normal 
 
     - name: Publish NuGet CQRS
       uses: brandedoutcast/publish-nuget@v2.5.2
@@ -54,10 +68,10 @@ jobs:
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org
 
-    - name: Publish NuGet Web
-      uses: brandedoutcast/publish-nuget@v2.5.2
-      with:
-        PROJECT_FILE_PATH: Perigee.Framework.Data.Web/Perigee.Framework.Data.Web.csproj
-        PACKAGE_NAME: PerigeePerigee.Framework.Data.Web
-        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-        NUGET_SOURCE: https://api.nuget.org
+    #- name: Publish NuGet Web
+    #  uses: brandedoutcast/publish-nuget@v2.5.2
+    #  with:
+    #    PROJECT_FILE_PATH: Perigee.Framework.Data.Web/Perigee.Framework.Data.Web.csproj
+    #    PACKAGE_NAME: PerigeePerigee.Framework.Data.Web
+    #    NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+    #    NUGET_SOURCE: https://api.nuget.org

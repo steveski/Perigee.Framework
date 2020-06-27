@@ -37,16 +37,6 @@
         #endregion
 
 
-        #region Implementation from EF6 not included in Core
-
-        public virtual Task<int> SaveChangesAsync()
-        {
-            return SaveChangesAsync(CancellationToken.None);
-        }
-
-        #endregion
-
-
         private void SetAuditValues(EntityEntry entry)
         {
             var theEntity = (IAuditedEntity) entry.Entity;
@@ -72,7 +62,7 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ModelCreator = ModelCreator ?? new DefaultDbModelCreator();
+            ModelCreator ??= new DefaultDbModelCreator();
             ModelCreator.Create(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
@@ -107,7 +97,7 @@
             return Set<TEntity>().Find(keyValues.ToArray());
         }
 
-        public Task<TEntity> GetAsync<TEntity>(object firstKeyValue, params object[] otherKeyValues)
+        public Task<TEntity> GetAsync<TEntity>(object firstKeyValue, CancellationToken cancellationToken, params object[] otherKeyValues)
             where TEntity : Entity
         {
             if (firstKeyValue == null) throw new ArgumentNullException(nameof(firstKeyValue));
@@ -129,7 +119,8 @@
         public void Update<TEntity>(TEntity entity) where TEntity : Entity
         {
             var entry = Entry(entity);
-            entry.State = EntityState.Modified;
+            if (entry.State != EntityState.Added)
+                entry.State = EntityState.Modified;
         }
 
         public void Delete<TEntity>(TEntity entity) where TEntity : Entity
@@ -143,9 +134,9 @@
             Entry(entity).Reload();
         }
 
-        public Task ReloadAsync<TEntity>(TEntity entity) where TEntity : Entity
+        public Task ReloadAsync<TEntity>(TEntity entity, CancellationToken cancellationToken) where TEntity : Entity
         {
-            return Entry(entity).ReloadAsync();
+            return Entry(entity).ReloadAsync(cancellationToken);
         }
 
         public void Attach<TEntity>(TEntity entity) where TEntity : Entity
@@ -180,7 +171,7 @@
                 }
         }
 
-        public Task DiscardChangesAsync()
+        public Task DiscardChangesAsync(CancellationToken cancellationToken)
         {
             var reloadTasks = new List<Task>();
             foreach (var entry in ChangeTracker.Entries().Where(x => x != null))
@@ -193,14 +184,14 @@
                         entry.State = EntityState.Unchanged;
                         break;
                     case EntityState.Deleted:
-                        reloadTasks.Add(entry.ReloadAsync());
+                        reloadTasks.Add(entry.ReloadAsync(cancellationToken));
                         break;
                 }
 
             return Task.WhenAll(reloadTasks);
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             foreach (var entry in ChangeTracker.Entries().Where(x =>
                 x.State == EntityState.Added || x.State == EntityState.Modified || x.State == EntityState.Deleted))

@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
@@ -10,21 +11,21 @@
     public class LogRequestMiddleware
     {
         private readonly ILogger _logger;
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
         private Func<object, Exception, string> _defaultFormatter = (state, exception) => state.ToString();
 
         public LogRequestMiddleware(RequestDelegate next) //, ILogger logger)
         {
-            this.next = next;
+            this._next = next;
             //_logger = logger;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, CancellationToken cancellationToken)
         {
             var requestBodyStream = new MemoryStream();
             var originalRequestBody = context.Request.Body;
 
-            await context.Request.Body.CopyToAsync(requestBodyStream).ConfigureAwait(false);
+            await context.Request.Body.CopyToAsync(requestBodyStream, cancellationToken).ConfigureAwait(false);
             requestBodyStream.Seek(0, SeekOrigin.Begin);
 
             //var url = UriHelper.GetDisplayUrl(context.Request);
@@ -34,7 +35,7 @@
             requestBodyStream.Seek(0, SeekOrigin.Begin);
             context.Request.Body = requestBodyStream;
 
-            await next(context).ConfigureAwait(false);
+            await _next(context).ConfigureAwait(false);
             context.Request.Body = originalRequestBody;
         }
     }

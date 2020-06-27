@@ -1,6 +1,6 @@
 ﻿namespace Perigee.Framework.Data.Cqrs.UnitTests
 {
-    using Entities;
+    using Cqrs.Entities;
 
     public class TestEntity : EntityWithId<int>
     {

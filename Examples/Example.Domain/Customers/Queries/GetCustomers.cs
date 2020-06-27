@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Example.Entities;
     using Microsoft.EntityFrameworkCore;
@@ -27,14 +28,14 @@
             _db = db;
         }
 
-        public async Task<IEnumerable<GetCustomerView>> Handle(CustomersBy query)
+        public async Task<IEnumerable<GetCustomerView>> Handle(CustomersBy query, CancellationToken cancellationToken)
         {
             var customers = _db.Query<Customer>();
 
             // Id provided so only use that
             if (query.Id.HasValue)
             {
-                var theCustomer = await customers.SingleOrDefaultAsync(x => x.Id == query.Id).ConfigureAwait(false);
+                var theCustomer = await customers.SingleOrDefaultAsync(x => x.Id == query.Id, cancellationToken).ConfigureAwait(false);
                 return new[]
                 {
                     new GetCustomerView
@@ -61,7 +62,7 @@
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 EmailAddress = x.EmailAddress
-            }).ToListAsync().ConfigureAwait(false) as IEnumerable<GetCustomerView>;
+            }).ToListAsync(cancellationToken).ConfigureAwait(false) as IEnumerable<GetCustomerView>;
 
             return view;
         }

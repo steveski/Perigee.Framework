@@ -1,5 +1,6 @@
 ﻿namespace Example.Domain.Customers.Commands
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Entities;
     using Perigee.Framework.Data.Cqrs.Database;
@@ -19,10 +20,11 @@
             _db = db;
         }
 
-        public async Task Handle(DoSomethingCommand command)
+        public Task Handle(DoSomethingCommand command, CancellationToken cancellationToken)
         {
             //_db.Create(new Customer {FirstName = command.DoodadWhatsit});
-            await _db.SaveChangesAsync().ConfigureAwait(false);
+
+            return Task.CompletedTask;
         }
     }
 }

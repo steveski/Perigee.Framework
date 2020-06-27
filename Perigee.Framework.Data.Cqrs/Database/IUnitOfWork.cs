@@ -1,6 +1,7 @@
 ﻿namespace Perigee.Framework.Data.Cqrs.Database
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using Helpers.Shared;
 
@@ -27,14 +28,14 @@
         ///     A task result that contains the number of data units whose values were modified after saving
         ///     changes.
         /// </returns>
-        Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
         /// <summary>
         ///     Asynchronously revert all current data changes to the last known state of the underlying data store.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
         [UsedImplicitly]
-        Task DiscardChangesAsync();
+        Task DiscardChangesAsync(CancellationToken cancellationToken);
 
         /// <summary>
         ///     Revert all current data changes to the last known state of the underlying data store.

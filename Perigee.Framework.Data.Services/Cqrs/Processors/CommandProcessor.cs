@@ -1,6 +1,7 @@
 ﻿namespace Perigee.Framework.Data.Services.Cqrs.Processors
 {
     using System.Diagnostics;
+    using System.Threading;
     using System.Threading.Tasks;
     using Autofac;
     using Data.Cqrs.Transactions;
@@ -17,11 +18,11 @@
         }
 
         [DebuggerStepThrough]
-        public Task Execute(IDefineCommand command)
+        public Task Execute(IDefineCommand command, CancellationToken cancellationToken)
         {
             var handlerType = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
             dynamic handler = _lifetimeScope.Resolve(handlerType);
-            return handler.Handle((dynamic) command);
+            return handler.Handle((dynamic) command, cancellationToken);
         }
     }
 }

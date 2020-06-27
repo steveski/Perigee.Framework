@@ -19,16 +19,16 @@
             _db = db;
         }
 
-        public async Task Handle(TCommand command)
+        public async Task Handle(TCommand command, CancellationToken cancellationToken)
         {
-            await HandleWithRetry(command, 5).ConfigureAwait(false);
+            await HandleWithRetry(command, 5, cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task HandleWithRetry(TCommand command, int retries)
+        private async Task HandleWithRetry(TCommand command, int retries, CancellationToken cancellationToken)
         {
             try
             {
-                await _decorated.Handle(command).ConfigureAwait(false);
+                await _decorated.Handle(command, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@
                     throw;
 
                 Thread.Sleep(300);
-                await HandleWithRetry(command, retries - 1).ConfigureAwait(false);
+                await HandleWithRetry(command, retries - 1, cancellationToken).ConfigureAwait(false);
             }
         }
 

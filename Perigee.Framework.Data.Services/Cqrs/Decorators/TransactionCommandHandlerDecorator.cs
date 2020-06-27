@@ -1,5 +1,6 @@
 ﻿namespace Perigee.Framework.Data.Services.Cqrs.Decorators
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Data.Cqrs.Database;
     using Data.Cqrs.Transactions;
@@ -17,15 +18,16 @@
         }
 
 
-        public async Task Handle(TCommand command)
+        public async Task Handle(TCommand command, CancellationToken cancellationToken)
         {
+            // TODO: Cleanup. This was a problem at one point due to be not being sure about the transparent transactions issue.
             //using (unitOfWork)
             //{
-            await decorated.Handle(command).ConfigureAwait(false);
+            await decorated.Handle(command, cancellationToken).ConfigureAwait(false);
             var killIt = false;
             if (killIt)
-                await unitOfWork.DiscardChangesAsync().ConfigureAwait(false);
-            await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
+                await unitOfWork.DiscardChangesAsync(cancellationToken).ConfigureAwait(false);
+            await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
             //}
         }

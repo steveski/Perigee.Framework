@@ -1,6 +1,7 @@
 ﻿namespace Perigee.Framework.Data.Cqrs.Database
 {
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Entities;
     using Helpers.Shared;
@@ -44,6 +45,7 @@
         ///     First or only primary key value of the entity instance that the
         ///     underlying relational data store should return.
         /// </param>
+        /// <param name="cancellationToken"></param>
         /// <param name="otherKeyValues">
         ///     Other components of a composite primary key not identified in the
         ///     firstKeyValue argument.
@@ -52,7 +54,7 @@
         ///     A task result containing a single writable entity instance whose primary key matches the argument value(s),
         ///     if one exists in the underlying relational data store. Otherwise, the task result will represent null.
         /// </returns>
-        Task<TEntity> GetAsync<TEntity>(object firstKeyValue, params object[] otherKeyValues) where TEntity : Entity;
+        Task<TEntity> GetAsync<TEntity>(object firstKeyValue, CancellationToken cancellationToken, params object[] otherKeyValues) where TEntity : Entity;
 
         /// <summary>
         ///     Inform an underlying relational data store to return a set of writable entity instances.
@@ -138,7 +140,7 @@
         /// </param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         [UsedImplicitly]
-        Task ReloadAsync<TEntity>(TEntity entity) where TEntity : Entity;
+        Task ReloadAsync<TEntity>(TEntity entity, CancellationToken cancellationToken) where TEntity : Entity;
 
         /// <summary>
         ///     Re-attach a detatched entity, i.e. one loaded with Query (IReadEntities) including entities returned from

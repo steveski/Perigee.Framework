@@ -1,5 +1,6 @@
 ﻿namespace Example.Domain.Customers.Commands
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Entities;
     using Perigee.Framework.Data.Cqrs.Database;
@@ -22,7 +23,7 @@
             _db = db;
         }
 
-        public Task Handle(CreateCustomerCommand command)
+        public Task Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
         {
             var cust = new Customer
             {
@@ -33,7 +34,8 @@
 
             _db.Create(cust);
             command.CreatedEntity = cust;
-            return Task.FromResult(cust);
+
+            return Task.CompletedTask;
         }
     }
 }

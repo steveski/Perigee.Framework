@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Text.Json;
+    using System.Threading;
     using Perigee.Framework.Data.Cqrs.Transactions;
     using System.Threading.Tasks;
     using Example.Domain.Customers.Commands;
@@ -35,22 +36,23 @@
                 EmailAddress = "herbert.scrackle@home.com"
             };
 
+            var tokenSource = new CancellationTokenSource();
 
-            await _processCommands.Execute(addCustomerCommand1).ConfigureAwait(false);
-            await _processCommands.Execute(addCustomerCommand2).ConfigureAwait(false);
+            await _processCommands.Execute(addCustomerCommand1, tokenSource.Token).ConfigureAwait(false);
+            await _processCommands.Execute(addCustomerCommand2, tokenSource.Token).ConfigureAwait(false);
 
             var customersByQuery = new CustomersBy
             {
                 FirstName = "Herbert"
             };
 
-            var results = await _processQueries.Execute(customersByQuery).ConfigureAwait(false);
+            var results = await _processQueries.Execute(customersByQuery, tokenSource.Token).ConfigureAwait(false);
             var resultsList = results?.ToList();
 
             Console.WriteLine("Records created: 2");
             Console.WriteLine($"Querying after creation for Customer with First Name of 'Herbert' returns {resultsList?.Count ?? 0}");
 
-            if (resultsList.Count > 0)
+            if (resultsList != null && resultsList.Count > 0)
             {
                 var json = JsonSerializer.Serialize(resultsList, new JsonSerializerOptions
                 {

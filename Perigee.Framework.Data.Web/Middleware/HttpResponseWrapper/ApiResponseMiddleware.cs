@@ -4,6 +4,7 @@
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
     using Extensions;
     using Microsoft.AspNetCore.Http;
@@ -19,7 +20,7 @@
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, CancellationToken cancellationToken)
         {
             if (IsSwagger(context))
             {
@@ -40,28 +41,28 @@
                         if (new[] {(int) HttpStatusCode.OK, (int) HttpStatusCode.Created}.Contains(context.Response
                             .StatusCode))
                         {
-                            var body = await FormatResponse(context.Response).ConfigureAwait(false);
-                            await HandleSuccessRequestAsync(context, body, context.Response.StatusCode).ConfigureAwait(false);
+                            var body = await FormatResponse(context.Response, cancellationToken).ConfigureAwait(false);
+                            await HandleSuccessRequestAsync(context, body, context.Response.StatusCode, cancellationToken).ConfigureAwait(false);
                         }
                         else
                         {
-                            await HandleNotSuccessRequestAsync(context, context.Response.StatusCode).ConfigureAwait(false);
+                            await HandleNotSuccessRequestAsync(context, context.Response.StatusCode, cancellationToken).ConfigureAwait(false);
                         }
                     }
                     catch (Exception ex)
                     {
-                        await HandleExceptionAsync(context, ex).ConfigureAwait(false);
+                        await HandleExceptionAsync(context, ex, cancellationToken).ConfigureAwait(false);
                     }
                     finally
                     {
                         responseBody.Seek(0, SeekOrigin.Begin);
-                        await responseBody.CopyToAsync(originalBody).ConfigureAwait(false);
+                        await responseBody.CopyToAsync(originalBody, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
         }
 
-        private async Task<string> FormatResponse(HttpResponse response)
+        private async Task<string> FormatResponse(HttpResponse response, CancellationToken cancellationToken)
         {
             response.Body.Seek(0, SeekOrigin.Begin);
             var plainBodyText = await new StreamReader(response.Body).ReadToEndAsync().ConfigureAwait(false);
@@ -70,7 +71,7 @@
             return plainBodyText;
         }
 
-        private Task HandleNotSuccessRequestAsync(HttpContext context, int code)
+        private Task HandleNotSuccessRequestAsync(HttpContext context, int code, CancellationToken cancellationToken)
         {
             //context.Response.ContentType = "application/json";
             ApiError apiError = null;
@@ -87,10 +88,10 @@
             context.Response.StatusCode = code;
 
             var json = JsonConvert.SerializeObject(apiResponse);
-            return context.Response.WriteAsync(json);
+            return context.Response.WriteAsync(json, cancellationToken);
         }
 
-        private Task HandleSuccessRequestAsync(HttpContext context, object body, int code)
+        private Task HandleSuccessRequestAsync(HttpContext context, object body, int code, CancellationToken cancellationToken)
         {
             //context.Response.ContentType = "application/json";
             string jsonString, bodyText = string.Empty;
@@ -131,21 +132,22 @@
                 jsonString = JsonConvert.SerializeObject(apiResponse);
             }
 
-            return context.Response.WriteAsync(jsonString);
+            return context.Response.WriteAsync(jsonString, cancellationToken);
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
         {
             ApiError apiError = null;
             ApiResponse response = null;
 
-            if (exception is ApiException)
+            if (exception is ApiException ex)
             {
-                var ex = exception as ApiException;
-                apiError = new ApiError(ex.Message);
-                apiError.ValidationErrors = ex.Errors;
-                apiError.ReferenceErrorCode = ex.ReferenceErrorCode;
-                apiError.ReferenceDocumentLink = ex.ReferenceDocumentLink;
+                apiError = new ApiError(ex.Message)
+                {
+                    ValidationErrors = ex.Errors,
+                    ReferenceErrorCode = ex.ReferenceErrorCode,
+                    ReferenceDocumentLink = ex.ReferenceDocumentLink
+                };
 
                 context.Response.StatusCode = ex.StatusCode;
             }
@@ -164,17 +166,15 @@
                 var stack = exception.StackTrace;
 #endif
 
-                apiError = new ApiError(msg);
-                apiError.Details = stack;
+                apiError = new ApiError(msg) {Details = stack};
                 context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
             }
 
             //context.Response.ContentType = "application/json";
-            response = new ApiResponse(context.Response.StatusCode, ResponseMessageEnum.Exception.GetDescription(),
-                null, apiError);
+            response = new ApiResponse(context.Response.StatusCode, ResponseMessageEnum.Exception.GetDescription(), null, apiError);
 
             var json = JsonConvert.SerializeObject(response);
-            return context.Response.WriteAsync(json);
+            return context.Response.WriteAsync(json, cancellationToken);
         }
 
         private bool IsSwagger(HttpContext context)

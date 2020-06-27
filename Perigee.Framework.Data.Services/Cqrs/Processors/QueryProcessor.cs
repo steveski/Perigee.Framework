@@ -1,6 +1,7 @@
 ﻿namespace Perigee.Framework.Data.Services.Cqrs.Processors
 {
     using System.Diagnostics;
+    using System.Threading;
     using System.Threading.Tasks;
     using Autofac;
     using Data.Cqrs.Transactions;
@@ -18,11 +19,11 @@
         }
 
         [DebuggerStepThrough]
-        public Task<TResult> Execute<TResult>(IDefineQuery<TResult> query)
+        public Task<TResult> Execute<TResult>(IDefineQuery<TResult> query, CancellationToken cancellationToken)
         {
             var handlerType = typeof(IHandleQuery<,>).MakeGenericType(query.GetType(), typeof(TResult));
             dynamic handler = _lifetimeScope.Resolve(handlerType);
-            return handler.Handle((dynamic) query);
+            return handler.Handle((dynamic) query, cancellationToken);
         }
     }
 }

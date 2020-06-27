@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@
             //_logger = logger;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, CancellationToken cancellationToken)
         {
             var bodyStream = context.Response.Body;
 
@@ -29,10 +30,10 @@
             await _next(context).ConfigureAwait(false);
 
             responseBodyStream.Seek(0, SeekOrigin.Begin);
-            var responseBody = new StreamReader(responseBodyStream).ReadToEnd();
+            var responseBody = await new StreamReader(responseBodyStream).ReadToEndAsync().ConfigureAwait(false);
             //_logger.Log(LogLevel.Information, 1, $"RESPONSE LOG: {responseBody}", null, _defaultFormatter);
             responseBodyStream.Seek(0, SeekOrigin.Begin);
-            await responseBodyStream.CopyToAsync(bodyStream).ConfigureAwait(false);
+            await responseBodyStream.CopyToAsync(bodyStream, cancellationToken).ConfigureAwait(false);
             //context.Response.Body = bodyStream;
         }
     }

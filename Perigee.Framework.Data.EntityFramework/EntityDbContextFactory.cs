@@ -10,6 +10,7 @@
     /// </summary>
     public class EntityDbContextFactory : IDesignTimeDbContextFactory<EntityDbContext>
     {
+        // TODO: Rework this to have details injected from calling application
         public EntityDbContext CreateDbContext(string[] args)
         {
             var configuration = new ConfigurationBuilder()

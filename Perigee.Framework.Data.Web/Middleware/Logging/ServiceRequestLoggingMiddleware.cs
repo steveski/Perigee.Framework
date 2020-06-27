@@ -49,7 +49,7 @@
         public async Task Invoke(HttpContext context, CancellationToken cancellationToken)
         {
             //First, get the incoming request
-            var request = await FormatRequest(context.Request).ConfigureAwait(false);
+            var request = await FormatRequest(context.Request, cancellationToken).ConfigureAwait(false);
 
             //Copy a pointer to the original response body stream
             var originalBodyStream = context.Response.Body;
@@ -64,7 +64,7 @@
             await _next(context).ConfigureAwait(false);
 
             //Format the response from the server
-            var response = await FormatResponse(context.Response).ConfigureAwait(false);
+            var response = await FormatResponse(context.Response, cancellationToken).ConfigureAwait(false);
 
             //TODO: Save log to chosen datastore
 

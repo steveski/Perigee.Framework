@@ -1,9 +1,10 @@
 ﻿namespace Perigee.Framework.Data.Cqrs.Transactions
 {
+    using System.Threading;
     using System.Threading.Tasks;
 
     public interface IProcessQueries
     {
-        Task<TResult> Execute<TResult>(IDefineQuery<TResult> query);
+        Task<TResult> Execute<TResult>(IDefineQuery<TResult> query, CancellationToken cancellationToken);
     }
 }

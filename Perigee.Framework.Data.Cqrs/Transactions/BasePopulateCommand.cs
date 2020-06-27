@@ -1,6 +1,7 @@
 ﻿namespace Perigee.Framework.Data.Cqrs.Transactions
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public abstract class BasePopulateCommand<TCommand> : IPopulateCommand<TCommand> where TCommand : IDefineCommand
@@ -15,19 +16,17 @@
 
         protected Action<TCommand> PopulateAction { get; set; }
 
-        public virtual async Task Populate(TCommand command)
+        public virtual Task Populate(TCommand command, CancellationToken cancellationToken)
         {
-            if (PopulateAction != null)
-                PopulateAction(command);
+            PopulateAction?.Invoke(command);
 
-
-            await Task.FromResult(1).ConfigureAwait(false);
+            return Task.CompletedTask;
         }
 
-        public async Task<bool> HandlePopulate(TCommand command)
+        public async Task<bool> HandlePopulate(TCommand command, CancellationToken cancellationToken)
         {
             if (!_isPopulated)
-                await Populate(command).ConfigureAwait(false);
+                await Populate(command, cancellationToken).ConfigureAwait(false);
 
             _isPopulated = true;
             return true;

@@ -8,7 +8,7 @@
     public abstract class BaseQueryViews<TEntity> : BaseQuery<IEnumerable<TEntity>>
     {
         public IDictionary<Expression<Func<TEntity, object>>, OrderByDirection> OrderBy { get; set; }
-        public string sort { get; set; } //OrderByProperty
-        public string order { get; set; } //OrderByDirection
+        public string Sort { get; set; } //OrderByProperty
+        public string Order { get; set; } //OrderByDirection
     }
 }

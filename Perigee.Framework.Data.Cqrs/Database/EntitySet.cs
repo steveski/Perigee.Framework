@@ -3,16 +3,22 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Linq.Expressions;
+    using EnsureThat;
     using Entities;
 
     public class EntitySet<TEntity> : IQueryable<TEntity> where TEntity : Entity
     {
         public EntitySet(IQueryable<TEntity> queryable, IReadEntities entities)
         {
-            Queryable = queryable ?? throw new ArgumentNullException(nameof(queryable));
-            Entities = entities ?? throw new ArgumentNullException(nameof(entities));
+            Ensure.Any.IsNotNull(queryable, nameof(queryable));
+            Ensure.Any.IsNotNull(entities, nameof(entities));
+
+            Queryable = queryable;
+            Entities = entities;
+
         }
 
         internal IQueryable<TEntity> Queryable { get; set; }
@@ -23,6 +29,7 @@
             return Queryable.GetEnumerator();
         }
 
+        [ExcludeFromCodeCoverage]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

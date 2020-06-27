@@ -12,25 +12,25 @@
     /// <typeparam name="T"></typeparam>
     public abstract class BaseQueryPaginated<T> : BaseQuery<PagedResult<T>>
     {
-        public BaseQueryPaginated()
+        protected BaseQueryPaginated()
         {
             OrderBy = new Dictionary<Expression<Func<T, object>>, OrderByDirection>();
         }
 
         public IDictionary<Expression<Func<T, object>>, OrderByDirection> OrderBy { get; set; }
 
-        public string sort { get; set; } //OrderByProperty
-        public string order { get; set; } //OrderByDirection
+        public string Sort { get; set; } //OrderByProperty
+        public string Order { get; set; } //OrderByDirection
 
 
-        public int offset { get; set; } // number of records to offset, e.g. can calculate page size
-        public int limit { get; set; } // number of records on a page
+        public int Offset { get; set; } // number of records to offset, e.g. can calculate page size
+        public int Limit { get; set; } // number of records on a page
 
 
         //public PagingInformation PagingInformation { get; set; }
         public PagingInformation PagingInformation =>
-            limit == 0
+            Limit == 0
                 ? null // no paging info = will not apply paging
-                : new PagingInformation(offset / limit, limit);
+                : new PagingInformation(Offset / Limit, Limit);
     }
 }

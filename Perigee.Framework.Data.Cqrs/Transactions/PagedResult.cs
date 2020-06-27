@@ -7,18 +7,18 @@
         public readonly int PageCount;
 
         public readonly PagingInformation Paging;
-        public readonly ReadOnlyCollection<T> rows; // Page
+        public readonly ReadOnlyCollection<T> Rows; // Page
 
-        // todo: renaming these fields to align with what JS expects is a bit of a hack. they were called RowCount and Page respectively
+        // TODO: renaming these fields to align with what JS expects is a bit of a hack. they were called RowCount and Page respectively
 
-        public readonly int total; // RowCount
+        public readonly int Total; // RowCount
 
         public PagedResult(PagingInformation paging, int pageCount, int itemCount, ReadOnlyCollection<T> page)
         {
             Paging = paging;
             PageCount = pageCount;
-            total = itemCount;
-            rows = page;
+            Total = itemCount;
+            Rows = page;
         }
     }
 }

@@ -56,7 +56,7 @@ jobs:
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
         PROJECT_FILE_PATH: Perigee.Framework.Services/Perigee.Framework.Services.csproj
-        PACKAGE_NAME: PerigeePerigee.Framework.Services
+        PACKAGE_NAME: Perigee.Framework.Services
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org
 
@@ -64,6 +64,6 @@ jobs:
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
         PROJECT_FILE_PATH: Perigee.Framework.Web/Perigee.Framework.Web.csproj
-        PACKAGE_NAME: PerigeePerigee.Framework.Web
+        PACKAGE_NAME: Perigee.Framework.Web
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org

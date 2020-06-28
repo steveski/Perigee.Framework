@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Security.Claims;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Example.Domain.Customers.Queries;
@@ -15,7 +16,7 @@
 
     internal static class ContainerConfiguration
     {
-        public static IServiceProvider Configure()
+        public static IServiceProvider Configure(ClaimsPrincipal principal)
         {
             var serviceCollection = new ServiceCollection();
             // Add basic ASP.NET Core services here such as logging
@@ -33,7 +34,9 @@
             
             containerBuilder.RegisterModule(efModule);
             containerBuilder.RegisterModule<ServicesModule>();
-            containerBuilder.RegisterModule<CqrsModule>();
+
+            var cqrsModule = new CqrsModule(principal);
+            containerBuilder.RegisterModule(cqrsModule);
 
             containerBuilder.RegisterType<AppProcess>().SingleInstance();
 

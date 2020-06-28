@@ -1,6 +1,8 @@
 ﻿namespace Perigee.Framework.Data.EntityFramework
 {
+    using System.Security.Principal;
     using Autofac;
+    using Cqrs;
     using Microsoft.EntityFrameworkCore;
     using ModelCreation;
 
@@ -19,7 +21,6 @@
         public EntityFrameworkModule(DbContextOptions<EntityDbContext> dbContextOptions)
         {
             _dbContextOptions = dbContextOptions;
-
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -31,7 +32,7 @@
                 .As<ICreateDbModel>();
 
             // Expecting IUnitOfWork, IReadEntities and IWriteEntities to be registered with this call
-            builder.Register(c => new EntityDbContext(_dbContextOptions)
+            builder.Register(c => new EntityDbContext(_dbContextOptions, c.Resolve<IUserService>())
                 {
                     ModelCreator = c.Resolve<ICreateDbModel>()
                 })

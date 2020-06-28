@@ -4,22 +4,32 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Security.Principal;
     using System.Threading;
     using System.Threading.Tasks;
+    using Cqrs;
     using Cqrs.Database;
     using Cqrs.Entities;
+    using EnsureThat;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using ModelCreation;
 
     public class EntityDbContext : DbContext, IWriteEntities
     {
+        private readonly IUserService _userService;
+
         #region Construction & Initialization
 
-        public EntityDbContext(DbContextOptions<EntityDbContext> options) : base(options)
+        public EntityDbContext(DbContextOptions<EntityDbContext> options, IUserService userService) : base(options)
         {
+            Ensure.Any.IsNotNull(userService, nameof(userService));
+
+            _userService = userService;
+
             ////Initializer = new BrownfieldDbInitialiser();
-            /// 
+            ///
+            
         }
 
         ////private IDatabaseInitialiser<EntityDbContext> _initializer;
@@ -40,13 +50,13 @@
         private void SetAuditValues(EntityEntry entry)
         {
             var theEntity = (IAuditedEntity) entry.Entity;
-            theEntity.UpdatedOn = DateTime.Now;
-            theEntity.UpdatedBy = "xx1234";
+            theEntity.UpdatedOn = _userService.CurrentDateTime;
+            theEntity.UpdatedBy = _userService.Principal.Identity.Name;
 
             if (entry.State == EntityState.Added)
             {
-                theEntity.CreatedOn = DateTime.Now;
-                theEntity.CreatedBy = "xx1234";
+                theEntity.CreatedOn = _userService.CurrentDateTime;
+                theEntity.CreatedBy = _userService.Principal.Identity.Name;
             }
         }
 

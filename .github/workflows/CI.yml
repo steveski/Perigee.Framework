@@ -22,7 +22,7 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
       
-    - name: Setup .NET Core 3.1
+    - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
@@ -39,39 +39,39 @@ jobs:
     - name: Publish NuGet CQRS
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-        PROJECT_FILE_PATH: Perigee.Framework.Data.Cqrs/Perigee.Framework.Data.Cqrs.csproj
-        PACKAGE_NAME: Perigee.Framework.Data.Cqrs
+        PROJECT_FILE_PATH: Perigee.Framework.Cqrs/Perigee.Framework.Cqrs.csproj
+        PACKAGE_NAME: Perigee.Framework.Cqrs
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org
 
     - name: Publish NuGet EF
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-        PROJECT_FILE_PATH: Perigee.Framework.Data.EntityFramework/Perigee.Framework.Data.EntityFramework.csproj
-        PACKAGE_NAME: Perigee.Framework.Data.EntityFramework
+        PROJECT_FILE_PATH: Perigee.Framework.EntityFramework/Perigee.Framework.EntityFramework.csproj
+        PACKAGE_NAME: Perigee.Framework.EntityFramework
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org
 
     - name: Publish NuGet Shared
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-        PROJECT_FILE_PATH: Perigee.Framework.Data.Helpers.Shared/Perigee.Framework.Data.Helpers.Shared.csproj
-        PACKAGE_NAME: PerigeePerigee.Framework.Data.Helpers.Shared
+        PROJECT_FILE_PATH: Perigee.Framework.Helpers.Shared/Perigee.Framework.Helpers.Shared.csproj
+        PACKAGE_NAME: PerigeePerigee.Framework.Helpers.Shared
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org
 
     - name: Publish NuGet Services
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-        PROJECT_FILE_PATH: Perigee.Framework.Data.Services/Perigee.Framework.Data.Services.csproj
-        PACKAGE_NAME: PerigeePerigee.Framework.Data.Services
+        PROJECT_FILE_PATH: Perigee.Framework.Services/Perigee.Framework.Services.csproj
+        PACKAGE_NAME: PerigeePerigee.Framework.Services
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org
 
-    #- name: Publish NuGet Web
-    #  uses: brandedoutcast/publish-nuget@v2.5.2
-    #  with:
-    #    PROJECT_FILE_PATH: Perigee.Framework.Data.Web/Perigee.Framework.Data.Web.csproj
-    #    PACKAGE_NAME: PerigeePerigee.Framework.Data.Web
-    #    NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-    #    NUGET_SOURCE: https://api.nuget.org
+    - name: Publish NuGet Web
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Web/Perigee.Framework.Web.csproj
+        PACKAGE_NAME: PerigeePerigee.Framework.Web
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org

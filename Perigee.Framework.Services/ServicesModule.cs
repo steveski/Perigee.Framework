@@ -5,7 +5,7 @@
     using Autofac;
     using Cqrs.Decorators;
     using Cqrs.Processors;
-    using Perigee.Framework.Cqrs.Transactions;
+    using Perigee.Framework.Base.Transactions;
     using Module = Autofac.Module;
 
     public class ServicesModule : Module

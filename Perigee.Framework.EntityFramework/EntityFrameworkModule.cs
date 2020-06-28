@@ -1,10 +1,9 @@
 ﻿namespace Perigee.Framework.EntityFramework
 {
-    using System.Security.Principal;
     using Autofac;
-    using Cqrs;
     using Microsoft.EntityFrameworkCore;
     using ModelCreation;
+    using Perigee.Framework.Base;
 
     /// <summary>
     /// Registers the EntityDbContext and access interfaces IUnitOfWork, IReadEntities and IWriteEntities.

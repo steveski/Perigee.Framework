@@ -4,8 +4,8 @@
     using System.Data.Common;
     using System.Threading;
     using System.Threading.Tasks;
-    using Framework.Cqrs.Database;
-    using Framework.Cqrs.Transactions;
+    using Perigee.Framework.Base.Database;
+    using Perigee.Framework.Base.Transactions;
 
     public class DeadlockRetryCommandHandlerDecorator<TCommand> : IHandleCommand<TCommand>
         where TCommand : IDefineCommand

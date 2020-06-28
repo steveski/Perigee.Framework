@@ -39,8 +39,8 @@ jobs:
     - name: Publish NuGet CQRS
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-        PROJECT_FILE_PATH: Perigee.Framework.Cqrs/Perigee.Framework.Cqrs.csproj
-        PACKAGE_NAME: Perigee.Framework.Cqrs
+        PROJECT_FILE_PATH: Perigee.Framework.Base/Perigee.Framework.Base.csproj
+        PACKAGE_NAME: Perigee.Framework.Base
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org
 

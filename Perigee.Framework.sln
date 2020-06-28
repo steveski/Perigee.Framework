@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.Helpers.Shared", "Perigee.Framework.Helpers.Shared\Perigee.Framework.Helpers.Shared.csproj", "{DB1E7BB6-3FBB-4351-914A-6ACE5186663C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.Cqrs", "Perigee.Framework.Cqrs\Perigee.Framework.Cqrs.csproj", "{26FF77FA-F444-450C-A3FC-89D21A805369}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.Base", "Perigee.Framework.Base\Perigee.Framework.Base.csproj", "{26FF77FA-F444-450C-A3FC-89D21A805369}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.EntityFramework", "Perigee.Framework.EntityFramework\Perigee.Framework.EntityFramework.csproj", "{53A276C2-ED23-470B-9B2F-7440407AB954}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.Web", "Pe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E5F0783A-B459-43FB-BFF9-6510863F9985}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.Cqrs.UnitTests", "Tests\Perigee.Framework.Cqrs.UnitTests\Perigee.Framework.Cqrs.UnitTests.csproj", "{510F231C-29B7-4EF4-BB59-239EF22BE3F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.Base.UnitTests", "Tests\Perigee.Framework.Base.UnitTests\Perigee.Framework.Base.UnitTests.csproj", "{510F231C-29B7-4EF4-BB59-239EF22BE3F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.EntityFramework.UnitTests", "Tests\Perigee.Framework.EntityFramework.UnitTests\Perigee.Framework.EntityFramework.UnitTests.csproj", "{FC2C5754-A533-4B6D-85F4-6EC553A7A6AC}"
 EndProject

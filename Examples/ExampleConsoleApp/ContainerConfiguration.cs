@@ -9,8 +9,8 @@
     using Example.Domain.Customers.Views;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using Perigee.Framework.Cqrs;
-    using Perigee.Framework.Cqrs.Transactions;
+    using Perigee.Framework.Base;
+    using Perigee.Framework.Base.Transactions;
     using Perigee.Framework.EntityFramework;
     using Perigee.Framework.Services;
 

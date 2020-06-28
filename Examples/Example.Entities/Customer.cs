@@ -1,8 +1,7 @@
 ﻿namespace Example.Entities
 {
     using System;
-    using System.Collections.Generic;
-    using Perigee.Framework.Cqrs.Entities;
+    using Perigee.Framework.Base.Entities;
 
     public class Customer : EntityWithId<int>, IAuditedEntity
     {

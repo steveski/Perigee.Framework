@@ -4,16 +4,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
-    using System.Security.Principal;
     using System.Threading;
     using System.Threading.Tasks;
-    using Cqrs;
-    using Cqrs.Database;
-    using Cqrs.Entities;
     using EnsureThat;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using ModelCreation;
+    using Perigee.Framework.Base;
+    using Perigee.Framework.Base.Database;
+    using Perigee.Framework.Base.Entities;
 
     public class EntityDbContext : DbContext, IWriteEntities
     {

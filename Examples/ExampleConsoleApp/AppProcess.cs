@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Text.Json;
     using System.Threading;
-    using Perigee.Framework.Cqrs.Transactions;
+    using Perigee.Framework.Base.Transactions;
     using System.Threading.Tasks;
     using Example.Domain.Customers.Commands;
     using Example.Domain.Customers.Queries;

@@ -2,8 +2,8 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using Perigee.Framework.Cqrs.Database;
-    using Perigee.Framework.Cqrs.Transactions;
+    using Perigee.Framework.Base.Database;
+    using Perigee.Framework.Base.Transactions;
 
     public class TransactionCommandHandlerDecorator<TCommand> : IHandleCommand<TCommand>
         where TCommand : IDefineCommand

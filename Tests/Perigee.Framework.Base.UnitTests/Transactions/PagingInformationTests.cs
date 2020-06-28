@@ -1,8 +1,8 @@
-﻿namespace Perigee.Framework.Cqrs.UnitTests.Transactions
+﻿namespace Perigee.Framework.Base.UnitTests.Transactions
 {
     using System;
-    using Cqrs.Transactions;
     using FluentAssertions;
+    using Perigee.Framework.Base.Transactions;
     using Xunit;
 
     public class PagingInformationTests

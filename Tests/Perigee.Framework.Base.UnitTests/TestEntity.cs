@@ -1,6 +1,6 @@
-﻿namespace Perigee.Framework.Cqrs.UnitTests
+﻿namespace Perigee.Framework.Base.UnitTests
 {
-    using Cqrs.Entities;
+    using Perigee.Framework.Base.Entities;
 
     public class TestEntity : EntityWithId<int>
     {

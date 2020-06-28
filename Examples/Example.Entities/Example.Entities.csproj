@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Perigee.Framework.Data.Cqrs\Perigee.Framework.Data.Cqrs.csproj" />
+    <ProjectReference Include="..\..\Perigee.Framework.Cqrs\Perigee.Framework.Cqrs.csproj" />
   </ItemGroup>
 
 </Project>

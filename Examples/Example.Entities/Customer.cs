@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Perigee.Framework.Data.Cqrs.Entities;
+    using Perigee.Framework.Cqrs.Entities;
 
     public class Customer : EntityWithId<int>, IAuditedEntity
     {

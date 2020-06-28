@@ -9,10 +9,10 @@
     using Example.Domain.Customers.Views;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using Perigee.Framework.Data.Cqrs;
-    using Perigee.Framework.Data.Cqrs.Transactions;
-    using Perigee.Framework.Data.EntityFramework;
-    using Perigee.Framework.Data.Services;
+    using Perigee.Framework.Cqrs;
+    using Perigee.Framework.Cqrs.Transactions;
+    using Perigee.Framework.EntityFramework;
+    using Perigee.Framework.Services;
 
     internal static class ContainerConfiguration
     {

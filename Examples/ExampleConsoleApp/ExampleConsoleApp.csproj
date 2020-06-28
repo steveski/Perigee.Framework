@@ -14,8 +14,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Example.Domain\Example.Domain.csproj" />
-    <ProjectReference Include="..\..\Perigee.Framework.Data.EntityFramework\Perigee.Framework.Data.EntityFramework.csproj" />
-    <ProjectReference Include="..\..\Perigee.Framework.Data.Services\Perigee.Framework.Data.Services.csproj" />
+    <ProjectReference Include="..\..\Perigee.Framework.EntityFramework\Perigee.Framework.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\Perigee.Framework.Services\Perigee.Framework.Services.csproj" />
   </ItemGroup>
 
 </Project>

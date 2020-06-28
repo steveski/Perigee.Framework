@@ -3,8 +3,8 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Entities;
-    using Perigee.Framework.Data.Cqrs.Database;
-    using Perigee.Framework.Data.Cqrs.Transactions;
+    using Perigee.Framework.Cqrs.Database;
+    using Perigee.Framework.Cqrs.Transactions;
 
     public class DoSomethingCommand : BaseCreateEntityCommand<Customer>, IDefineCommand
     {

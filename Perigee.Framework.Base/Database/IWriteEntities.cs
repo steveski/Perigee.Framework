@@ -4,7 +4,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Entities;
-    using Helpers.Shared;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>
@@ -123,7 +122,6 @@
         ///     Entity instance whose data state will be replaced using the values currently
         ///     saved in the underlying relational data store.
         /// </param>
-        [UsedImplicitly]
         void Reload<TEntity>(TEntity entity) where TEntity : Entity;
 
         /// <summary>
@@ -139,7 +137,6 @@
         ///     saved in the underlying relational data store.
         /// </param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        [UsedImplicitly]
         Task ReloadAsync<TEntity>(TEntity entity, CancellationToken cancellationToken) where TEntity : Entity;
 
         /// <summary>

@@ -4,10 +4,8 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Autofac;
-    using Helpers.Shared;
     using Perigee.Framework.Base.Transactions;
 
-    [UsedImplicitly]
     internal sealed class CommandProcessor : IProcessCommands
     {
         private readonly ILifetimeScope _lifetimeScope;

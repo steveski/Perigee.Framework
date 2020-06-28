@@ -8,7 +8,6 @@
     using Microsoft.EntityFrameworkCore;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Transactions;
-    using Perigee.Framework.Helpers.Shared;
     using Views;
 
     public class CustomersBy : IDefineQuery<IEnumerable<GetCustomerView>>
@@ -18,7 +17,6 @@
         public string LastName { get; set; }
     }
 
-    [UsedImplicitly]
     public class HandleCustomerByQuery : IHandleQuery<CustomersBy, IEnumerable<GetCustomerView>>
     {
         private readonly IReadEntities _db;

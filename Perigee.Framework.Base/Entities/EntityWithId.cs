@@ -1,7 +1,6 @@
 ﻿namespace Perigee.Framework.Base.Entities
 {
     using System;
-    using Helpers.Shared;
 
     /// <summary>
     ///     A single unit of relational data that can be identified by a primary key.
@@ -12,7 +11,7 @@
         /// <summary>
         ///     Primary key of this entity.
         /// </summary>
-        public TId Id { get; [UsedImplicitly] protected set; }
+        public TId Id { get; protected set; }
 
         /// <summary>
         ///     Determine whether this entity is equal to another entity.

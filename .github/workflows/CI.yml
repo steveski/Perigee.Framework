@@ -52,14 +52,6 @@ jobs:
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
         NUGET_SOURCE: https://api.nuget.org
 
-    - name: Publish NuGet Shared
-      uses: brandedoutcast/publish-nuget@v2.5.2
-      with:
-        PROJECT_FILE_PATH: Perigee.Framework.Helpers.Shared/Perigee.Framework.Helpers.Shared.csproj
-        PACKAGE_NAME: PerigeePerigee.Framework.Helpers.Shared
-        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-        NUGET_SOURCE: https://api.nuget.org
-
     - name: Publish NuGet Services
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:

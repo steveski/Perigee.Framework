@@ -3,7 +3,6 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using Helpers.Shared;
 
     /// <summary>
     ///     Synchronizes data state changes with an underlying data store.
@@ -34,13 +33,11 @@
         ///     Asynchronously revert all current data changes to the last known state of the underlying data store.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        [UsedImplicitly]
         Task DiscardChangesAsync(CancellationToken cancellationToken);
 
         /// <summary>
         ///     Revert all current data changes to the last known state of the underlying data store.
         /// </summary>
-        [UsedImplicitly]
         void DiscardChanges();
     }
 }

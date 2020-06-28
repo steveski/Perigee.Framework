@@ -1,9 +1,7 @@
 ﻿namespace Perigee.Framework.EntityFramework.Initialisation
 {
     using Customisation;
-    using Helpers.Shared;
 
-    [UsedImplicitly]
     public class GreenfieldDbInitialiser //: DropCreateDatabaseIfModelChanges<DbContext>
     {
         private readonly ICustomiseDb _customizer;

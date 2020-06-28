@@ -4,10 +4,8 @@
     using Autofac.Core;
     using FluentValidation;
     using FluentValidation.Results;
-    using Helpers.Shared;
     using Transactions;
 
-    [UsedImplicitly]
     internal sealed class ValidationProcessor : IProcessValidation
     {
         private readonly Container _container;

@@ -21,8 +21,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Perigee.Framework.Helpers.Shared\Perigee.Framework.Helpers.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

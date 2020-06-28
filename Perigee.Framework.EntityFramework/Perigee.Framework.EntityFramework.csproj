@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Perigee.Framework.Base\Perigee.Framework.Base.csproj" />
+    <ProjectReference Include="..\Perigee.Framework.Services\Perigee.Framework.Services.csproj" />
   </ItemGroup>
 
 </Project>

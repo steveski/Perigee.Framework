@@ -18,6 +18,7 @@
     {
         public static IServiceProvider Configure(ClaimsPrincipal principal)
         {
+            // ReSharper disable once CollectionNeverUpdated.Local
             var serviceCollection = new ServiceCollection();
             // Add basic ASP.NET Core services here such as logging
 
@@ -33,10 +34,11 @@
             var efModule = new EntityFrameworkModule(optionsBuilder.Options);
             
             containerBuilder.RegisterModule(efModule);
-            containerBuilder.RegisterModule<ServicesModule>();
 
-            var cqrsModule = new CqrsModule(principal);
-            containerBuilder.RegisterModule(cqrsModule);
+            var servicesModule = new ServicesModule(principal);
+            containerBuilder.RegisterModule(servicesModule);
+            
+            containerBuilder.RegisterModule<BaseModule>();
 
             containerBuilder.RegisterType<AppProcess>().SingleInstance();
 

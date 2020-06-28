@@ -10,21 +10,24 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using ModelCreation;
-    using Perigee.Framework.Base;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Entities;
+    using Perigee.Framework.Services.User;
 
     public class EntityDbContext : DbContext, IWriteEntities
     {
         private readonly IUserService _userService;
+        private readonly IAuditedEntityUpdater _auditedEntityUpdater;
 
         #region Construction & Initialization
 
-        public EntityDbContext(DbContextOptions<EntityDbContext> options, IUserService userService) : base(options)
+        public EntityDbContext(DbContextOptions<EntityDbContext> options, IUserService userService, IAuditedEntityUpdater auditedEntityUpdater) : base(options)
         {
             Ensure.Any.IsNotNull(userService, nameof(userService));
+            Ensure.Any.IsNotNull(auditedEntityUpdater, nameof(auditedEntityUpdater));
 
             _userService = userService;
+            _auditedEntityUpdater = auditedEntityUpdater;
 
             ////Initializer = new BrownfieldDbInitialiser();
             ///
@@ -46,17 +49,18 @@
         #endregion
 
 
-        private void SetAuditValues(EntityEntry entry)
+        private void SetAuditValues()
         {
-            var theEntity = (IAuditedEntity) entry.Entity;
-            theEntity.UpdatedOn = _userService.CurrentDateTime;
-            theEntity.UpdatedBy = _userService.Principal.Identity.Name;
+            var addedEntities = ChangeTracker.Entries()
+                .Where(x => x.State == EntityState.Added)
+                .Select(x => x.Entity);
 
-            if (entry.State == EntityState.Added)
-            {
-                theEntity.CreatedOn = _userService.CurrentDateTime;
-                theEntity.CreatedBy = _userService.Principal.Identity.Name;
-            }
+            var updatedEntities = ChangeTracker.Entries()
+                .Where(x => x.State == EntityState.Modified)
+                .Select(x => x.Entity);
+
+            _auditedEntityUpdater.UpdateAuditFields(addedEntities, updatedEntities);
+
         }
 
         private void SetSoftDelete(EntityEntry entry)
@@ -202,13 +206,13 @@
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            foreach (var entry in ChangeTracker.Entries().Where(x =>
-                x.State == EntityState.Added || x.State == EntityState.Modified || x.State == EntityState.Deleted))
+            foreach (var entry in ChangeTracker.Entries().Where(x => x.State == EntityState.Deleted))
             {
                 if (entry.State == EntityState.Deleted && entry.Entity is ISoftDelete) SetSoftDelete(entry);
 
-                if (entry.Entity is IAuditedEntity) SetAuditValues(entry);
             }
+
+            SetAuditValues();
 
             return base.SaveChangesAsync(cancellationToken);
         }

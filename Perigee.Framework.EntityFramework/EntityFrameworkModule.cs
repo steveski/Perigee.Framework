@@ -4,6 +4,8 @@
     using Microsoft.EntityFrameworkCore;
     using ModelCreation;
     using Perigee.Framework.Base;
+    using Perigee.Framework.Base.Database;
+    using Perigee.Framework.Services.User;
 
     /// <summary>
     /// Registers the EntityDbContext and access interfaces IUnitOfWork, IReadEntities and IWriteEntities.
@@ -24,6 +26,8 @@
 
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<DefaultAuditedEntityUpdater>().As<IAuditedEntityUpdater>().InstancePerLifetimeScope();
+
             // If the calling code hasn't already registered a custom 
             // ICreateDbModel then register the internal DefaultDbModelCreator
             builder.RegisterType<DefaultDbModelCreator>()
@@ -31,7 +35,11 @@
                 .As<ICreateDbModel>();
 
             // Expecting IUnitOfWork, IReadEntities and IWriteEntities to be registered with this call
-            builder.Register(c => new EntityDbContext(_dbContextOptions, c.Resolve<IUserService>())
+            builder.Register(c => 
+                    new EntityDbContext(
+                        _dbContextOptions,
+                        c.Resolve<IUserService>(),
+                        c.Resolve<IAuditedEntityUpdater>())
                 {
                     ModelCreator = c.Resolve<ICreateDbModel>()
                 })

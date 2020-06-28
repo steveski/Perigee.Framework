@@ -2,16 +2,41 @@
 {
     using System;
     using System.Reflection;
+    using System.Security.Claims;
     using Autofac;
     using Cqrs.Decorators;
     using Cqrs.Processors;
+    using Perigee.Framework.Base.Services;
     using Perigee.Framework.Base.Transactions;
+    using Perigee.Framework.Services.User;
     using Module = Autofac.Module;
 
     public class ServicesModule : Module
     {
+        private readonly ClaimsPrincipal _principal;
+
+        public ServicesModule(ClaimsPrincipal principal)
+        {
+            _principal = principal;
+
+        }
+
+
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<DefaultDateTimeService>().As<IDateTimeService>().InstancePerLifetimeScope();
+
+            builder.Register(c => _principal)
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.Register(c => new UserService
+                {
+                    ClaimsPrincipal = _principal
+                }).As<IUserService>()
+                .InstancePerLifetimeScope();
+
+
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             RegisterQueryTransactions(builder, assemblies);

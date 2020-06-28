@@ -5,29 +5,10 @@
     using FluentValidation;
     using Validation;
 
-    public class CqrsModule : Module
+    public class BaseModule : Module
     {
-        private readonly ClaimsPrincipal _principal;
-
-        public CqrsModule(ClaimsPrincipal principal)
-        {
-            _principal = principal;
-
-        }
-
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(c => _principal)
-                .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
-
-            builder.Register(c => new UserService
-            {
-                Principal = _principal
-            }).As<IUserService>()
-                .InstancePerLifetimeScope();
-            
-
             ValidatorOptions.CascadeMode = CascadeMode.StopOnFirstFailure;
             //ValidatorOptions.ResourceProviderType = typeof(Resources);
 

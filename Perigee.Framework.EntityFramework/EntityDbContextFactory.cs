@@ -22,7 +22,7 @@
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             optionsBuilder.UseSqlServer(connectionString);
 
-            return new EntityDbContext(optionsBuilder.Options, null);
+            return new EntityDbContext(optionsBuilder.Options, null, null);
         }
     }
 }

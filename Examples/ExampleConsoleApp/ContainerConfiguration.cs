@@ -38,8 +38,6 @@
             var servicesModule = new ServicesModule(principal);
             containerBuilder.RegisterModule(servicesModule);
             
-            containerBuilder.RegisterModule<BaseModule>();
-
             containerBuilder.RegisterType<AppProcess>().SingleInstance();
 
             var container = containerBuilder.Build();

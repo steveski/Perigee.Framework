@@ -11,7 +11,7 @@
         /// <summary>
         ///     Primary key of this entity.
         /// </summary>
-        public TId Id { get; protected set; }
+        public TId Id { get; set; }
 
         /// <summary>
         ///     Determine whether this entity is equal to another entity.

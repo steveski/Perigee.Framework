@@ -27,21 +27,23 @@
             containerBuilder.Populate(serviceCollection);
             
             var optionsBuilder = new DbContextOptionsBuilder<EntityDbContext>()
-                .UseInMemoryDatabase("Snoogans");
+                //.UseInMemoryDatabase("Snoogans");
                 //.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
-                //.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CqrsExampleDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+                .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CqrsExampleDb;Trusted_Connection=True;MultipleActiveResultSets=true");
 
             var efModule = new EntityFrameworkModule(optionsBuilder.Options);
-            
             containerBuilder.RegisterModule(efModule);
 
+            // Turn on the CQRS pipeline in the framework
             var servicesModule = new ServicesModule(principal);
             containerBuilder.RegisterModule(servicesModule);
             
+            // Register the entry point for the application
             containerBuilder.RegisterType<AppProcess>().SingleInstance();
 
             var container = containerBuilder.Build();
 
+            // If this line isn't done, assemblies are loaded at launch. Using any symbol from the framework ensures they are.
             var asdasd = container.IsRegistered(typeof(IHandleQuery<CustomersBy, IEnumerable<GetCustomerView>>));
 
             return new AutofacServiceProvider(container);

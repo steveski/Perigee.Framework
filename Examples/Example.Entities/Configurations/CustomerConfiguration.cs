@@ -3,17 +3,17 @@
     using Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using Perigee.Framework.EntityFramework;
 
-    public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+    public class CustomerConfiguration : BaseEntityTypeConfiguration<Customer>
     {
-        public void Configure(EntityTypeBuilder<Customer> builder)
+        public override void ConfigureEntity(EntityTypeBuilder<Customer> builder)
         {
             builder.ToTable("Customer");
             builder.HasKey(x => x.Id);
 
             builder.Property(p => p.Id)
                 .HasColumnType("int")
-                //.ValueGeneratedNever()
                 .IsRequired();
 
             builder.Property(p => p.FirstName)
@@ -29,6 +29,18 @@
             builder.Property(p => p.EmailAddress)
                 .HasColumnType("nvarchar(255)")
                 .HasMaxLength(255);
+
+
+
+
+            builder.Property(p => p.CreatedOn).HasColumnName("CreatedOn").HasColumnType("datetime2");
+            builder.Property(p => p.UpdatedOn).HasColumnName("UpdatedOn").HasColumnType("datetime2");
+
+            builder.Property(p => p.CreatedBy).HasColumnName("CreatedBy").HasColumnType("nvarchar").HasMaxLength(50);
+            builder.Property(p => p.UpdatedBy).HasColumnName("UpdatedBy").HasColumnType("nvarchar").HasMaxLength(50);
+            
+            builder.Property(p => p.Version).HasColumnName("Version").IsRowVersion();
+
 
         }
 

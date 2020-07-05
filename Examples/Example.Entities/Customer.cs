@@ -3,12 +3,8 @@
     using System;
     using Perigee.Framework.Base.Entities;
 
-    public class Customer : EntityWithId<int>, IAuditedEntity
+    public class Customer : EntityWithId<int>, IAuditedEntity, ITimestampEnabled
     {
-        public Customer()
-        {
-            
-        }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -26,6 +22,11 @@
 
         #endregion
 
+        #region ITimestampEnabled Implementation
+
+        public byte[] Version { get; set; }
+
+        #endregion
 
     }
 }

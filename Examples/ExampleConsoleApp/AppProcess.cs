@@ -35,7 +35,7 @@
                 LastName = "Scrackle",
                 EmailAddress = "herbert.scrackle@home.com"
             };
-
+            
             var tokenSource = new CancellationTokenSource();
 
             await _processCommands.Execute(addCustomerCommand1, tokenSource.Token).ConfigureAwait(false);

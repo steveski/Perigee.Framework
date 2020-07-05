@@ -28,7 +28,7 @@
 
             _userService = userService;
             _auditedEntityUpdater = auditedEntityUpdater;
-
+            
             ////Initializer = new BrownfieldDbInitialiser();
             ///
             
@@ -92,7 +92,7 @@
             return query;
         }
 
-        public IQueryable<TEntity> Query<TEntity>() where TEntity : Entity
+        public new IQueryable<TEntity> Query<TEntity>() where TEntity : Entity
         {
             // AsNoTracking returns entities that are not attached to the DbContext
             return new EntitySet<TEntity>(Set<TEntity>().AsNoTracking(), this);

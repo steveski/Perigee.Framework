@@ -19,7 +19,7 @@
         private readonly IUserService _userService;
         private readonly IAuditedEntityUpdater _auditedEntityUpdater;
 
-        #region Construction & Initialization
+        #region Construction
 
         public EntityDbContext(DbContextOptions<EntityDbContext> options, IUserService userService, IAuditedEntityUpdater auditedEntityUpdater) : base(options)
         {
@@ -29,22 +29,9 @@
             _userService = userService;
             _auditedEntityUpdater = auditedEntityUpdater;
             
-            ////Initializer = new BrownfieldDbInitialiser();
-            ///
-            
+
         }
 
-        ////private IDatabaseInitialiser<EntityDbContext> _initializer;
-
-        ////public IDatabaseInitializer<EntityDbContext> Initializer
-        ////{
-        ////    get { return _initializer; }
-        ////    set
-        ////    {
-        ////        _initializer = value;
-        ////        Database.SetInitializer(Initializer);
-        ////    }
-        ////}
 
         #endregion
 
@@ -129,7 +116,7 @@
             if (Entry(entity).State == EntityState.Detached) Set<TEntity>().Add(entity);
         }
 
-        public void Update<TEntity>(TEntity entity) where TEntity : Entity
+        public new void Update<TEntity>(TEntity entity) where TEntity : Entity
         {
             var entry = Entry(entity);
             if (entry.State != EntityState.Added)
@@ -152,7 +139,7 @@
             return Entry(entity).ReloadAsync(cancellationToken);
         }
 
-        public void Attach<TEntity>(TEntity entity) where TEntity : Entity
+        public new void Attach<TEntity>(TEntity entity) where TEntity : Entity
         {
             if (Entry(entity).State == EntityState.Detached)
                 Set<TEntity>().Attach(entity);

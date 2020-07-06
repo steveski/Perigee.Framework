@@ -27,9 +27,9 @@
             containerBuilder.Populate(serviceCollection);
             
             var optionsBuilder = new DbContextOptionsBuilder<EntityDbContext>()
-                //.UseInMemoryDatabase("Snoogans");
+                .UseInMemoryDatabase("Snoogans");
                 //.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
-                .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CqrsExampleDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+                //.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CqrsExampleDb;Trusted_Connection=True;MultipleActiveResultSets=true");
 
             var efModule = new EntityFrameworkModule(optionsBuilder.Options);
             containerBuilder.RegisterModule(efModule);

@@ -2,11 +2,12 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Transactions;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Transactions;
 
     public class TransactionCommandHandlerDecorator<TCommand> : IHandleCommand<TCommand>
-        where TCommand : IDefineCommand
+        where TCommand : BaseEntityCommand
     {
         private readonly IHandleCommand<TCommand> decorated;
         private readonly IUnitOfWork unitOfWork;
@@ -20,16 +21,27 @@
 
         public async Task Handle(TCommand command, CancellationToken cancellationToken)
         {
-            // TODO: Cleanup. This was a problem at one point due to be not being sure about the transparent transactions issue.
-            //using (unitOfWork)
-            //{
-            await decorated.Handle(command, cancellationToken).ConfigureAwait(false);
-            var killIt = false;
-            if (killIt)
-                await unitOfWork.DiscardChangesAsync(cancellationToken).ConfigureAwait(false);
-            await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            if (command.Commit)
+            {
+                using var scope = new TransactionScope(
+                    TransactionScopeOption.Required,
+                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                    TransactionScopeAsyncFlowOption.Enabled);
 
-            //}
+                await decorated.Handle(command, cancellationToken).ConfigureAwait(false);
+                await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+                scope.Complete();
+
+            }
+            else
+            {
+                await decorated.Handle(command, cancellationToken).ConfigureAwait(false);
+
+            }
+
+
+
         }
     }
 }

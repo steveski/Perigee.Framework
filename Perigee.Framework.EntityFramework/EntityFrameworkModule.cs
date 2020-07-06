@@ -35,6 +35,19 @@
                 .As<ICreateDbModel>();
 
             builder.Register(c =>
+                    new TransientEntityDbContext(
+                        _dbContextOptions,
+                        c.Resolve<IUserService>(),
+                        c.Resolve<IAuditedEntityUpdater>())
+                    {
+                        ModelCreator = c.Resolve<ICreateDbModel>()
+                    })
+                //.AsImplementedInterfaces() // Doing this will reimplement IWriteEntities, IReadEntites and IUnitOfWork causing a clash...so DON'T!
+                .As<ITransientContext>()
+                .InstancePerDependency();
+
+            // Expecting IUnitOfWork, IReadEntities and IWriteEntities to be registered with this call
+            builder.Register(c =>
                     new EntityDbContext(
                         _dbContextOptions,
                         c.Resolve<IUserService>(),
@@ -42,22 +55,10 @@
                     {
                         ModelCreator = c.Resolve<ICreateDbModel>()
                     })
-                .As<ITransientContext>()
-                .InstancePerDependency();
-
-            // Expecting IUnitOfWork, IReadEntities and IWriteEntities to be registered with this call
-            builder.Register(c => 
-                    new EntityDbContext(
-                        _dbContextOptions,
-                        c.Resolve<IUserService>(),
-                        c.Resolve<IAuditedEntityUpdater>())
-                {
-                    ModelCreator = c.Resolve<ICreateDbModel>()
-                })
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
-            
+
 
         }
     }

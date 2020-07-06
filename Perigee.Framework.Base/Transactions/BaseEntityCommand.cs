@@ -1,12 +1,12 @@
 ﻿namespace Perigee.Framework.Base.Transactions
 {
-    public abstract class BaseEntityCommand
+    public abstract class BaseEntityCommand : BaseCommand
     {
         protected BaseEntityCommand()
         {
             Commit = true;
         }
 
-        public bool Commit { get; set; } // TODO: See if this can remain internal
+        public bool Commit { get; set; }
     }
 }

@@ -9,13 +9,13 @@
     public class TransactionCommandHandlerDecorator<TCommand> : IHandleCommand<TCommand>
         where TCommand : BaseEntityCommand
     {
-        private readonly IHandleCommand<TCommand> decorated;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IHandleCommand<TCommand> _decorated;
+        private readonly IUnitOfWork _unitOfWork;
 
         public TransactionCommandHandlerDecorator(IHandleCommand<TCommand> decorated, IUnitOfWork unitOfWork)
         {
-            this.decorated = decorated;
-            this.unitOfWork = unitOfWork;
+            this._decorated = decorated;
+            this._unitOfWork = unitOfWork;
         }
 
 
@@ -28,15 +28,15 @@
                     new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
                     TransactionScopeAsyncFlowOption.Enabled);
 
-                await decorated.Handle(command, cancellationToken).ConfigureAwait(false);
-                await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                await _decorated.Handle(command, cancellationToken).ConfigureAwait(false);
+                await _unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
                 scope.Complete();
 
             }
             else
             {
-                await decorated.Handle(command, cancellationToken).ConfigureAwait(false);
+                await _decorated.Handle(command, cancellationToken).ConfigureAwait(false);
 
             }
 

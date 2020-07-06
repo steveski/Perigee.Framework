@@ -1,13 +1,17 @@
 ﻿namespace ExampleConsoleApp
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Linq;
     using System.Text.Json;
     using System.Threading;
     using Perigee.Framework.Base.Transactions;
     using System.Threading.Tasks;
+    using Autofac;
     using Example.Domain.Customers.Commands;
     using Example.Domain.Customers.Queries;
+    using Perigee.Framework.Base.Database;
+    using Perigee.Framework.EntityFramework;
 
     public class AppProcess
     {
@@ -22,22 +26,31 @@
 
         public async Task Run()
         {
+            var tokenSource = new CancellationTokenSource();
             var addCustomerCommand1 = new CreateCustomerCommand
             {
                 FirstName = "Bob",
                 LastName = "Jones",
-                EmailAddress = "bob.jones@home.com"
+                EmailAddress = "bob.jones@home.com",
+                //Commit = false
             };
 
             var addCustomerCommand2 = new CreateCustomerCommand
             {
                 FirstName = "Herbert",
                 LastName = "Scrackle",
-                EmailAddress = "herbert.scrackle@home.com"
+                EmailAddress = "herbert.scrackle@home.com",
+                //Commit =  false
             };
-            
-            var tokenSource = new CancellationTokenSource();
 
+
+            //await Task.WhenAll(new[]
+            //{
+            //    _processCommands.Execute(addCustomerCommand1, tokenSource.Token),
+            //    _processCommands.Execute(addCustomerCommand2, tokenSource.Token)
+
+            //}).ConfigureAwait(false);
+            
             await _processCommands.Execute(addCustomerCommand1, tokenSource.Token).ConfigureAwait(false);
             await _processCommands.Execute(addCustomerCommand2, tokenSource.Token).ConfigureAwait(false);
 

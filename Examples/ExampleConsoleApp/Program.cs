@@ -15,11 +15,15 @@
 
 
             var serviceProvider = ContainerConfiguration.Configure(principal);
-            var theProcess = serviceProvider.GetService(typeof(AppProcess)) as AppProcess;
+            //var theProcess = serviceProvider.GetService(typeof(AppProcess)) as AppProcess;
+            var theProcess = serviceProvider.GetService(typeof(AppProcessQueuedCommands)) as AppProcessQueuedCommands;
 
-            if (theProcess == null) 
+            if (theProcess == null)
+            {
                 Console.WriteLine("AppProcess registration failed");
-                
+                return;
+            }
+
             theProcess.Run().Wait();
 
         }

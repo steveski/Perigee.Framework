@@ -10,26 +10,30 @@
     using Autofac;
     using Example.Domain.Customers.Commands;
     using Example.Domain.Customers.Queries;
+    using Example.Services;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.EntityFramework;
 
-    public class AppProcess
+    public class AppProcessQueuedCommands
     {
         private readonly IProcessQueries _processQueries;
-        private readonly IProcessCommands _processCommands;
+        private readonly ICommandProcessorQueue _commandProcessorQueue;
 
-        public AppProcess(IProcessQueries processQueries, IProcessCommands processCommands)
+        public AppProcessQueuedCommands(IProcessQueries processQueries, ICommandProcessorQueue commandProcessorQueue)
         {
             _processQueries = processQueries;
-            _processCommands = processCommands;
+            _commandProcessorQueue = commandProcessorQueue;
         }
 
         public async Task Run()
         {
+            Console.WriteLine("Queued command processor");
+
             var tokenSource = new CancellationTokenSource();
-         
-            
-            
+
+            var commandQueueTask = _commandProcessorQueue.StartProcessing(tokenSource.Token);
+
+
             var addCustomerCommand1 = new CreateCustomerCommand
             {
                 FirstName = "Bob",
@@ -47,16 +51,14 @@
             };
 
 
-            //await Task.WhenAll(new[]
-            //{
-            //    _processCommands.Execute(addCustomerCommand1, tokenSource.Token),
-            //    _processCommands.Execute(addCustomerCommand2, tokenSource.Token)
-
-            //}).ConfigureAwait(false);
+            _commandProcessorQueue.EnqueueCommand(addCustomerCommand1, tokenSource.Token);
+            _commandProcessorQueue.EnqueueCommand(addCustomerCommand2, tokenSource.Token);
             
-            await _processCommands.Execute(addCustomerCommand1, tokenSource.Token).ConfigureAwait(false);
-            await _processCommands.Execute(addCustomerCommand2, tokenSource.Token).ConfigureAwait(false);
+            _commandProcessorQueue.FinaliseQueue();
 
+            await commandQueueTask.ConfigureAwait(false);
+
+            
             var customersByQuery = new CustomersBy
             {
                 FirstName = "Herbert"

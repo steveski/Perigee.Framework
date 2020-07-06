@@ -16,9 +16,9 @@
 
     public class HandleCreateCustomerCommand : IHandleCommand<CreateCustomerCommand>
     {
-        private readonly IWriteEntities _db;
+        private readonly ITransientContext _db;
 
-        public HandleCreateCustomerCommand(IWriteEntities db)
+        public HandleCreateCustomerCommand(ITransientContext db)
         {
             _db = db;
         }

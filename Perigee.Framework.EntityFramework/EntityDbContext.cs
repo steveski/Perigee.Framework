@@ -14,7 +14,7 @@
     using Perigee.Framework.Base.Entities;
     using Perigee.Framework.Services.User;
 
-    public class EntityDbContext : DbContext, IWriteEntities
+    public class EntityDbContext : DbContext, IWriteEntities, ITransientContext
     {
         private readonly IUserService _userService;
         private readonly IAuditedEntityUpdater _auditedEntityUpdater;

@@ -149,6 +149,11 @@
         {
             return Entry(entity).State;
         }
+        
+        public new EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : Entity
+        {
+            return base.Entry(entity);
+        }
 
         #endregion
 

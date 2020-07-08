@@ -7,6 +7,7 @@
     using Autofac.Extensions.DependencyInjection;
     using Example.Domain.Customers.Queries;
     using Example.Domain.Customers.Views;
+    using Example.Services;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Perigee.Framework.Base;
@@ -37,9 +38,14 @@
             // Turn on the CQRS pipeline in the framework
             var servicesModule = new ServicesModule(principal);
             containerBuilder.RegisterModule(servicesModule);
-            
+
+            containerBuilder.RegisterModule<ExampleServicesModule>();
+
             // Register the entry point for the application
             containerBuilder.RegisterType<AppProcess>().SingleInstance();
+            containerBuilder.RegisterType<AppProcessQueuedCommands>().SingleInstance();
+
+            
 
             var container = containerBuilder.Build();
 

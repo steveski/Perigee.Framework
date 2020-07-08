@@ -154,5 +154,14 @@
         /// <param name="entity"></param>
         /// <returns></returns>
         EntityState GetState<TEntity>(TEntity entity) where TEntity : Entity;
+        
+        /// <summary>
+        /// Returns the Entry for the specified entity
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : Entity;
+        
     }
 }

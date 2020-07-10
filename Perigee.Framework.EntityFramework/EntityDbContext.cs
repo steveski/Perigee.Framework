@@ -150,9 +150,9 @@
             return Entry(entity).State;
         }
         
-        public new EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : Entity
+        public void SetEntityState<TEntity>(TEntity entity, EntityState entityState) where TEntity : Entity
         {
-            return base.Entry(entity);
+            Entry(entity).State = entityState;
         }
 
         #endregion

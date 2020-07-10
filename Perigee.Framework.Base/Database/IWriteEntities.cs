@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
     using Entities;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
 
     /// <summary>
     ///     Informs an underlying relational data store to accept or return sets of writeable entity instances.
@@ -162,7 +161,7 @@
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : Entity;
+        void SetEntityState<TEntity>(TEntity entity, EntityState entityState) where TEntity : Entity;
         
     }
 }

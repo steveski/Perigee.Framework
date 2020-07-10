@@ -4,7 +4,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Entities;
-    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     ///     Informs an underlying relational data store to accept or return sets of writeable entity instances.
@@ -136,11 +135,12 @@
         ///     Entity instance whose data state will be replaced using the values currently
         ///     saved in the underlying relational data store.
         /// </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         Task ReloadAsync<TEntity>(TEntity entity, CancellationToken cancellationToken) where TEntity : Entity;
 
         /// <summary>
-        ///     Re-attach a detatched entity, i.e. one loaded with Query (IReadEntities) including entities returned from
+        ///     Re-attach a detached entity, i.e. one loaded with Query (IReadEntities) including entities returned from
         ///     IProcess/HandleQueries
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -154,14 +154,15 @@
         /// <param name="entity"></param>
         /// <returns></returns>
         EntityState GetState<TEntity>(TEntity entity) where TEntity : Entity;
-        
+
         /// <summary>
         /// Returns the Entry for the specified entity
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
+        /// <param name="state"></param>
         /// <returns></returns>
-        void SetEntityState<TEntity>(TEntity entity, EntityState entityState) where TEntity : Entity;
+        void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : Entity;
         
     }
 }

@@ -22,7 +22,7 @@
             if (typeof(TEntity) == typeof(Customer))
             {
                 var name = _userService.ClaimsIdentity.Name;
-                return x => (x as Customer).ManagedBy == name;
+                return x => ((Customer)(object)x).ManagedBy == name;
             }
 
             // For each table / entity provide the expressions that match the filtering required for the specific entity

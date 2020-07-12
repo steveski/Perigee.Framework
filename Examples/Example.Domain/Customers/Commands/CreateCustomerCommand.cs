@@ -7,6 +7,7 @@
     using Entities;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Transactions;
+    using Perigee.Framework.Services.User;
 
     public class CreateCustomerCommand : BaseCreateEntityCommand<Customer>
     {
@@ -20,10 +21,12 @@
     public class HandleCreateCustomerCommand : IHandleCommand<CreateCustomerCommand>
     {
         private readonly IWriteEntities _db;
+        private readonly IUserService _userService;
 
-        public HandleCreateCustomerCommand(IWriteEntities db)
+        public HandleCreateCustomerCommand(IWriteEntities db, IUserService userService)
         {
             _db = db;
+            _userService = userService;
         }
 
         public async Task Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
@@ -32,7 +35,8 @@
             {
                 FirstName = command.FirstName,
                 LastName = command.LastName,
-                EmailAddress = command.EmailAddress
+                EmailAddress = command.EmailAddress,
+                ManagedBy = _userService.ClaimsIdentity.Name
             };
 
             _db.Create(cust);
@@ -43,13 +47,13 @@
 
     public class SomeService
     {
-        private BlockingCollection<int> messageQueue = new BlockingCollection<int>();
+        private readonly BlockingCollection<int> _messageQueue = new BlockingCollection<int>();
 
-        public void ProcessIncommingMessages(CancellationToken ct)
+        public void ProcessIncomingMessages(CancellationToken ct)
         {
             while (true)
             {
-                var message = messageQueue.Take(ct);
+                var message = _messageQueue.Take(ct);
                 Console.Write(message);
 
             }
@@ -57,7 +61,7 @@
 
         public void SubmitMessageForProcessing(int message)
         {
-            messageQueue.Add(message);
+            _messageQueue.Add(message);
         }
 
     }

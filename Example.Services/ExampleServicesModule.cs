@@ -9,7 +9,7 @@
         {
             builder.RegisterType<CommandProcessorQueue>().As<ICommandProcessorQueue>().SingleInstance();
 
-            builder.RegisterType<AssignedUserRecordAuthority>().As<IRecordAuthority>().InstancePerLifetimeScope();
+            builder.RegisterType<GeneralUserRecordAuthority>().As<IRecordAuthority>().InstancePerLifetimeScope();
             //builder.RegisterType<AllAuthorisedRecordAuthority>().As<IRecordAuthority>().InstancePerLifetimeScope();
 
         }

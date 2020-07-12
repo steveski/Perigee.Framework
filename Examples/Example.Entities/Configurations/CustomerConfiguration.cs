@@ -35,6 +35,11 @@
                 .HasMaxLength(100);
 
 
+            builder.HasOne(c => c.Address)
+                .WithMany(a => a.Customers)
+                .HasForeignKey(c => c.AddressId);
+
+
         }
 
     }

@@ -1,20 +1,20 @@
 ﻿namespace Example.Entities
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using Perigee.Framework.Base.Entities;
 
-    public class Customer : Entity<int>, IAuditedEntity, ITimestampEnabled
+    public class Address : Entity<int>, IAuditedEntity, ITimestampEnabled
     {
 
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Street { get; set; }
+        public string Suburb { get; set; }
+        public string PostalCode { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
 
-        public string EmailAddress { get; set; }
-
-        public string ManagedBy { get; set; }
-
-        public int AddressId { get; set; }
-        public Address Address { get; set; }
+        public ICollection<Customer> Customers { get; set; }
 
 
         #region IAuditedEntity Implementation

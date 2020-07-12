@@ -7,11 +7,11 @@
     using Perigee.Framework.Base.Entities;
     using Perigee.Framework.Services.User;
 
-    public class AssignedUserRecordAuthority : IRecordAuthority
+    public class GeneralUserRecordAuthority : IRecordAuthority
     {
         private readonly IUserService _userService;
 
-        public AssignedUserRecordAuthority(IUserService userService)
+        public GeneralUserRecordAuthority(IUserService userService)
         {
             _userService = userService;
 
@@ -30,5 +30,6 @@
 
             return x => true;
         }
+ 
     }
 }

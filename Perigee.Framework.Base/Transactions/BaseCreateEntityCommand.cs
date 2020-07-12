@@ -2,7 +2,7 @@
 {
     using Entities;
 
-    public abstract class BaseCreateEntityCommand<TEntity> : BaseEntityCommand where TEntity : Entity
+    public abstract class BaseCreateEntityCommand<TEntity> : BaseEntityCommand where TEntity : IEntity
     {
         public TEntity CreatedEntity { get; set; }
     }

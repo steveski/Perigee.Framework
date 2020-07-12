@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Examples\Example.Entities\Example.Entities.csproj" />
     <ProjectReference Include="..\Perigee.Framework.Base\Perigee.Framework.Base.csproj" />
   </ItemGroup>
 

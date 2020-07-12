@@ -37,7 +37,7 @@
             builder.Register(c =>
                     new TransientEntityDbContext(
                         _dbContextOptions,
-                        c.Resolve<IUserService>(),
+                        c.Resolve<IRecordAuthority>(),
                         c.Resolve<IAuditedEntityUpdater>())
                     {
                         ModelCreator = c.Resolve<ICreateDbModel>()
@@ -50,7 +50,7 @@
             builder.Register(c =>
                     new EntityDbContext(
                         _dbContextOptions,
-                        c.Resolve<IUserService>(),
+                        c.Resolve<IRecordAuthority>(),
                         c.Resolve<IAuditedEntityUpdater>())
                     {
                         ModelCreator = c.Resolve<ICreateDbModel>()

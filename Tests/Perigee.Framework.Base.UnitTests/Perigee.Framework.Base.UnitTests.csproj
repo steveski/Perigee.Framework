@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\Perigee.Framework.Base\Perigee.Framework.Base.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\" />
+  </ItemGroup>
+
 </Project>

@@ -2,7 +2,7 @@
 {
     using Perigee.Framework.Base.Entities;
 
-    public class TestEntity : EntityWithId<int>
+    public class TestEntity : Entity<int>
     {
         public string Name { get; set; }
 

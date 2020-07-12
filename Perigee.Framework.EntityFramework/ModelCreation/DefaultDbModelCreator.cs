@@ -31,7 +31,7 @@
             // Set "Conventions" using an alternate technique until Conventions are supported in EF Core
             var dbConventions = assembly.GetTypes()
                 .Where(t => t.GetTypeInfo().ImplementedInterfaces
-                    .Any(i => i.Name.Equals(typeof(IEfDbConvention).Name, StringComparison.InvariantCultureIgnoreCase)
+                    .Any(i => i.Name.Equals(nameof(IEfDbConvention), StringComparison.InvariantCultureIgnoreCase)
                     )).ToList();
             dbConventions.ForEach(t =>
             {
@@ -49,17 +49,15 @@
 
         private bool NotSystemAssembly(string assembFullName)
         {
-            var ret = true;
-            if (assembFullName.StartsWith("System.", StringComparison.InvariantCultureIgnoreCase) ||
-                assembFullName.StartsWith("Microsoft.", StringComparison.InvariantCultureIgnoreCase) ||
-                assembFullName.StartsWith("netstandard", StringComparison.InvariantCultureIgnoreCase) ||
-                assembFullName.StartsWith("mscorlib", StringComparison.InvariantCultureIgnoreCase) ||
-                assembFullName.StartsWith("Remotion.", StringComparison.InvariantCultureIgnoreCase) ||
-                assembFullName.StartsWith("NewtonSoft", StringComparison.InvariantCultureIgnoreCase) ||
-                assembFullName.StartsWith("FluentValidation", StringComparison.InvariantCultureIgnoreCase) ||
-                assembFullName.StartsWith("SimpleInjector", StringComparison.InvariantCultureIgnoreCase) ||
-                assembFullName.StartsWith("Anonymous", StringComparison.InvariantCultureIgnoreCase))
-                ret = false;
+            bool ret = !(assembFullName.StartsWith("System.", StringComparison.InvariantCultureIgnoreCase) ||
+                         assembFullName.StartsWith("Microsoft.", StringComparison.InvariantCultureIgnoreCase) ||
+                         assembFullName.StartsWith("netstandard", StringComparison.InvariantCultureIgnoreCase) ||
+                         assembFullName.StartsWith("mscorlib", StringComparison.InvariantCultureIgnoreCase) ||
+                         assembFullName.StartsWith("Remoting.", StringComparison.InvariantCultureIgnoreCase) ||
+                         assembFullName.StartsWith("NewtonSoft", StringComparison.InvariantCultureIgnoreCase) ||
+                         assembFullName.StartsWith("FluentValidation", StringComparison.InvariantCultureIgnoreCase) ||
+                         assembFullName.StartsWith("SimpleInjector", StringComparison.InvariantCultureIgnoreCase) ||
+                         assembFullName.StartsWith("Anonymous", StringComparison.InvariantCultureIgnoreCase));
 
             return ret;
         }

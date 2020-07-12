@@ -6,8 +6,8 @@
 
     public class TransientEntityDbContext : EntityDbContext, ITransientContext
     {
-        public TransientEntityDbContext(DbContextOptions<EntityDbContext> options, IUserService userService, IAuditedEntityUpdater auditedEntityUpdater) 
-            : base(options, userService, auditedEntityUpdater)
+        public TransientEntityDbContext(DbContextOptions<EntityDbContext> options, IRecordAuthority recordAuthority, IAuditedEntityUpdater auditedEntityUpdater) 
+            : base(options, recordAuthority, auditedEntityUpdater)
         {
         }
     }

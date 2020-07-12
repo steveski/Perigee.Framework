@@ -3,7 +3,7 @@
     using System;
     using Perigee.Framework.Base.Entities;
 
-    public class Customer : EntityWithId<int>, IAuditedEntity, ITimestampEnabled
+    public class Customer : Entity<int>, IAuditedEntity, ITimestampEnabled
     {
 
         public string FirstName { get; set; }
@@ -11,6 +11,7 @@
 
         public string EmailAddress { get; set; }
 
+        public string ManagedBy { get; set; }
 
 
         #region IAuditedEntity Implementation

@@ -7,37 +7,30 @@
     using System.Threading;
     using System.Threading.Tasks;
     using EnsureThat;
+    using LinqKit;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using ModelCreation;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Entities;
-    using Perigee.Framework.Services.User;
     using EntityState = Perigee.Framework.Base.Database.EntityState;
     using EfEntityState = Microsoft.EntityFrameworkCore.EntityState;
 
 
     public class EntityDbContext : DbContext, IWriteEntities
     {
-        private readonly IUserService _userService;
+        private readonly IRecordAuthority _recordAuthority;
         private readonly IAuditedEntityUpdater _auditedEntityUpdater;
 
-        #region Construction
-
-        public EntityDbContext(DbContextOptions<EntityDbContext> options, IUserService userService, IAuditedEntityUpdater auditedEntityUpdater) : base(options)
+        public EntityDbContext(DbContextOptions<EntityDbContext> options, IRecordAuthority recordAuthority, IAuditedEntityUpdater auditedEntityUpdater) : base(options)
         {
-            Ensure.Any.IsNotNull(userService, nameof(userService));
+            Ensure.Any.IsNotNull(recordAuthority, nameof(recordAuthority));
             Ensure.Any.IsNotNull(auditedEntityUpdater, nameof(auditedEntityUpdater));
 
-            _userService = userService;
+            _recordAuthority = recordAuthority;
             _auditedEntityUpdater = auditedEntityUpdater;
             
-
         }
-
-
-        #endregion
-
 
         private void SetAuditValues()
         {
@@ -74,87 +67,68 @@
 
         #region Queries
 
-        public IQueryable<TEntity> EagerLoad<TEntity>(IQueryable<TEntity> query,
-            Expression<Func<TEntity, object>> expression) where TEntity : Entity
-        {
-            // Include will eager load data into the query
-            if (query != null && expression != null) query = query.Include(expression);
-            return query;
-        }
-
-        public new IQueryable<TEntity> Query<TEntity>() where TEntity : Entity
+        public new IQueryable<TEntity> Query<TEntity>() where TEntity : class, IEntity
         {
             // AsNoTracking returns entities that are not attached to the DbContext
-            return new EntitySet<TEntity>(Set<TEntity>().AsNoTracking(), this);
+            return QueryUnfiltered<TEntity>().Where(_recordAuthority.Clause<TEntity>());
+        }
+        
+        public IQueryable<TEntity> QueryUnfiltered<TEntity>() where TEntity : class, IEntity
+        {
+            // AsNoTracking returns entities that are not attached to the DbContext
+            return Set<TEntity>().AsNoTracking().AsExpandable();
         }
 
         #endregion
 
         #region Commands
-
-        public TEntity Get<TEntity>(object firstKeyValue, params object[] otherKeyValues) where TEntity : Entity
+        
+        public IQueryable<TEntity> Get<TEntity>() where TEntity : class, IEntity
         {
-            if (firstKeyValue == null) throw new ArgumentNullException(nameof(firstKeyValue));
-            var keyValues = new List<object> {firstKeyValue};
-            if (otherKeyValues != null) keyValues.AddRange(otherKeyValues);
-            return Set<TEntity>().Find(keyValues.ToArray());
+            return Set<TEntity>().AsExpandable().Where(_recordAuthority.Clause<TEntity>());
         }
-
-        public Task<TEntity> GetAsync<TEntity>(object firstKeyValue, CancellationToken cancellationToken, params object[] otherKeyValues)
-            where TEntity : Entity
-        {
-            if (firstKeyValue == null) throw new ArgumentNullException(nameof(firstKeyValue));
-            var keyValues = new List<object> {firstKeyValue};
-            if (otherKeyValues != null) keyValues.AddRange(otherKeyValues);
-            return Set<TEntity>().FindAsync(keyValues.ToArray()).AsTask();
-        }
-
-        public IQueryable<TEntity> Get<TEntity>() where TEntity : Entity
-        {
-            return new EntitySet<TEntity>(Set<TEntity>(), this);
-        }
-
-        public void Create<TEntity>(TEntity entity) where TEntity : Entity
+        
+        public void Create<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             if (Entry(entity).State == EfEntityState.Detached) Set<TEntity>().Add(entity);
         }
 
-        public new void Update<TEntity>(TEntity entity) where TEntity : Entity
+        public new void Update<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             var entry = Entry(entity);
             if (entry.State != EfEntityState.Added)
                 entry.State = EfEntityState.Modified;
         }
 
-        public void Delete<TEntity>(TEntity entity) where TEntity : Entity
+        public void Delete<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             if (Entry(entity).State != EfEntityState.Deleted)
                 Set<TEntity>().Remove(entity);
         }
 
-        public void Reload<TEntity>(TEntity entity) where TEntity : Entity
+        public void Reload<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             Entry(entity).Reload();
         }
 
-        public Task ReloadAsync<TEntity>(TEntity entity, CancellationToken cancellationToken) where TEntity : Entity
+        public Task ReloadAsync<TEntity>(TEntity entity, CancellationToken cancellationToken) where TEntity : class, IEntity
         {
             return Entry(entity).ReloadAsync(cancellationToken);
         }
 
-        public new void Attach<TEntity>(TEntity entity) where TEntity : Entity
+        public new void Attach<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             if (Entry(entity).State == EfEntityState.Detached)
                 Set<TEntity>().Attach(entity);
         }
 
-        public EntityState GetState<TEntity>(TEntity entity) where TEntity : Entity
+        public EntityState GetState<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             var internalEntityState = MapToInternal(Entry(entity).State);
             return internalEntityState;
         }
         
-        public void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : Entity
+        public void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class, IEntity
         {
             Entry(entity).State = MapToEf(state);
         }

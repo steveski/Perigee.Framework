@@ -28,7 +28,7 @@
             // For each table / entity provide the expressions that match the filtering required for the specific entity
 
 
-            return x => false;
+            return x => true;
         }
     }
 }

@@ -44,6 +44,7 @@
             // Register the entry point for the application
             containerBuilder.RegisterType<AppProcess>().SingleInstance();
             containerBuilder.RegisterType<AppProcessQueuedCommands>().SingleInstance();
+            containerBuilder.RegisterType<AppProcessDelete>().SingleInstance();
 
             
 

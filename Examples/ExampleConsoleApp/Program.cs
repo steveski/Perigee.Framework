@@ -17,6 +17,7 @@
             var serviceProvider = ContainerConfiguration.Configure(principal);
             var theProcess = serviceProvider.GetService(typeof(AppProcess)) as AppProcess;
             //var theProcess = serviceProvider.GetService(typeof(AppProcessQueuedCommands)) as AppProcessQueuedCommands;
+            //var theProcess = serviceProvider.GetService(typeof(AppProcessDelete)) as AppProcessDelete;
 
             if (theProcess == null)
             {

@@ -2,11 +2,6 @@
 {
     public abstract class BaseEntityCommand : BaseCommand
     {
-        protected BaseEntityCommand()
-        {
-            Commit = true;
-        }
-
-        public bool Commit { get; set; }
+        public bool Commit { get; set; } = true;
     }
 }

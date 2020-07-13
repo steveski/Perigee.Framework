@@ -25,20 +25,23 @@
 
         public void UpdateAuditFields(IEnumerable<object> addedEntities, IEnumerable<object> updatedEntities)
         {
+            var user = _userService?.ClaimsPrincipal?.Identity?.Name ?? "Unknown";
+            var now = _dateTimeService.Now;
+
             foreach (var added in addedEntities.OfType<IAuditedEntity>())
             {
-                added.CreatedBy = _userService.ClaimsPrincipal.Identity.Name;
-                added.CreatedOn = _dateTimeService.Now;
+                added.CreatedBy = user;
+                added.CreatedOn = now;
 
-                added.UpdatedBy = _userService.ClaimsPrincipal.Identity.Name;
-                added.UpdatedOn = _dateTimeService.Now;
+                added.UpdatedBy = user;
+                added.UpdatedOn = now;
 
             }
 
             foreach (var added in updatedEntities.OfType<IAuditedEntity>())
             {
-                added.UpdatedBy = _userService.ClaimsPrincipal.Identity.Name;
-                added.UpdatedOn = _dateTimeService.Now;
+                added.UpdatedBy = user;
+                added.UpdatedOn = now;
 
             }
 

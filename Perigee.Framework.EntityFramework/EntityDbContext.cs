@@ -186,13 +186,12 @@
             return Task.WhenAll(reloadTasks);
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entry in ChangeTracker.Entries().Where(x => x.State == EfEntityState.Deleted))
-            {
-                if (entry.State == EfEntityState.Deleted && entry.Entity is ISoftDelete) SetSoftDelete(entry);
-
-            }
+            var softDeletedEntities = ChangeTracker.Entries()
+                .Where(x => x.State == EfEntityState.Deleted && x.Entity is ISoftDelete);
+            
+            softDeletedEntities.ToList().ForEach(SetSoftDelete);
 
             SetAuditValues();
 

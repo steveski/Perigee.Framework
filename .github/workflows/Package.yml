@@ -1,0 +1,71 @@
+# Package and deploy script wrapped in trigger based on the following article:
+# https://github.community/t/depend-on-another-workflow/16311/3
+
+name: NuGet Packaging
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  pull_request:
+    types: [closed]
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+if: github.event.pull_request.merged
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+        
+    - name: Install dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Test
+      run: dotnet test -c Release --no-build --verbosity normal 
+
+    - name: Publish NuGet Base
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Base/Perigee.Framework.Base.csproj
+        PACKAGE_NAME: Perigee.Framework.Base
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish NuGet EF
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.EntityFramework/Perigee.Framework.EntityFramework.csproj
+        PACKAGE_NAME: Perigee.Framework.EntityFramework
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish NuGet Services
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Services/Perigee.Framework.Services.csproj
+        PACKAGE_NAME: Perigee.Framework.Services
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+    - name: Publish NuGet Web
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+        PROJECT_FILE_PATH: Perigee.Framework.Web/Perigee.Framework.Web.csproj
+        PACKAGE_NAME: Perigee.Framework.Web
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        NUGET_SOURCE: https://api.nuget.org
+
+with:
+ref: master
+

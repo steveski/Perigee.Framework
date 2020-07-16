@@ -1,12 +1,9 @@
 ![CI](https://github.com/steveski/Perigee.Framework/workflows/CI/badge.svg)
 
-![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.Base?label=Perigee.Framework.Base)
-
-![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.Services?label=Perigee.Framework.Services)
-
-![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.EntityFramework?label=Perigee.Framework.EntityFramework)
-
-![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.Web?label=Perigee.Framework.Web)
+[![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.Base?label=Perigee.Framework.Base)](https://www.nuget.org/packages/Perigee.Framework.Base/)
+[![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.Services?label=Perigee.Framework.Services)](https://www.nuget.org/packages/Perigee.Framework.Services/)
+[![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.EntityFramework?label=Perigee.Framework.EntityFramework)](https://www.nuget.org/packages/Perigee.Framework.EntityFramework/)
+[![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.Web?label=Perigee.Framework.Web)](https://www.nuget.org/packages/Perigee.Framework.Web/)
 
 # Perigee.Framework
 Build .NET application using CQRS easily.

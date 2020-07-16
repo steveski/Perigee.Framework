@@ -1,7 +1,10 @@
 ![CI](https://github.com/steveski/Perigee.Framework/workflows/CI/badge.svg)
-[![NuGet](https://img.shields.io/nuget/dt/mediatr.svg)](https://www.nuget.org/packages/Perigee.Framework.Base)
-[![NuGet](https://img.shields.io/nuget/dt/mediatr.svg)](https://www.nuget.org/packages/Perigee.Framework.Services)
-[![NuGet](https://img.shields.io/nuget/dt/mediatr.svg)](https://www.nuget.org/packages/Perigee.Framework.EntityFramework) 
+
+![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.Base?label=Perigee.Framework.Base)
+
+![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.Services?label=Perigee.Framework.Services)
+
+![Nuget](https://img.shields.io/nuget/v/Perigee.Framework.EntityFramework?label=Perigee.Framework.EntityFramework)
 
 # Perigee.Framework
 Build .NET application using CQRS easily.

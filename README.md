@@ -8,7 +8,7 @@ Examples of usage can be found in the [wiki](https://github.com/steveski/Perigee
 
 ### Installation
 
-For a minimal setup providing a CQRS pipeline to start create commands and queries:
+For a minimal setup providing a CQRS pipeline to start creating commands and queries:
 
     Install-Package Perigee.Framework.Services
     

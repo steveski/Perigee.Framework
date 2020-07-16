@@ -2,7 +2,7 @@
 
 # Perigee.Framework
 Build .NET application using CQRS easily.
-This is an implementation of Steven van Deurson's blogs arcticles on his [Command](https://blogs.cuttingedge.it/steven/posts/2011/meanwhile-on-the-command-side-of-my-architecture/) / [Query](https://blogs.cuttingedge.it/steven/posts/2011/meanwhile-on-the-command-side-of-my-architecture/) architecture. Some extensions of Steven's work and core concepts from the project [Tripod](https://github.com/danludwig/tripod) have been reworked into a more generic base framework Standard that can be used in any project type. The project compiles as a suite of .NET Standard libraries allowing use in a variety of .NET language versions.
+This is an implementation of Steven van Deurson's blogs arcticles on his [Command](https://blogs.cuttingedge.it/steven/posts/2011/meanwhile-on-the-command-side-of-my-architecture/) / [Query](https://blogs.cuttingedge.it/steven/posts/2011/meanwhile-on-the-command-side-of-my-architecture/) architecture. Some extensions of Steven's work and core concepts from the project [Tripod](https://github.com/danludwig/tripod) have been reworked into a more generic base framework that can be used in any project type. The project compiles as a suite of .NET Standard libraries allowing use in a variety of .NET language versions.
 
 Examples of usage can be found in the [wiki](https://github.com/steveski/Perigee.Framework/wiki).
 

@@ -24,6 +24,21 @@
         IQueryable<TEntity> Get<TEntity>() where TEntity : class, IEntity;
 
         /// <summary>
+        ///     Inform an underlying relational data store to return a set of writable entity instances.
+        ///     If <see cref="includeSoftDeleted"/> if true then soft deleted records will be included
+        /// </summary>
+        /// <typeparam name="TEntity">
+        ///     Type of the entity instances that the underlying relational data store
+        ///     should return.
+        /// </typeparam>
+        /// <returns>
+        ///     IQueryable for set of writable TEntity instances from an underlying relational data
+        ///     store.
+        /// </returns>
+        IQueryable<TEntity> Get<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete;
+
+
+        /// <summary>
         ///     Inform the underlying relational data store that a new entity instance should be added to a set
         ///     of entity instances.
         /// </summary>

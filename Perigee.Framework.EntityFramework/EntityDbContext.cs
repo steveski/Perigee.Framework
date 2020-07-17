@@ -72,22 +72,49 @@
             // AsNoTracking returns entities that are not attached to the DbContext
             return QueryUnfiltered<TEntity>().Where(_recordAuthority.Clause<TEntity>());
         }
-        
+
+        public IQueryable<TEntity> Query<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete
+        {
+            var query = Query<TEntity>();
+            if (includeSoftDeleted)
+                query = query.Where(x => x.IsDeleted);
+
+            return query;
+        }
+
         public IQueryable<TEntity> QueryUnfiltered<TEntity>() where TEntity : class, IEntity
         {
             // AsNoTracking returns entities that are not attached to the DbContext
             return Set<TEntity>().AsNoTracking().AsExpandable();
         }
 
+        public IQueryable<TEntity> QueryUnfiltered<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete
+        {
+            var query = QueryUnfiltered<TEntity>();
+            if (includeSoftDeleted)
+                query = query.Where(x => x.IsDeleted);
+
+            return query;
+        }
+
         #endregion
 
         #region Commands
-        
+
         public IQueryable<TEntity> Get<TEntity>() where TEntity : class, IEntity
         {
             return Set<TEntity>().AsExpandable().Where(_recordAuthority.Clause<TEntity>());
         }
-        
+
+        public IQueryable<TEntity> Get<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete
+        {
+            var query = Get<TEntity>();
+            if (includeSoftDeleted)
+                query = query.Where(x => x.IsDeleted);
+
+            return query;
+        }
+
         public void Create<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             if (Entry(entity).State == EfEntityState.Detached) Set<TEntity>().Add(entity);

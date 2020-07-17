@@ -17,12 +17,6 @@
     /// </summary>
     public class EntityFrameworkModule : Module
     {
-        private readonly DbContextOptions<EntityDbContext> _dbContextOptions;
-
-        public EntityFrameworkModule(DbContextOptions<EntityDbContext> dbContextOptions)
-        {
-            _dbContextOptions = dbContextOptions;
-        }
 
         protected override void Load(ContainerBuilder builder)
         {
@@ -36,7 +30,7 @@
 
             builder.Register(c =>
                     new TransientEntityDbContext(
-                        _dbContextOptions,
+                        c.Resolve<DbContextOptions<EntityDbContext>>(),
                         c.Resolve<IRecordAuthority>(),
                         c.Resolve<IAuditedEntityUpdater>())
                     {
@@ -49,7 +43,7 @@
             // Expecting IUnitOfWork, IReadEntities and IWriteEntities to be registered with this call
             builder.Register(c =>
                     new EntityDbContext(
-                        _dbContextOptions,
+                        c.Resolve<DbContextOptions<EntityDbContext>>(),
                         c.Resolve<IRecordAuthority>(),
                         c.Resolve<IAuditedEntityUpdater>())
                     {

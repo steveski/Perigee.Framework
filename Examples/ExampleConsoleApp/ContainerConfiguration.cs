@@ -26,14 +26,15 @@
             var containerBuilder = new ContainerBuilder();
 
             containerBuilder.Populate(serviceCollection);
-            
-            var optionsBuilder = new DbContextOptionsBuilder<EntityDbContext>()
-                .UseInMemoryDatabase("Snoogans");
+
+            containerBuilder.Register(c => new DbContextOptionsBuilder<EntityDbContext>()
+                    .UseInMemoryDatabase("Snoogans")
                 //.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
                 //.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CqrsExampleDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+                    .Options
+            );
 
-            var efModule = new EntityFrameworkModule(optionsBuilder.Options);
-            containerBuilder.RegisterModule(efModule);
+            containerBuilder.RegisterModule<EntityFrameworkModule>();
 
             // Turn on the CQRS pipeline in the framework
             var servicesModule = new ServicesModule(principal);

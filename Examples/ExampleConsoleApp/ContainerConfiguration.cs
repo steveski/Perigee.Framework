@@ -37,8 +37,8 @@
             containerBuilder.RegisterModule<EntityFrameworkModule>();
 
             // Turn on the CQRS pipeline in the framework
-            var servicesModule = new ServicesModule(principal);
-            containerBuilder.RegisterModule(servicesModule);
+            containerBuilder.Register(c => principal);
+            containerBuilder.RegisterModule<ServicesModule>();
 
             containerBuilder.RegisterModule<ExampleServicesModule>();
 

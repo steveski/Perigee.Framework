@@ -16,26 +16,17 @@
 
     public class ServicesModule : Module
     {
-        private readonly ClaimsPrincipal _principal;
-
-        public ServicesModule(ClaimsPrincipal principal)
-        {
-            _principal = principal;
-
-        }
-
-
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<DefaultDateTimeService>().As<IDateTimeService>().InstancePerLifetimeScope();
 
-            builder.Register(c => _principal)
-                .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
-
-            builder.Register(c => new UserService
+            builder.Register(c =>
                 {
-                    ClaimsPrincipal = _principal
+                    var principal = c.Resolve<ClaimsPrincipal>();
+                    return new UserService
+                    {
+                        ClaimsPrincipal = principal
+                    };
                 }).As<IUserService>()
                 .InstancePerLifetimeScope();
 

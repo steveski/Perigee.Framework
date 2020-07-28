@@ -11,9 +11,11 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Perigee.Framework.Base;
+    using Perigee.Framework.Base.Services;
     using Perigee.Framework.Base.Transactions;
     using Perigee.Framework.EntityFramework;
     using Perigee.Framework.Services;
+    using Perigee.Framework.Services.Security;
 
     internal static class ContainerConfiguration
     {
@@ -28,16 +30,16 @@
             containerBuilder.Populate(serviceCollection);
 
             containerBuilder.Register(c => new DbContextOptionsBuilder<EntityDbContext>()
-                    .UseInMemoryDatabase("Snoogans")
-                //.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
-                //.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CqrsExampleDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+                //.UseInMemoryDatabase("Snoogans")
+                //.UseSqlServer(_config.GetConnectionString("DefaultConnection"))
+                .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CqrsExampleDb;Trusted_Connection=True;MultipleActiveResultSets=true")
                     .Options
             );
 
             containerBuilder.RegisterModule<EntityFrameworkModule>();
 
             // Turn on the CQRS pipeline in the framework
-            containerBuilder.Register(c => principal);
+            containerBuilder.Register(c => new PrincipalProvider(principal)).As<IPrincipalProvider>();
             containerBuilder.RegisterModule<ServicesModule>();
 
             containerBuilder.RegisterModule<ExampleServicesModule>();

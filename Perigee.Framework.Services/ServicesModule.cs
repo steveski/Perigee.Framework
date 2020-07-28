@@ -22,11 +22,8 @@
 
             builder.Register(c =>
                 {
-                    var principal = c.Resolve<ClaimsPrincipal>();
-                    return new UserService
-                    {
-                        ClaimsPrincipal = principal
-                    };
+                    var principalProvider = c.Resolve<IPrincipalProvider>();
+                    return new UserService(principalProvider);
                 }).As<IUserService>()
                 .InstancePerLifetimeScope();
 

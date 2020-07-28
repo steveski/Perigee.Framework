@@ -1,11 +1,11 @@
-﻿namespace Perigee.Framework.Services.User
+﻿namespace Perigee.Framework.Base.Services
 {
     using System.Security.Claims;
     using System.Security.Principal;
 
     public interface IUserService
     {
-        ClaimsPrincipal ClaimsPrincipal { get; set; }
+        ClaimsPrincipal ClaimsPrincipal { get; }
 
         IIdentity ClaimsIdentity { get; }
 

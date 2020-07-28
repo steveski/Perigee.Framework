@@ -3,10 +3,18 @@
     using System.Runtime.InteropServices;
     using System.Security.Claims;
     using System.Security.Principal;
+    using Perigee.Framework.Base.Services;
 
     public class UserService : IUserService
     {
-        public ClaimsPrincipal ClaimsPrincipal { get; set; }
+        private readonly IPrincipalProvider _principalProvider;
+
+        public UserService(IPrincipalProvider principalProvider)
+        {
+            _principalProvider = principalProvider;
+        }
+
+        public ClaimsPrincipal ClaimsPrincipal => _principalProvider.ClaimsPrincipal;
 
         public IIdentity ClaimsIdentity
         {

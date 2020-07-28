@@ -6,8 +6,8 @@
     using System.Threading.Tasks;
     using Entities;
     using Perigee.Framework.Base.Database;
+    using Perigee.Framework.Base.Services;
     using Perigee.Framework.Base.Transactions;
-    using Perigee.Framework.Services.User;
 
     public class CreateCustomerCommand : BaseCreateEntityCommand<Customer>
     {
@@ -29,7 +29,7 @@
             _userService = userService;
         }
 
-        public async Task Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
+        public Task Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
         {
             var cust = new Customer
             {
@@ -42,6 +42,7 @@
             _db.Create(cust);
             command.CreatedEntity = cust;
             
+            return Task.CompletedTask;
         }
     }
 

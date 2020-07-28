@@ -5,6 +5,7 @@
     [LastName] NVARCHAR(100) NOT NULL, 
     [EmailAddress] NVARCHAR(255) NOT NULL,
     [ManagedBy] NVARCHAR(100) NULL, 
+    [AddressId] INT NULL,
     [CreatedOn] DATETIME2 NOT NULL, 
     [CreatedBy] NVARCHAR(50) NOT NULL, 
     [UpdatedOn] DATETIME2 NOT NULL, 

@@ -3,6 +3,7 @@
     using System.Runtime.InteropServices;
     using System.Security.Claims;
     using System.Security.Principal;
+    using System.Threading.Tasks;
     using Perigee.Framework.Base.Services;
 
     public class UserService : IUserService
@@ -14,7 +15,15 @@
             _principalProvider = principalProvider;
         }
 
-        public ClaimsPrincipal ClaimsPrincipal => _principalProvider.ClaimsPrincipal;
+        public ClaimsPrincipal ClaimsPrincipal
+        {
+            get
+            {
+                var task = Task.Run(() => _principalProvider.GetClaimsPrincipal());
+                var claimsPrincipal = task.GetAwaiter().GetResult();
+                return claimsPrincipal;
+            }
+        }
 
         public IIdentity ClaimsIdentity
         {

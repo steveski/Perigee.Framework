@@ -1,8 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Divergic.Configuration.Autofac" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Perigee.Framework.Web\Perigee.Framework.Web.csproj" />
+    <ProjectReference Include="..\Example.Domain\Example.Domain.csproj" />
+    <ProjectReference Include="..\Example.Services\Example.Services.csproj" />
+    <ProjectReference Include="..\ExampleRestApi.Contract\ExampleRestApi.Contract.csproj" />
+  </ItemGroup>
 
 
 </Project>

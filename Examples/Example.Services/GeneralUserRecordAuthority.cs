@@ -6,7 +6,6 @@
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Entities;
     using Perigee.Framework.Base.Services;
-    using Perigee.Framework.Services.User;
 
     public class GeneralUserRecordAuthority : IRecordAuthority
     {

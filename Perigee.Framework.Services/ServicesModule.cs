@@ -1,6 +1,7 @@
 ﻿namespace Perigee.Framework.Services
 {
     using System;
+    using System.Linq;
     using System.Reflection;
     using System.Security.Claims;
     using Autofac;

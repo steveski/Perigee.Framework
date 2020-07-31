@@ -34,6 +34,9 @@
             if (query.Id.HasValue)
             {
                 var theCustomer = await customers.SingleOrDefaultAsync(x => x.Id == query.Id, cancellationToken).ConfigureAwait(false);
+                if(theCustomer == null)
+                    return new List<GetCustomerView>();
+
                 return new[]
                 {
                     new GetCustomerView

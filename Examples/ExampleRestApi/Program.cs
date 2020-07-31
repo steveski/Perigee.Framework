@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace ExampleRestApi
 {
+    using Autofac.Extensions.DependencyInjection;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -18,6 +20,7 @@ namespace ExampleRestApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

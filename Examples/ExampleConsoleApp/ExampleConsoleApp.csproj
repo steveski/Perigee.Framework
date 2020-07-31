@@ -8,15 +8,16 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Example.Services\Example.Services.csproj" />
     <ProjectReference Include="..\Example.Domain\Example.Domain.csproj" />
     <ProjectReference Include="..\..\Perigee.Framework.EntityFramework\Perigee.Framework.EntityFramework.csproj" />
     <ProjectReference Include="..\..\Perigee.Framework.Services\Perigee.Framework.Services.csproj" />
+    <ProjectReference Include="..\Example.Services\Example.Services.csproj" />
   </ItemGroup>
 
 </Project>

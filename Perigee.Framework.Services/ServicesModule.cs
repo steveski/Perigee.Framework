@@ -17,7 +17,11 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<DefaultDateTimeService>().As<IDateTimeService>().InstancePerLifetimeScope();
+            builder.Register(c =>
+            {
+                var config = c.IsRegistered<IDateTimeConfig>() ? c.Resolve<IDateTimeConfig>() : null;
+                return new DateTimeService(config);
+            }).As<IDateTimeService>().InstancePerLifetimeScope();
 
             builder.Register(c =>
                 {

@@ -17,18 +17,22 @@
                 .IsRequired();
 
             builder.Property(p => p.FirstName)
-                .HasColumnType("nvarchar")
+                .HasColumnType("nvarchar(100)")
                 .HasMaxLength(100)
                 .IsRequired();
 
             builder.Property(p => p.LastName)
-                .HasColumnType("nvarchar")
+                .HasColumnType("nvarchar(100)")
                 .HasMaxLength(100)
                 .IsRequired();
 
             builder.Property(p => p.EmailAddress)
-                .HasColumnType("nvarchar")
+                .HasColumnType("nvarchar(255)")
                 .HasMaxLength(255);
+
+            builder.Property(p => p.ManagedBy)
+                .HasColumnType("nvarchar(50)")
+                .HasMaxLength(50);
 
 
             builder.HasOne(c => c.Address)

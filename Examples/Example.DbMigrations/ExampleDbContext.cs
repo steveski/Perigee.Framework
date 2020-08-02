@@ -7,7 +7,10 @@
 
     public class ExampleDbContext : DbContext
     {
-        public ExampleDbContext(DbContextOptions<ExampleDbContext> contextOptions) : base(contextOptions)
+        public ExampleDbContext() : base(
+            new DbContextOptionsBuilder<ExampleDbContext>()
+                .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CqrsExampleDb;Trusted_Connection=True;")
+                .Options)
         {
             if (Database.ProviderName != "Microsoft.EntityFrameworkCode.InMemory")
             {

@@ -6,7 +6,7 @@
     {
         public DateTime Now { get; }
         public DateTime Today { get; }
-        public DateTime UtcNow { get; }
+
 
     }
 }

@@ -46,8 +46,8 @@
             builder.Property(p => p.CreatedOn).HasColumnName("CreatedOn").HasColumnType("datetime2");
             builder.Property(p => p.UpdatedOn).HasColumnName("UpdatedOn").HasColumnType("datetime2");
 
-            builder.Property(p => p.CreatedBy).HasColumnName("CreatedBy").HasColumnType("nvarchar").HasMaxLength(50);
-            builder.Property(p => p.UpdatedBy).HasColumnName("UpdatedBy").HasColumnType("nvarchar").HasMaxLength(50);
+            builder.Property(p => p.CreatedBy).HasColumnName("CreatedBy").HasColumnType("nvarchar(50)").HasMaxLength(50);
+            builder.Property(p => p.UpdatedBy).HasColumnName("UpdatedBy").HasColumnType("nvarchar(50)").HasMaxLength(50);
 
         }
 

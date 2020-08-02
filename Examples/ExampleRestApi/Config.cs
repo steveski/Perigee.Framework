@@ -6,6 +6,19 @@
     {
         public DatabaseConfig Database { get; set; }
         public DateTimeConfig DateTime { get; set; }
+        public AesConfig Aes { get; set; }
+    }
+
+    public interface IAesConfig
+    {
+        string Key { get; set; }
+        string Iv { get; set; }
+    }
+
+    public class AesConfig : IAesConfig
+    {
+        public string Key { get; set; }
+        public string Iv { get; set; }
 
     }
 

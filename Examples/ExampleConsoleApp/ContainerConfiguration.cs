@@ -3,12 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.Security.Claims;
+    using System.Text;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Example.Domain.Customers.Queries;
     using Example.Domain.Customers.Views;
     using Example.Services;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.DataEncryption;
+    using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
     using Microsoft.Extensions.DependencyInjection;
     using Perigee.Framework.Base.Services;
     using Perigee.Framework.Base.Transactions;
@@ -18,7 +21,7 @@
 
     internal static class ContainerConfiguration
     {
-        public static IServiceProvider Configure(ClaimsPrincipal principal, IDatabaseConfig databaseConfig)
+        public static IServiceProvider Configure(ClaimsPrincipal principal, IDatabaseConfig databaseConfig, IAesConfig aesConfig)
         {
             // ReSharper disable once CollectionNeverUpdated.Local
             var serviceCollection = new ServiceCollection();
@@ -51,7 +54,14 @@
             containerBuilder.RegisterType<AppProcessQueuedCommands>().SingleInstance();
             containerBuilder.RegisterType<AppProcessDelete>().SingleInstance();
 
-            
+            containerBuilder.Register(c =>
+            {
+                var key = Encoding.ASCII.GetBytes(aesConfig.Key);
+                var iv = Encoding.ASCII.GetBytes(aesConfig.Iv);
+
+                return new AesProvider(key, iv);
+            }).As<IEncryptionProvider>();
+
 
             var container = containerBuilder.Build();
 
@@ -62,3 +72,4 @@
         }
     }
 }
+

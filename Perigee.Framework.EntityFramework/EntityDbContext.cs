@@ -9,26 +9,41 @@
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using Microsoft.EntityFrameworkCore.DataEncryption;
     using ModelCreation;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Entities;
     using EntityState = Perigee.Framework.Base.Database.EntityState;
     using EfEntityState = Microsoft.EntityFrameworkCore.EntityState;
 
+    public static class MyClass
+    {
+
+        public static DbContextOptionsBuilder UseFieldEncryption(
+            this DbContextOptionsBuilder optionsBuilder,
+            Action<IEncryptionProvider> fieldEncryptionOptionsAction = null)
+        {
+
+            return optionsBuilder;
+        }
+    
+    }
+
 
     public class EntityDbContext : DbContext, IWriteEntities
     {
         private readonly IRecordAuthority _recordAuthority;
         private readonly IAuditedEntityUpdater _auditedEntityUpdater;
+        private readonly IEncryptionProvider _encryptionProvider;
 
-        public EntityDbContext(DbContextOptions<EntityDbContext> options, IRecordAuthority recordAuthority, IAuditedEntityUpdater auditedEntityUpdater) : base(options)
+        public EntityDbContext(DbContextOptions<EntityDbContext> options, IRecordAuthority recordAuthority, IAuditedEntityUpdater auditedEntityUpdater, IEncryptionProvider encryptionProvider = null) : base(options)
         {
             Ensure.Any.IsNotNull(recordAuthority, nameof(recordAuthority));
             Ensure.Any.IsNotNull(auditedEntityUpdater, nameof(auditedEntityUpdater));
 
             _recordAuthority = recordAuthority;
             _auditedEntityUpdater = auditedEntityUpdater;
-            
+            _encryptionProvider = encryptionProvider;
         }
 
         private void SetAuditValues()
@@ -59,6 +74,11 @@
         {
             ModelCreator ??= new DefaultDbModelCreator();
             ModelCreator.Create(modelBuilder);
+
+            if(_encryptionProvider != null)
+                modelBuilder.UseEncryption(_encryptionProvider);
+
+
             base.OnModelCreating(modelBuilder);
         }
 

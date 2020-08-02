@@ -2,10 +2,11 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using Perigee.Framework.EntityFramework;
 
-    public class AddressConfiguration : IEntityTypeConfiguration<Address>
+    public class AddressConfiguration : BaseEntityTypeConfiguration<Address>
     {
-        public void Configure(EntityTypeBuilder<Address> builder)
+        public override void ConfigureEntity(EntityTypeBuilder<Address> builder)
         {
             builder.ToTable("Address");
             builder.HasKey(x => x.Id);

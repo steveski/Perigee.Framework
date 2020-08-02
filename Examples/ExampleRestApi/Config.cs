@@ -1,8 +1,11 @@
 ﻿namespace ExampleRestApi
 {
+    using Perigee.Framework.Services;
+
     public class Config
     {
         public DatabaseConfig Database { get; set; }
+        public DateTimeConfig DateTime { get; set; }
 
     }
 

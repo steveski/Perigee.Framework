@@ -10,7 +10,6 @@
     using Example.Services;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using Perigee.Framework.Base;
     using Perigee.Framework.Base.Services;
     using Perigee.Framework.Base.Transactions;
     using Perigee.Framework.EntityFramework;
@@ -19,7 +18,7 @@
 
     internal static class ContainerConfiguration
     {
-        public static IServiceProvider Configure(ClaimsPrincipal principal)
+        public static IServiceProvider Configure(ClaimsPrincipal principal, IDatabaseConfig databaseConfig)
         {
             // ReSharper disable once CollectionNeverUpdated.Local
             var serviceCollection = new ServiceCollection();
@@ -29,12 +28,15 @@
 
             containerBuilder.Populate(serviceCollection);
 
-            containerBuilder.Register(c => new DbContextOptionsBuilder<EntityDbContext>()
-                //.UseInMemoryDatabase("Snoogans")
-                //.UseSqlServer(_config.GetConnectionString("DefaultConnection"))
-                .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CqrsExampleDb;Trusted_Connection=True;MultipleActiveResultSets=true")
-                    .Options
-            );
+            containerBuilder.Register(c =>
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<EntityDbContext>();
+                optionsBuilder = databaseConfig.InMemory.Enabled
+                    ? optionsBuilder.UseInMemoryDatabase(databaseConfig.InMemory.Name)
+                    : optionsBuilder.UseSqlServer(databaseConfig.ConnectionString);
+
+                    return optionsBuilder.Options;
+            });
 
             containerBuilder.RegisterModule<EntityFrameworkModule>();
 

@@ -3,7 +3,7 @@
     using System;
     using Perigee.Framework.Base.Entities;
 
-    public class Customer : Entity<int>, IAuditedEntity, ITimestampEnabled
+    public class Customer : Entity<int>, IAuditedEntity, ITimestampEnabled, ISoftDelete
     {
 
         public string FirstName { get; set; }
@@ -32,5 +32,6 @@
 
         #endregion
 
+        public bool IsDeleted { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,10 +6,9 @@ using Microsoft.Extensions.Logging;
 namespace ExampleRestApi.Controllers
 {
     using System.Threading;
-    using Autofac;
+    using AutoMapper;
     using Example.Domain.Customers.Commands;
     using Example.Domain.Customers.Queries;
-    using Example.Domain.Customers.Views;
     using ExampleRestApi.Contract;
     using Perigee.Framework.Base.Transactions;
 
@@ -21,6 +18,7 @@ namespace ExampleRestApi.Controllers
     {
         private readonly IProcessQueries _queries;
         private readonly IProcessCommands _commands;
+        private readonly IMapper _mapper;
         private readonly ILogger<CustomerController> _logger;
 
         public CustomerController(IProcessQueries queries, IProcessCommands commands, ILogger<CustomerController> logger)
@@ -31,14 +29,21 @@ namespace ExampleRestApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCustomer([FromBody] CreateCustomerCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddCustomer([FromBody] CustomerDto customer, CancellationToken cancellationToken)
         {
+            var command = new CreateCustomerCommand
+            {
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                EmailAddress = customer.EmailAddress
+            };
+
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             await _commands.Execute(command, cancellationToken).ConfigureAwait(false);
             if (command.CreatedEntity == null) return BadRequest();
 
-            var contract = new CustomerContract
+            var contract = new CustomerDto
             {
                 Id = command.CreatedEntity.Id,
                 FirstName = command.CreatedEntity.FirstName,
@@ -58,7 +63,7 @@ namespace ExampleRestApi.Controllers
         {
             var customers = await _queries.Execute(new CustomersBy(), cancellationToken).ConfigureAwait(false);
 
-            var contract = customers.Select(customer => new CustomerContract
+            var contract = customers.Select(customer => new CustomerDto
             {
                 Id = customer.Id,
                 FirstName = customer.FirstName,
@@ -70,7 +75,8 @@ namespace ExampleRestApi.Controllers
         }
 
         // GET: api/customer/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}")]
         public async Task<IActionResult> GetCustomer([FromRoute] int id, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -81,7 +87,7 @@ namespace ExampleRestApi.Controllers
             var customer = customers.FirstOrDefault();
             if (customer == null) return NotFound();
 
-            var contract = new CustomerContract
+            var contract = new CustomerDto
             {
                 Id = customer.Id,
                 FirstName = customer.FirstName,

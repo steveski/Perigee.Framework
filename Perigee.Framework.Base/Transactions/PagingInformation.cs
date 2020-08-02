@@ -1,7 +1,6 @@
 ﻿namespace Perigee.Framework.Base.Transactions
 {
     using System;
-    using EnsureThat;
 
     public class PagingInformation
     {

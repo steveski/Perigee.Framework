@@ -1,27 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace ExampleRestApi
 {
     using Autofac;
-    using Autofac.Core;
     using Autofac.Extensions.DependencyInjection;
-    using Example.Domain.Customers.Commands;
-    using Example.Domain.Customers.Views;
-    using Microsoft.AspNetCore.Components.Authorization;
-    using Perigee.Framework.Base.Transactions;
-    using Perigee.Framework.Web.Extensions;
-    using Perigee.Framework.Web.Middleware.Logging;
+    using Microsoft.Extensions.Diagnostics.HealthChecks;
 
     public class Startup
     {
@@ -38,6 +26,10 @@ namespace ExampleRestApi
         {
             services.AddControllers();
             services.AddSwaggerGen();
+            
+            services.AddHealthChecks()
+                .AddCheck("HealthCheck", () => HealthCheckResult.Healthy(DateTime.Now.ToLongTimeString()));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +66,7 @@ namespace ExampleRestApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
 
             });
 

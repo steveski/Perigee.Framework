@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.Threading;
     using System.Threading.Tasks;
+    using EnsureThat;
     using Entities;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Services;
@@ -24,6 +25,9 @@
 
         public HandleCreateCustomerCommand(IWriteEntities db, IUserService userService)
         {
+            Ensure.Any.IsNotNull(db, nameof(db));
+            Ensure.Any.IsNotNull(userService, nameof(userService));
+
             _db = db;
             _userService = userService;
         }

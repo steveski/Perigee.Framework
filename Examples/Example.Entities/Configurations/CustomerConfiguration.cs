@@ -30,10 +30,6 @@
                 .HasColumnType("nvarchar")
                 .HasMaxLength(255);
 
-            builder.Property(p => p.EmailAddress)
-                .HasColumnType("nvarchar")
-                .HasMaxLength(100);
-
 
             builder.HasOne(c => c.Address)
                 .WithMany(a => a.Customers)

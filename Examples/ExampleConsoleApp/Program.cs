@@ -3,18 +3,27 @@
     using System;
     using System.Security.Claims;
     using System.Security.Principal;
+    using Microsoft.Extensions.Configuration;
 
     class Program
     {
         static void Main(string[] args)
         {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .AddCommandLine(args)
+                .Build();
+
+            var databaseConfig = configuration.GetSection("Database").Get<DatabaseConfig>();
+
             var userIdentity = new GenericIdentity(Environment.UserDomainName + "\\" + Environment.UserName, "Anonymous");
             
             var principal = new ClaimsPrincipal(userIdentity);
             AppDomain.CurrentDomain.SetThreadPrincipal(principal);
 
 
-            var serviceProvider = ContainerConfiguration.Configure(principal);
+            var serviceProvider = ContainerConfiguration.Configure(principal, databaseConfig);
             var theProcess = serviceProvider.GetService(typeof(AppProcess)) as AppProcess;
             //var theProcess = serviceProvider.GetService(typeof(AppProcessQueuedCommands)) as AppProcessQueuedCommands;
             //var theProcess = serviceProvider.GetService(typeof(AppProcessDelete)) as AppProcessDelete;

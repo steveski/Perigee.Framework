@@ -3,9 +3,7 @@
     using Autofac;
     using Microsoft.EntityFrameworkCore;
     using ModelCreation;
-    using Perigee.Framework.Base;
     using Perigee.Framework.Base.Database;
-    using Perigee.Framework.Services.User;
 
     /// <summary>
     /// Registers the EntityDbContext and access interfaces IUnitOfWork, IReadEntities and IWriteEntities.

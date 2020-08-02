@@ -11,7 +11,6 @@ namespace ExampleRestApi
     using Perigee.Framework.EntityFramework;
     using Perigee.Framework.Services;
     using Perigee.Framework.Services.Security;
-    using Perigee.Framework.Web.Security;
 
     public class ExampleRestApiModule : Module
     {
@@ -41,7 +40,11 @@ namespace ExampleRestApi
 
             builder.RegisterModule<ExampleServicesModule>();
 
+
+            var autoMapperModule = new AutoMapperModule();
+
             // If this line isn't done, assemblies are loaded at launch. Using any symbol from the framework ensures they are.
+            // https://dotnetcoretutorials.com/2020/07/03/getting-assemblies-is-harder-than-you-think-in-c/
             var ignoreThisCommand = new CustomersBy { FirstName = "blah" };
 
         }

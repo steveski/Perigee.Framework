@@ -1,6 +1,5 @@
 ﻿namespace Perigee.Framework.Services.User
 {
-    using System.Runtime.InteropServices;
     using System.Security.Claims;
     using System.Security.Principal;
     using System.Threading.Tasks;

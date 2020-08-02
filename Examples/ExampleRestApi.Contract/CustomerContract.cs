@@ -2,8 +2,8 @@
 {
     using System.Runtime.Serialization;
 
-    [DataContract(Name = "Contract")]
-    public class CustomerContract
+    [DataContract(Name = "Customer")]
+    public class CustomerDto
     {
         [DataMember]
         public int Id { get; set; }

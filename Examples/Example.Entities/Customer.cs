@@ -1,6 +1,7 @@
 ﻿namespace Example.Entities
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
     using Perigee.Framework.Base.Entities;
 
     public class Customer : Entity<int>, IAuditedEntity, ITimestampEnabled, ISoftDelete
@@ -9,6 +10,7 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
+        [Encrypted]
         public string EmailAddress { get; set; }
 
         public string ManagedBy { get; set; }

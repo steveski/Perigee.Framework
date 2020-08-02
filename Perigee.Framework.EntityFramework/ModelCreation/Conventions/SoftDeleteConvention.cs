@@ -3,7 +3,7 @@
     using System.Linq;
     using Microsoft.EntityFrameworkCore;
 
-    public class SoftDeleteConvention : IEfDbConvention
+    public class SoftDeleteConvention //: IEfDbConvention
     {
         public void SetConvention(ModelBuilder modelBuilder)
         {

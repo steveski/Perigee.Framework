@@ -16,6 +16,7 @@
                 .Build();
 
             var databaseConfig = configuration.GetSection("Database").Get<DatabaseConfig>();
+            var aesConfig = configuration.GetSection("Aes").Get<AesConfig>();
 
             var userIdentity = new GenericIdentity(Environment.UserDomainName + "\\" + Environment.UserName, "Anonymous");
             
@@ -23,7 +24,7 @@
             AppDomain.CurrentDomain.SetThreadPrincipal(principal);
 
 
-            var serviceProvider = ContainerConfiguration.Configure(principal, databaseConfig);
+            var serviceProvider = ContainerConfiguration.Configure(principal, databaseConfig, aesConfig);
             var theProcess = serviceProvider.GetService(typeof(AppProcess)) as AppProcess;
             //var theProcess = serviceProvider.GetService(typeof(AppProcessQueuedCommands)) as AppProcessQueuedCommands;
             //var theProcess = serviceProvider.GetService(typeof(AppProcessDelete)) as AppProcessDelete;

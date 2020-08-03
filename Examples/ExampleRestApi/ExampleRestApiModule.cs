@@ -2,11 +2,14 @@ namespace ExampleRestApi
 {
     using System.Security.Claims;
     using System.Security.Principal;
+    using System.Text;
     using Autofac;
     using Divergic.Configuration.Autofac;
     using Example.Domain.Customers.Queries;
     using Example.Services;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.DataEncryption;
+    using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
     using Perigee.Framework.Base.Services;
     using Perigee.Framework.EntityFramework;
     using Perigee.Framework.Services;
@@ -40,6 +43,14 @@ namespace ExampleRestApi
 
             builder.RegisterModule<ExampleServicesModule>();
 
+            builder.Register(c =>
+            {
+                var keyInfo = c.Resolve<IAesConfig>();
+                var key = Encoding.ASCII.GetBytes(keyInfo.Key);
+                var iv = Encoding.ASCII.GetBytes(keyInfo.Iv);
+
+                return new AesProvider(key, iv);
+            }).As<IEncryptionProvider>();
 
             var autoMapperModule = new AutoMapperModule();
 

@@ -3,7 +3,7 @@
     using System.Linq;
     using Microsoft.EntityFrameworkCore;
 
-    public class AuditFieldsConvention : IEfDbConvention
+    public class AuditFieldsConvention //: IEfDbConvention
     {
         public void SetConvention(ModelBuilder modelBuilder)
         {

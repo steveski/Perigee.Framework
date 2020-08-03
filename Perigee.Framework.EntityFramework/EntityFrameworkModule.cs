@@ -2,6 +2,7 @@
 {
     using Autofac;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.DataEncryption;
     using ModelCreation;
     using Perigee.Framework.Base.Database;
 
@@ -40,13 +41,20 @@
 
             // Expecting IUnitOfWork, IReadEntities and IWriteEntities to be registered with this call
             builder.Register(c =>
-                    new EntityDbContext(
+                {
+                    IEncryptionProvider encryptionProvider = null;
+                    if (c.IsRegistered<IEncryptionProvider>())
+                        encryptionProvider = c.Resolve<IEncryptionProvider>();
+
+                    return new EntityDbContext(
                         c.Resolve<DbContextOptions<EntityDbContext>>(),
                         c.Resolve<IRecordAuthority>(),
-                        c.Resolve<IAuditedEntityUpdater>())
+                        c.Resolve<IAuditedEntityUpdater>(),
+                        encryptionProvider)
                     {
                         ModelCreator = c.Resolve<ICreateDbModel>()
-                    })
+                    };
+                })
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 

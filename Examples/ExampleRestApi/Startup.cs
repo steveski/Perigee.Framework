@@ -9,7 +9,9 @@ namespace ExampleRestApi
 {
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Diagnostics.HealthChecks;
+    using Perigee.Framework.EntityFramework;
 
     public class Startup
     {
@@ -26,7 +28,9 @@ namespace ExampleRestApi
         {
             services.AddControllers();
             services.AddSwaggerGen();
-            
+
+            services.AddTransient<IDatabaseConfig, DatabaseConfig>();
+
             services.AddHealthChecks()
                 .AddCheck("HealthCheck", () => HealthCheckResult.Healthy(DateTime.Now.ToLongTimeString()));
 

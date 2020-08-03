@@ -1,10 +1,12 @@
 ﻿namespace Perigee.Framework.EntityFramework.ModelCreation
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using Conventions;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata;
 
     public class DefaultDbModelCreator : ICreateDbModel
     {
@@ -45,6 +47,8 @@
             ////{
             ////    entityType.Relational().TableName = entityType.DisplayName();
             ////}
+
+  
         }
 
         private bool NotSystemAssembly(string assembFullName)

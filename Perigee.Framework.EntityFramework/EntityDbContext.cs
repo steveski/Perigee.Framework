@@ -66,6 +66,8 @@
                 modelBuilder.UseEncryption(_encryptionProvider);
 
 
+
+
             base.OnModelCreating(modelBuilder);
         }
 

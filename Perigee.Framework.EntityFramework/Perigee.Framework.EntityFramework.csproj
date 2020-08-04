@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Version>1.0.18.0</Version>
+    <UserSecretsId>258a8cf8-0581-4e62-b67e-8d7c3fe9225d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\3rdPartyRepos\EntityFrameworkCore.TemporalTables\EntityFrameworkCore.TemporalTables\EntityFrameworkCore.TemporalTables.csproj" />
     <ProjectReference Include="..\Perigee.Framework.Base\Perigee.Framework.Base.csproj" />
     <ProjectReference Include="..\Perigee.Framework.Services\Perigee.Framework.Services.csproj" />
   </ItemGroup>

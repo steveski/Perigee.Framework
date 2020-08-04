@@ -15,19 +15,7 @@
     using Perigee.Framework.Base.Entities;
     using EntityState = Perigee.Framework.Base.Database.EntityState;
     using EfEntityState = Microsoft.EntityFrameworkCore.EntityState;
-
-    public static class MyClass
-    {
-
-        public static DbContextOptionsBuilder UseFieldEncryption(
-            this DbContextOptionsBuilder optionsBuilder,
-            Action<IEncryptionProvider> fieldEncryptionOptionsAction = null)
-        {
-
-            return optionsBuilder;
-        }
     
-    }
 
 
     public class EntityDbContext : DbContext, IWriteEntities

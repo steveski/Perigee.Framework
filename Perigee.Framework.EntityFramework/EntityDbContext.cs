@@ -9,9 +9,9 @@
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
-    using Microsoft.EntityFrameworkCore.DataEncryption;
     using ModelCreation;
     using Perigee.Framework.Base.Database;
+    using Perigee.Framework.Base.Encryption;
     using Perigee.Framework.Base.Entities;
     using EntityState = Perigee.Framework.Base.Database.EntityState;
     using EfEntityState = Microsoft.EntityFrameworkCore.EntityState;
@@ -62,10 +62,6 @@
         {
             ModelCreator ??= new DefaultDbModelCreator();
             ModelCreator.Create(modelBuilder);
-
-            if(_encryptionProvider != null)
-                modelBuilder.UseEncryption(_encryptionProvider);
-
 
             base.OnModelCreating(modelBuilder);
         }

@@ -10,13 +10,13 @@
     using Example.Domain.Customers.Views;
     using Example.Services;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.DataEncryption;
-    using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
     using Microsoft.Extensions.DependencyInjection;
+    using Perigee.Framework.Base.Encryption;
     using Perigee.Framework.Base.Services;
     using Perigee.Framework.Base.Transactions;
     using Perigee.Framework.EntityFramework;
     using Perigee.Framework.Services;
+    using Perigee.Framework.Services.Encryption.Aes;
     using Perigee.Framework.Services.Security;
 
     internal static class ContainerConfiguration

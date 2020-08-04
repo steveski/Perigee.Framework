@@ -8,11 +8,11 @@ namespace ExampleRestApi
     using Example.Domain.Customers.Queries;
     using Example.Services;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.DataEncryption;
-    using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
+    using Perigee.Framework.Base.Encryption;
     using Perigee.Framework.Base.Services;
     using Perigee.Framework.EntityFramework;
     using Perigee.Framework.Services;
+    using Perigee.Framework.Services.Encryption.Aes;
     using Perigee.Framework.Services.Security;
 
     public class ExampleRestApiModule : Module

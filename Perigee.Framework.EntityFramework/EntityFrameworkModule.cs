@@ -2,9 +2,9 @@
 {
     using Autofac;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.DataEncryption;
     using ModelCreation;
     using Perigee.Framework.Base.Database;
+    using Perigee.Framework.Base.Encryption;
 
     /// <summary>
     /// Registers the EntityDbContext and access interfaces IUnitOfWork, IReadEntities and IWriteEntities.

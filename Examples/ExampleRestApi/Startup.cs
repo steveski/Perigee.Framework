@@ -9,9 +9,12 @@ namespace ExampleRestApi
 {
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
+    using AutoMapper;
+    using Example.Domain.Addresses.Commands;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Diagnostics.HealthChecks;
     using Perigee.Framework.EntityFramework;
+    using System.Reflection;
 
     public class Startup
     {
@@ -26,6 +29,7 @@ namespace ExampleRestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(HandleCreateAddressCommand).GetTypeInfo().Assembly);
             services.AddControllers();
             services.AddSwaggerGen();
 

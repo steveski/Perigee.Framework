@@ -1,5 +1,6 @@
 ﻿namespace Example.Domain.Addresses.Commands
 {
+    using AutoMapper;
     using Entities;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Transactions;
@@ -22,22 +23,17 @@
     public class HandleCreateAddressCommandWithTransientDbContext : IHandleCommand<CreateAddressCommandWithTransientDbContext>
     {
         private readonly ITransientContext _db;
+        private readonly IMapper _mapper;
 
-        public HandleCreateAddressCommandWithTransientDbContext(ITransientContext db)
+        public HandleCreateAddressCommandWithTransientDbContext(ITransientContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         public async Task Handle(CreateAddressCommandWithTransientDbContext command, CancellationToken cancellationToken)
         {
-            var address = new Address
-            {
-                Street = command.Street,
-                Suburb = command.Suburb,
-                PostalCode = command.PostalCode,
-                State = command.State,
-                Country = command.Country,
-            };
+            var address = _mapper.Map<CreateAddressCommandWithTransientDbContext, Address>(command);
 
             _db.Create(address);
             command.Address = address;

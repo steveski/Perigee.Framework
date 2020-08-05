@@ -13,6 +13,7 @@
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.EntityFramework;
     using Example.Domain.Addresses.Commands;
+    using Example.Domain.Addresses.Queries;
 
     public class AppProcess
     {
@@ -109,6 +110,45 @@
                 });
 
                 Console.WriteLine("Query result:");
+                Console.WriteLine(json);
+            }
+
+            // Get a single address
+            var addressesByQuery = new AddressesBy
+            {
+                Id = addAddressCommand1.CreatedEntity.Id
+            };
+
+            var addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
+            var addressResultsList = addressResults?.ToList();
+
+            if (addressResultsList != null && addressResultsList.Count > 0)
+            {
+                var json = JsonSerializer.Serialize(addressResultsList, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+
+                Console.WriteLine("Query result (1 address):");
+                Console.WriteLine(json);
+            }
+
+            // Get all address
+            addressesByQuery = new AddressesBy
+            {
+            };
+
+            addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
+            addressResultsList = addressResults?.ToList();
+
+            if (addressResultsList != null && addressResultsList.Count > 0)
+            {
+                var json = JsonSerializer.Serialize(addressResultsList, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+
+                Console.WriteLine("Query result (multiple addresses):");
                 Console.WriteLine(json);
             }
 

@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Example.Entities;
     using Microsoft.EntityFrameworkCore;
     using Perigee.Framework.Base.Database;
@@ -20,10 +21,12 @@
     public class HandleCustomerByQuery : IHandleQuery<CustomersBy, IEnumerable<GetCustomerView>>
     {
         private readonly IReadEntities _db;
+        private readonly IMapper _mapper;
 
-        public HandleCustomerByQuery(IReadEntities db)
+        public HandleCustomerByQuery(IReadEntities db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<GetCustomerView>> Handle(CustomersBy query, CancellationToken cancellationToken)
@@ -37,15 +40,11 @@
                 if(theCustomer == null)
                     return new List<GetCustomerView>();
 
+                var custView = _mapper.Map<Customer, GetCustomerView>(theCustomer);
+
                 return new[]
                 {
-                    new GetCustomerView
-                    {
-                        Id = theCustomer.Id,
-                        FirstName = theCustomer.FirstName,
-                        LastName = theCustomer.LastName,
-                        EmailAddress = theCustomer.EmailAddress
-                    }
+                    custView
                 };
             }
 
@@ -56,16 +55,8 @@
             if (!string.IsNullOrEmpty(query.LastName))
                 customers = customers.Where(x => x.LastName.Contains(query.LastName));
 
-            // Execute the query and return the results
-            var view = await customers.Select(x => new GetCustomerView
-            {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                EmailAddress = x.EmailAddress
-            }).ToListAsync(cancellationToken).ConfigureAwait(false) as IEnumerable<GetCustomerView>;
-
-            return view;
+            // Return the results
+            return _mapper.Map<IEnumerable<Customer>, IEnumerable<GetCustomerView>>(customers);
         }
     }
 }

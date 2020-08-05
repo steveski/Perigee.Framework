@@ -1,12 +1,12 @@
 ﻿namespace Example.Domain.Addresses.Queries
 {
+    using AutoMapper;
     using Example.Domain.Addresses.Views;
     using Example.Entities;
     using Microsoft.EntityFrameworkCore;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.Base.Transactions;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -19,10 +19,12 @@
     public class HandleAddressByQuery : IHandleQuery<AddressesBy, IEnumerable<GetAddressView>>
     {
         private readonly IReadEntities _db;
+        private readonly IMapper _mapper;
 
-        public HandleAddressByQuery(IReadEntities db)
+        public HandleAddressByQuery(IReadEntities db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<GetAddressView>> Handle(AddressesBy query, CancellationToken cancellationToken)
@@ -36,32 +38,16 @@
                 if(theAddress == null)
                     return new List<GetAddressView>();
 
+                var addressView = _mapper.Map<Address, GetAddressView>(theAddress);
+
                 return new[]
                 {
-                    new GetAddressView
-                    {
-                        Id = theAddress.Id,
-                        Street = theAddress.Street,
-                        Suburb = theAddress.Suburb,
-                        PostalCode = theAddress.PostalCode,
-                        State = theAddress.State,
-                        Country = theAddress.Country
-                    }
+                    addressView
                 };
             }
 
-            // Execute the query and return the results
-            var view = await addresses.Select(x => new GetAddressView
-            {
-                Id = x.Id,
-                Street = x.Street,
-                Suburb = x.Suburb,
-                PostalCode = x.PostalCode,
-                State = x.State,
-                Country = x.Country
-            }).ToListAsync(cancellationToken).ConfigureAwait(false) as IEnumerable<GetAddressView>;
-
-            return view;
+            // Return the results
+            return _mapper.Map<IEnumerable<Address>, IEnumerable<GetAddressView>>(addresses);
         }
     }
 }

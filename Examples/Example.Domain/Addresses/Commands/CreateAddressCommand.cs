@@ -1,5 +1,6 @@
 ﻿namespace Example.Domain.Addresses.Commands
 {
+    using AutoMapper;
     using EnsureThat;
     using Entities;
     using Perigee.Framework.Base.Database;
@@ -21,24 +22,19 @@
     public class HandleCreateAddressCommand : IHandleCommand<CreateAddressCommand>
     {
         private readonly IWriteEntities _db;
+        private readonly IMapper _mapper;
 
-        public HandleCreateAddressCommand(IWriteEntities db)
+        public HandleCreateAddressCommand(IWriteEntities db, IMapper mapper)
         {
             Ensure.Any.IsNotNull(db, nameof(db));
 
             _db = db;
+            _mapper = mapper;
         }
 
         public Task Handle(CreateAddressCommand command, CancellationToken cancellationToken)
         {
-            var address = new Address
-            {
-                Street = command.Street,
-                Suburb = command.Suburb,
-                PostalCode = command.PostalCode,
-                State = command.State,
-                Country = command.Country,
-            };
+            var address = _mapper.Map<CreateAddressCommand, Address>(command);
 
             _db.Create(address);
             command.CreatedEntity = address;

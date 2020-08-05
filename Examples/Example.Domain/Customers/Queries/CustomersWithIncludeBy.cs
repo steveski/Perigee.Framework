@@ -33,9 +33,10 @@
         {
             // Create a list of the expressions you would usually put into Include() statements.
             // For example if you want .Include(c => Address), do this...
-            var includes = new List<Expression<Func<Customer, Address>>>
+            var includes = new List<Expression<Func<Customer, object>>>
             {
-                c => c.Address
+                c => c.Address,
+                //c => c.OtherRelatedEntity
             };
 
             // Pass include expressions list to Query(). When providing this list it's not necessary to specify generic types 

@@ -99,8 +99,8 @@
             var results = await _processQueries.Execute(customersByQuery, tokenSource.Token).ConfigureAwait(false);
             var resultsList = results?.ToList();
 
-            Console.WriteLine("Records created: 2");
-            Console.WriteLine($"Querying after creation for Customer with First Name of 'Herbert' returns {resultsList?.Count ?? 0}");
+            Console.WriteLine("Records created: 2 addresses, 3 people");
+            Console.WriteLine($"Querying for Customer with First Name of 'Herbert' returns {resultsList?.Count ?? 0}");
 
             if (resultsList != null && resultsList.Count > 0)
             {
@@ -121,6 +121,7 @@
 
             var addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
             var addressResultsList = addressResults?.ToList();
+            Console.WriteLine($"Querying for Address with id {addAddressCommand1.CreatedEntity.Id} returns {addressResultsList?.Count ?? 0}");
 
             if (addressResultsList != null && addressResultsList.Count > 0)
             {
@@ -140,6 +141,7 @@
 
             addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
             addressResultsList = addressResults?.ToList();
+            Console.WriteLine($"Querying for all Addresses returns {addressResultsList?.Count ?? 0}");
 
             if (addressResultsList != null && addressResultsList.Count > 0)
             {
@@ -161,7 +163,7 @@
             var detailedResults = await _processQueries.Execute(customersWithAddressByQuery, tokenSource.Token).ConfigureAwait(false);
             var detailedResultsList = detailedResults?.ToList();
 
-            Console.WriteLine($"Querying details after creation for Customer with First Name of 'Herbert' returns {detailedResultsList?.Count ?? 0}");
+            Console.WriteLine($"Querying full details for Customer with First Name of 'Herbert' returns {detailedResultsList?.Count ?? 0}");
 
             if (detailedResultsList != null && detailedResultsList.Count > 0)
             {
@@ -174,7 +176,5 @@
                 Console.WriteLine(json);
             }
         }
-
-
     }
 }

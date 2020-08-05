@@ -36,34 +36,35 @@ jobs:
     - name: Test
       run: dotnet test -c Release --no-build --verbosity normal 
 
-    - name: Publish NuGet Base
-      uses: brandedoutcast/publish-nuget@v2.5.2
-      with:
-        PROJECT_FILE_PATH: Perigee.Framework.Base/Perigee.Framework.Base.csproj
-        PACKAGE_NAME: Perigee.Framework.Base
-        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-        NUGET_SOURCE: https://api.nuget.org
-    
-    - name: Publish NuGet EF
-      uses: brandedoutcast/publish-nuget@v2.5.2
-      with:
-        PROJECT_FILE_PATH: Perigee.Framework.EntityFramework/Perigee.Framework.EntityFramework.csproj
-        PACKAGE_NAME: Perigee.Framework.EntityFramework
-        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-        NUGET_SOURCE: https://api.nuget.org
-    
-    - name: Publish NuGet Services
-      uses: brandedoutcast/publish-nuget@v2.5.2
-      with:
-        PROJECT_FILE_PATH: Perigee.Framework.Services/Perigee.Framework.Services.csproj
-        PACKAGE_NAME: Perigee.Framework.Services
-        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-        NUGET_SOURCE: https://api.nuget.org
-    
-    - name: Publish NuGet Web
-      uses: brandedoutcast/publish-nuget@v2.5.2
-      with:
-        PROJECT_FILE_PATH: Perigee.Framework.Web/Perigee.Framework.Web.csproj
-        PACKAGE_NAME: Perigee.Framework.Web
-        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-        NUGET_SOURCE: https://api.nuget.org
+    # name: Publish NuGet Base
+    # uses: brandedoutcast/publish-nuget@v2.5.2
+    # with:
+    #   PROJECT_FILE_PATH: Perigee.Framework.Base/Perigee.Framework.Base.csproj
+    #   PACKAGE_NAME: Perigee.Framework.Base
+    #   NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+    #   NUGET_SOURCE: https://api.nuget.org
+    #
+    # name: Publish NuGet EF
+    # uses: brandedoutcast/publish-nuget@v2.5.2
+    # with:
+    #   PROJECT_FILE_PATH: Perigee.Framework.EntityFramework/Perigee.Framework.EntityFramework.csproj
+    #   PACKAGE_NAME: Perigee.Framework.EntityFramework
+    #   NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+    #   NUGET_SOURCE: https://api.nuget.org
+    #
+    # name: Publish NuGet Services
+    # uses: brandedoutcast/publish-nuget@v2.5.2
+    # with:
+    #   PROJECT_FILE_PATH: Perigee.Framework.Services/Perigee.Framework.Services.csproj
+    #   PACKAGE_NAME: Perigee.Framework.Services
+    #   NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+    #   NUGET_SOURCE: https://api.nuget.org
+    #
+    # name: Publish NuGet Web
+    # uses: brandedoutcast/publish-nuget@v2.5.2
+    # with:
+    #   PROJECT_FILE_PATH: Perigee.Framework.Web/Perigee.Framework.Web.csproj
+    #   PACKAGE_NAME: Perigee.Framework.Web
+    #   NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+    #   NUGET_SOURCE: https://api.nuget.org
+    #

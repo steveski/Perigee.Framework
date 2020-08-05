@@ -15,7 +15,7 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
-        
+        public int? AddressId { get; set; }
     }
 
     public class HandleCreateCustomerCommand : IHandleCommand<CreateCustomerCommand>
@@ -39,6 +39,7 @@
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 EmailAddress = command.EmailAddress,
+                AddressId = command.AddressId,
                 ManagedBy = _userService.ClaimsIdentity.Name
             };
 

@@ -1,10 +1,11 @@
-﻿using AutoMapper;
+﻿#define USE_AUTOMAPPER
+
+using AutoMapper;
 using Example.Domain.Customers.Views;
 using Example.Entities;
 using Microsoft.EntityFrameworkCore;
 using Perigee.Framework.Base.Database;
 using Perigee.Framework.Base.Transactions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -64,12 +65,12 @@ namespace Example.Domain.Customers.Queries
                 customers = customers.Where(x => x.LastName.Contains(query.LastName));
 */
 
+#if USE_AUTOMAPPER
             // Return the results
             return _mapper.Map<IEnumerable<Customer>, IEnumerable<GetCustomerWithAddressView>>(customersWithAddress);
-            
-// This code does do the righ thing, but I don't want to use it as it doesn't use AutoMapper,
-// and gets annoying / risky when adding a member variable.
-/*
+#else
+            // This code does do the righ thing, but I don't want to use it as it doesn't use AutoMapper,
+            // and gets annoying / risky when adding a member variable.
             // Execute the query and return the results
             var view = await customersWithAddress.Select(x => new GetCustomerWithAddressView
             {
@@ -85,7 +86,7 @@ namespace Example.Domain.Customers.Queries
             }).ToListAsync(cancellationToken).ConfigureAwait(false) as IEnumerable<GetCustomerWithAddressView>;
 
             return view;
-*/
+#endif // USE_AUTOMAPPER
         }
     }
 }

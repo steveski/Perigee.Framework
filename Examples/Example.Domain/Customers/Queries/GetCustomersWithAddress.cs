@@ -65,6 +65,8 @@ namespace Example.Domain.Customers.Queries
                 customers = customers.Where(x => x.LastName.Contains(query.LastName));
 */
 
+            customersWithAddress = customersWithAddress.Include(c => c.Address);
+
 #if USE_AUTOMAPPER
             // Return the results
             return _mapper.Map<IEnumerable<Customer>, IEnumerable<GetCustomerWithAddressView>>(customersWithAddress);

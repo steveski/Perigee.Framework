@@ -3,11 +3,14 @@
     using Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using Perigee.Framework.Base.Encryption;
     using Perigee.Framework.EntityFramework;
     using Perigee.Framework.EntityFramework.Encryption;
 
     public class CustomerConfiguration : BaseEntityTypeConfiguration<Customer>
     {
+
+ 
         public override void ConfigureEntity(EntityTypeBuilder<Customer> builder)
         {
             builder.ToTable("Customer");
@@ -30,7 +33,7 @@
             builder.Property(p => p.EmailAddress)
                 .HasColumnType("nvarchar(255)")
                 .HasMaxLength(255)
-                .HasConversion(new EncryptionConverter());
+                .EnableEncryption();
 
             builder.Property(p => p.ManagedBy)
                 .HasColumnType("nvarchar(50)")

@@ -24,14 +24,13 @@
         private readonly IAuditedEntityUpdater _auditedEntityUpdater;
         private readonly IEncryptionProvider _encryptionProvider;
 
-        public EntityDbContext(DbContextOptions<EntityDbContext> options, IRecordAuthority recordAuthority, IAuditedEntityUpdater auditedEntityUpdater, IEncryptionProvider encryptionProvider = null) : base(options)
+        public EntityDbContext(DbContextOptions<EntityDbContext> options, IRecordAuthority recordAuthority, IAuditedEntityUpdater auditedEntityUpdater) : base(options)
         {
             Ensure.Any.IsNotNull(recordAuthority, nameof(recordAuthority));
             Ensure.Any.IsNotNull(auditedEntityUpdater, nameof(auditedEntityUpdater));
 
             _recordAuthority = recordAuthority;
             _auditedEntityUpdater = auditedEntityUpdater;
-            _encryptionProvider = encryptionProvider;
         }
 
         private void SetAuditValues()

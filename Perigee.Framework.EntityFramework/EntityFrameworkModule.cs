@@ -40,20 +40,12 @@
                 .InstancePerDependency();
 
             // Expecting IUnitOfWork, IReadEntities and IWriteEntities to be registered with this call
-            builder.Register(c =>
+            builder.Register(c => new EntityDbContext(
+                    c.Resolve<DbContextOptions<EntityDbContext>>(),
+                    c.Resolve<IRecordAuthority>(),
+                    c.Resolve<IAuditedEntityUpdater>())
                 {
-                    IEncryptionProvider encryptionProvider = null;
-                    if (c.IsRegistered<IEncryptionProvider>())
-                        encryptionProvider = c.Resolve<IEncryptionProvider>();
-
-                    return new EntityDbContext(
-                        c.Resolve<DbContextOptions<EntityDbContext>>(),
-                        c.Resolve<IRecordAuthority>(),
-                        c.Resolve<IAuditedEntityUpdater>(),
-                        encryptionProvider)
-                    {
-                        ModelCreator = c.Resolve<ICreateDbModel>()
-                    };
+                    ModelCreator = c.Resolve<ICreateDbModel>()
                 })
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();

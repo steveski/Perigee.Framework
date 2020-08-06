@@ -85,114 +85,108 @@
             };
             await _processCommands.Execute(addCustomerCommand3, tokenSource.Token).ConfigureAwait(false);
 
-
-            //await Task.WhenAll(new[]
-            //{
-            //    _processCommands.Execute(addCustomerCommand1, tokenSource.Token),
-            //    _processCommands.Execute(addCustomerCommand2, tokenSource.Token)
-
-            //}).ConfigureAwait(false);
-
-            var customersByQuery = new CustomersBy
-            {
-                FirstName = "Bob"
-            };
-
-            var resultsList = new List<GetCustomerWithAddressView>();
-
-            // Query using "Projector" pattern where the mapping is done on Sql Server rather than in this application.
-            // This approach is more efficient as only the required data ever comes back to the application
-            var results = await _processQueries.Execute(customersByQuery, tokenSource.Token).ConfigureAwait(false);
-            if(results != null)
-                resultsList.AddRange(results.Where(x => x.Address != null));
-
-            // Query using Include expressions. There may be scenarios where an include is required. EF Core poses restrictions
-            // when using AsExpandable() from LinqKit, so this QueryHandler shows how to pass Include expressions to Query<TEntity>(...)
-            var customersWithIncludeByQuery = new CustomersWithIncludeBy()
-            {
-                FirstName = "Bob"
-            };
-
-            var resultsUsingInclude = await _processQueries.Execute(customersWithIncludeByQuery, tokenSource.Token).ConfigureAwait(false);
-            if(resultsUsingInclude != null)
-                resultsList.AddRange(resultsUsingInclude.Where(x => x.Address != null));
-
-
             Console.WriteLine("Records created: 2 addresses, 3 people");
-            Console.WriteLine($"Querying for Customer with First Name of 'Herbert' returns {resultsList?.Count ?? 0}");
 
-            if (resultsList != null && resultsList.Count > 0)
+            // Now test getting data back
             {
-                var json = JsonSerializer.Serialize(resultsList, new JsonSerializerOptions
+                // Query using "Projector" pattern where the mapping is done on Sql Server rather than in this application.
+                // This approach is more efficient as only the required data ever comes back to the application
+                var customersByQuery = new CustomersBy
                 {
-                    WriteIndented = true
-                });
+                    FirstName = "Bob"
+                };
 
-                Console.WriteLine("Query result:");
-                Console.WriteLine(json);
+                var results = await _processQueries.Execute(customersByQuery, tokenSource.Token).ConfigureAwait(false);
+                var resultsList = results?.ToList();
+                Console.WriteLine($"Querying for Customer with First Name of '{customersByQuery.FirstName}' returns {resultsList?.Count ?? 0}");
+                if (resultsList != null && resultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(resultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result:");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
             }
 
-            // Get a single address
-            var addressesByQuery = new AddressesBy
             {
-                Id = addAddressCommand1.CreatedEntity.Id
-            };
-
-            var addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
-            var addressResultsList = addressResults?.ToList();
-            Console.WriteLine($"Querying for Address with id {addAddressCommand1.CreatedEntity.Id} returns {addressResultsList?.Count ?? 0}");
-
-            if (addressResultsList != null && addressResultsList.Count > 0)
-            {
-                var json = JsonSerializer.Serialize(addressResultsList, new JsonSerializerOptions
+                // Query using Include expressions. There may be scenarios where an include is required. EF Core poses restrictions
+                // when using AsExpandable() from LinqKit, so this QueryHandler shows how to pass Include expressions to Query<TEntity>(...)
+                var customersWithIncludeByQuery = new CustomersWithIncludeBy()
                 {
-                    WriteIndented = true
-                });
+                    FirstName = "Bob"
+                };
 
-                Console.WriteLine("Query result (1 address):");
-                Console.WriteLine(json);
+                var resultsUsingInclude = await _processQueries.Execute(customersWithIncludeByQuery, tokenSource.Token).ConfigureAwait(false);
+                var resultsList = resultsUsingInclude?.ToList();
+
+                Console.WriteLine($"Querying for Customer with First Name of '{customersWithIncludeByQuery.FirstName}' returns {resultsList?.Count ?? 0}");
+
+                if (resultsList != null && resultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(resultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result:");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
             }
 
-            // Get all address
-            addressesByQuery = new AddressesBy
             {
-            };
-
-            addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
-            addressResultsList = addressResults?.ToList();
-            Console.WriteLine($"Querying for all Addresses returns {addressResultsList?.Count ?? 0}");
-
-            if (addressResultsList != null && addressResultsList.Count > 0)
-            {
-                var json = JsonSerializer.Serialize(addressResultsList, new JsonSerializerOptions
+                // Get a single address
+                var addressesByQuery = new AddressesBy
                 {
-                    WriteIndented = true
-                });
+                    Id = addAddressCommand1.CreatedEntity.Id
+                };
 
-                Console.WriteLine("Query result (multiple addresses):");
-                Console.WriteLine(json);
+                var addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
+                var addressResultsList = addressResults?.ToList();
+                Console.WriteLine($"Querying for Address with id {addAddressCommand1.CreatedEntity.Id} returns {addressResultsList?.Count ?? 0}");
+
+                if (addressResultsList != null && addressResultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(addressResultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result (1 address):");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
             }
 
-            // Now lets look at the detailed results (Customer with Address)
-            var customersWithAddressByQuery = new CustomersWithAddressBy
             {
-                FirstName = "Herbert"
-            };
-
-            var detailedResults = await _processQueries.Execute(customersWithAddressByQuery, tokenSource.Token).ConfigureAwait(false);
-            var detailedResultsList = detailedResults?.ToList();
-
-            Console.WriteLine($"Querying full details for Customer with First Name of 'Herbert' returns {detailedResultsList?.Count ?? 0}");
-
-            if (detailedResultsList != null && detailedResultsList.Count > 0)
-            {
-                var json = JsonSerializer.Serialize(detailedResultsList, new JsonSerializerOptions
+                // Get all address
+                var addressesByQuery = new AddressesBy
                 {
-                    WriteIndented = true
-                });
+                };
 
-                Console.WriteLine("Query result:");
-                Console.WriteLine(json);
+                var addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
+                var addressResultsList = addressResults?.ToList();
+                Console.WriteLine($"Querying for all Addresses returns {addressResultsList?.Count ?? 0}");
+
+                if (addressResultsList != null && addressResultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(addressResultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result (multiple addresses):");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
             }
         }
     }

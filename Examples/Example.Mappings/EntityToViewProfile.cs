@@ -12,11 +12,23 @@ namespace Example.Mappings
             CreateMap<Address, GetAddressView>();
             CreateMap<Customer, GetCustomerWithAddressView>();
             CreateMap<Customer, GetCustomerWithAddressView>()
-                .ForPath(v => v.Address.Street, e => e.MapFrom(x => x.Address.Street))
-                .ForPath(v => v.Address.Suburb, e => e.MapFrom(x => x.Address.Suburb))
-                .ForPath(v => v.Address.PostalCode, e => e.MapFrom(x => x.Address.PostalCode))
-                .ForPath(v => v.Address.State, e => e.MapFrom(x => x.Address.State))
-                .ForPath(v => v.Address.Country, e => e.MapFrom(x => x.Address.Country))
+                .ForMember(c=>c.Address, option => option.Ignore())
+                .AfterMap((src, dst) =>
+                {
+                    if (src.Address != null)
+                    {
+                        dst.Address = 
+                        dst.Address = new AddressView
+                        {
+                            Id = src.Address.Id,
+                            Street = src.Address.Street,
+                            Suburb = src.Address.Suburb,
+                            PostalCode = src.Address.PostalCode,
+                            State = src.Address.State,
+                            Country = src.Address.Country
+                        };
+                    }
+                })
                 ;
         }
     }

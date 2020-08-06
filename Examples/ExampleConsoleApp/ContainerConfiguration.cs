@@ -80,7 +80,7 @@
             var container = containerBuilder.Build();
 
             // If this line isn't done, assemblies are loaded at launch. Using any symbol from the framework ensures they are.
-            var asdasd = container.IsRegistered(typeof(IHandleQuery<CustomersBy, IEnumerable<GetCustomerView>>));
+            var asdasd = container.IsRegistered(typeof(IHandleQuery<CustomersBy, IEnumerable<GetCustomerWithAddressView>>));
 
             return new AutofacServiceProvider(container);
         }

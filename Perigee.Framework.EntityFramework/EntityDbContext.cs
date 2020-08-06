@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
     using EnsureThat;
@@ -73,6 +74,18 @@
 
         #region Queries
 
+        //public IQueryable<TEntity> Query<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes) where TEntity : class, IEntity
+        //{
+        //    var query = Set<TEntity>().AsNoTracking();
+
+        //    foreach (var expression in includes)
+        //    {
+        //        query = query.Include(expression);
+        //    }
+
+        //    return query.AsExpandable();
+        //}
+
         public new IQueryable<TEntity> Query<TEntity>() where TEntity : class, IEntity
         {
             // AsNoTracking returns entities that are not attached to the DbContext
@@ -88,6 +101,20 @@
             return query;
         }
 
+        public IQueryable<TEntity> Query<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes) where TEntity : class, IEntity
+        {
+            return QueryUnfiltered(includes).Where(_recordAuthority.Clause<TEntity>());
+        }
+
+        public IQueryable<TEntity> Query<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes, bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete
+        {
+            var query = Query(includes);
+            if (includeSoftDeleted)
+                query = query.Where(x => x.IsDeleted);
+
+            return query;
+        }
+
         public IQueryable<TEntity> QueryUnfiltered<TEntity>() where TEntity : class, IEntity
         {
             // AsNoTracking returns entities that are not attached to the DbContext
@@ -97,6 +124,27 @@
         public IQueryable<TEntity> QueryUnfiltered<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete
         {
             var query = QueryUnfiltered<TEntity>();
+            if (includeSoftDeleted)
+                query = query.Where(x => x.IsDeleted);
+
+            return query;
+        }
+
+        public IQueryable<TEntity> QueryUnfiltered<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes) where TEntity : class, IEntity
+        {
+            var query = Set<TEntity>().AsNoTracking();
+
+            foreach (var expression in includes)
+            {
+                query = query.Include(expression);
+            }
+
+            return query.AsExpandable();
+        }
+
+        public IQueryable<TEntity> QueryUnfiltered<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes, bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete
+        {
+            var query = QueryUnfiltered(includes);
             if (includeSoftDeleted)
                 query = query.Where(x => x.IsDeleted);
 

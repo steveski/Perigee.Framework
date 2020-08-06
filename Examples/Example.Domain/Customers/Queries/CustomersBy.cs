@@ -11,14 +11,14 @@
     using Perigee.Framework.Base.Transactions;
     using Views;
 
-    public class CustomersBy : IDefineQuery<IEnumerable<GetCustomerView>>
+    public class CustomersBy : IDefineQuery<IEnumerable<GetCustomerWithAddressView>>
     {
         public int? Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
     }
 
-    public class HandleCustomerByQuery : IHandleQuery<CustomersBy, IEnumerable<GetCustomerView>>
+    public class HandleCustomerByQuery : IHandleQuery<CustomersBy, IEnumerable<GetCustomerWithAddressView>>
     {
         private readonly IReadEntities _db;
         private readonly IMapper _mapper;
@@ -29,16 +29,16 @@
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetCustomerView>> Handle(CustomersBy query, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GetCustomerWithAddressView>> Handle(CustomersBy query, CancellationToken cancellationToken)
         {
             var customers = _db.Query<Customer>();
 
             // Id provided so only use that
             if (query.Id.HasValue)
             {
-                var theCustomer = await customers.FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken).ConfigureAwait(false);
+                var theCustomer = await customers.Select(GetCustomerWithAddressView.Projector).FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken).ConfigureAwait(false);
                 if(theCustomer == null)
-                    return new List<GetCustomerView>();
+                    return new List<GetCustomerWithAddressView>();
 
                 var custView = _mapper.Map<Customer, GetCustomerView>(theCustomer);
 

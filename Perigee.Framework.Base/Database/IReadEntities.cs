@@ -1,6 +1,10 @@
 ﻿namespace Perigee.Framework.Base.Database
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using Entities;
 
     /// <summary>
@@ -34,7 +38,12 @@
         ///     data store.
         /// </returns>
         IQueryable<TEntity> Query<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete;
-        
+
+
+
+        IQueryable<TEntity> Query<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes) where TEntity : class, IEntity;
+        IQueryable<TEntity> Query<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes, bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete;
+
 
     }
 }

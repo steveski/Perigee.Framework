@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Example.Domain.Addresses.Views;
+using Example.Domain.CustomerEmployerMappings.Views;
 using Example.Domain.Customers.Views;
 using Example.Entities;
 
@@ -29,6 +30,11 @@ namespace Example.Mappings
                         };
                     }
                 })
+                ;
+
+            CreateMap<CustomerEmployerMapping, GetCustomerEmployerMappingDetailedDataView>()
+                .ForMember(cem => cem.CustomerName, entity => entity.MapFrom(x => (x.Customer != null) ? x.Customer.FirstName : "<Customer Is Null>"))
+                .ForMember(cem => cem.EmployerName , entity => entity.MapFrom(x => (x.Employer != null) ? x.Employer.Name : "<Employer Is Null>"))
                 ;
         }
     }

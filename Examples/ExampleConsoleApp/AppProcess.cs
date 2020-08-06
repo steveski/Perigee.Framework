@@ -16,6 +16,9 @@
     using Perigee.Framework.EntityFramework;
     using Example.Domain.Addresses.Commands;
     using Example.Domain.Addresses.Queries;
+    using Example.Domain.Employers.Commands;
+    using Example.Domain.CustomerEmployerMappings.Commands;
+    using Example.Domain.CustomerEmployerMappings.Queries;
 
     public class AppProcess
     {
@@ -183,6 +186,41 @@
                     });
 
                     Console.WriteLine("Query result (multiple addresses):");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
+            }
+
+            // Create an Employer, and a CustomerEmployerMapping for one of the Customers above
+            var addEmployerCommand = new CreateEmployerCommand
+            {
+                Name = "Springfield Power Plant"
+            };
+            await _processCommands.Execute(addEmployerCommand, tokenSource.Token);
+
+            var addCustomerEmployerMappingComand = new CreateCustomerEmployerMappingCommand
+            {
+                CustomerId = addCustomerCommand3.CreatedEntity.Id,
+                EmployerId = addEmployerCommand.CreatedEntity.Id
+            };
+            await _processCommands.Execute(addCustomerEmployerMappingComand, tokenSource.Token);
+
+            {
+                // And now show the full details of all CustomerEmployerMappings, includinging drilling down
+                var getAllCEMs = new GetCustomerEmployerMappings();
+                var cemResults = await _processQueries.Execute(getAllCEMs, tokenSource.Token).ConfigureAwait(false);
+                var cemResultsList = cemResults?.ToList();
+                Console.WriteLine($"Querying for all CustomerEmployerMappings returns {cemResultsList?.Count ?? 0}");
+
+                if (cemResultsList != null && cemResultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(cemResultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result:");
                     Console.WriteLine(json);
                 }
 

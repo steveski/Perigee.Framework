@@ -16,12 +16,12 @@ namespace Example.Domain.CustomerEmployerMappings.Queries
     {
     }
 
-    public class HandleCustomersWithIncludeByQuery : IHandleQuery<GetCustomerEmployerMappings, IEnumerable<GetCustomerEmployerMappingDetailedDataView>>
+    public class HandleCustomerEmployerMappingsWithIncludeByQuery : IHandleQuery<GetCustomerEmployerMappings, IEnumerable<GetCustomerEmployerMappingDetailedDataView>>
     {
         private readonly IReadEntities _db;
         private readonly IMapper _mapper;
 
-        public HandleCustomersWithIncludeByQuery(IReadEntities db, IMapper mapper)
+        public HandleCustomerEmployerMappingsWithIncludeByQuery(IReadEntities db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;

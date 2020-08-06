@@ -4,6 +4,7 @@
     using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Example.Domain.Customers.Commands;
     using Example.Entities;
     using FluentAssertions;
@@ -24,6 +25,7 @@
             // Arrange
             var db = Substitute.For<IWriteEntities>();
             var userService = Substitute.For<IUserService>();
+            var mapper = Substitute.For<IMapper>();
             var claimsIdentity = Substitute.For<ClaimsIdentity>();
 
             userService.ClaimsIdentity.Returns(claimsIdentity);
@@ -37,8 +39,8 @@
             };
             
             // Act
-            var sut = new HandleCreateCustomerCommand(db, userService);
-            await sut.Handle(command, CancellationToken.None);
+            var sut = new HandleCreateCustomerCommand(db, userService, mapper);
+            await sut.Handle(command, CancellationToken.None).ConfigureAwait(false);
 
             // Assert
             db.Received(1).Create(
@@ -60,9 +62,10 @@
         public void CreateThrowsExceptionWithNullDb()
         {
             var userService = Substitute.For<IUserService>();
+            var mapper = Substitute.For<IMapper>();
 
             // ReSharper disable once ObjectCreationAsStatement
-            Action action = () => new HandleCreateCustomerCommand(null, userService);
+            Action action = () => new HandleCreateCustomerCommand(null, userService, mapper);
 
             action.Should().Throw<ArgumentNullException>();
 
@@ -72,9 +75,10 @@
         public void CreateThrowsExceptionWithNullUserService()
         {
             var db = Substitute.For<IWriteEntities>();
+            var mapper = Substitute.For<IMapper>();
 
             // ReSharper disable once ObjectCreationAsStatement
-            Action action = () => new HandleCreateCustomerCommand(db, null);
+            Action action = () => new HandleCreateCustomerCommand(db, null, mapper);
 
             action.Should().Throw<ArgumentNullException>();
 

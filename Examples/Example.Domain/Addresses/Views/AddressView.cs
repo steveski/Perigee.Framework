@@ -13,7 +13,7 @@
         public string State { get; set; }
         public string Country { get; set; }
 
-        public static Expression<Func<Address, AddressView>> Projector = addr => new AddressView
+        internal static Expression<Func<Address, AddressView>> Projector = addr => new AddressView
         {
             Id = addr.Id,
             Street = addr.Street,

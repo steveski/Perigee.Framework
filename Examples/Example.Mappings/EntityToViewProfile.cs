@@ -10,13 +10,13 @@ namespace Example.Mappings
         public EntityToViewProfile()
         {
             CreateMap<Address, GetAddressView>();
-            CreateMap<Customer, GetCustomerView>();
+            CreateMap<Customer, GetCustomerWithAddressView>();
             CreateMap<Customer, GetCustomerWithAddressView>()
-                .ForMember(v => v.Street, e => e.MapFrom(x => x.Address.Street))
-                .ForMember(v => v.Suburb, e => e.MapFrom(x => x.Address.Suburb))
-                .ForMember(v => v.PostalCode, e => e.MapFrom(x => x.Address.PostalCode))
-                .ForMember(v => v.State, e => e.MapFrom(x => x.Address.State))
-                .ForMember(v => v.Country, e => e.MapFrom(x => x.Address.Country))
+                .ForPath(v => v.Address.Street, e => e.MapFrom(x => x.Address.Street))
+                .ForPath(v => v.Address.Suburb, e => e.MapFrom(x => x.Address.Suburb))
+                .ForPath(v => v.Address.PostalCode, e => e.MapFrom(x => x.Address.PostalCode))
+                .ForPath(v => v.Address.State, e => e.MapFrom(x => x.Address.State))
+                .ForPath(v => v.Address.Country, e => e.MapFrom(x => x.Address.Country))
                 ;
         }
     }

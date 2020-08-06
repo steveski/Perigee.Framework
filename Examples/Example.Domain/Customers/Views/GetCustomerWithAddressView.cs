@@ -16,7 +16,7 @@
         public AddressView Address { get; set; }
 
 
-        public static Expression<Func<Customer, GetCustomerWithAddressView>> Projector = cust => new GetCustomerWithAddressView
+        internal static Expression<Func<Customer, GetCustomerWithAddressView>> Projector = cust => new GetCustomerWithAddressView
         {
             Id = cust.Id,
             FirstName = cust.FirstName,

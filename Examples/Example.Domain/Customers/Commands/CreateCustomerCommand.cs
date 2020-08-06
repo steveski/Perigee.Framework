@@ -42,29 +42,10 @@
 
             _db.Create(cust);
             command.CreatedEntity = cust;
-            
+
+
             return Task.CompletedTask;
         }
     }
 
-    public class SomeService
-    {
-        private readonly BlockingCollection<int> _messageQueue = new BlockingCollection<int>();
-
-        public void ProcessIncomingMessages(CancellationToken ct)
-        {
-            while (true)
-            {
-                var message = _messageQueue.Take(ct);
-                Console.Write(message);
-
-            }
-        }
-
-        public void SubmitMessageForProcessing(int message)
-        {
-            _messageQueue.Add(message);
-        }
-
-    }
 }

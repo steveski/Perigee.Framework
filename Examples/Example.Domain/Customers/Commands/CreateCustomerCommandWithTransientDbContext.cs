@@ -43,24 +43,4 @@
         }
     }
 
-    //public class SomeService
-    //{
-    //    private BlockingCollection<int> messageQueue = new BlockingCollection<int>();
-
-    //    public void ProcessIncommingMessages(CancellationToken ct)
-    //    {
-    //        while (true)
-    //        {
-    //            var message = messageQueue.Take(ct);
-    //            Console.Write(message);
-
-    //        }
-    //    }
-
-    //    public void SubmitMessageForProcessing(int message)
-    //    {
-    //        messageQueue.Add(message);
-    //    }
-
-    //}
 }

@@ -1,11 +1,14 @@
 namespace ExampleRestApi
 {
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Security.Principal;
     using System.Text;
     using Autofac;
+    using AutoMapper;
     using Divergic.Configuration.Autofac;
     using Example.Domain.Customers.Queries;
+    using Example.Mappings;
     using Example.Services;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.DataEncryption;
@@ -52,7 +55,18 @@ namespace ExampleRestApi
                 return new AesProvider(key, iv);
             }).As<IEncryptionProvider>();
 
-            var autoMapperModule = new AutoMapperModule();
+            builder.Register(c =>
+            {
+                var scope = c.Resolve<ILifetimeScope>();
+                return new MapperConfiguration(mc =>
+                    mc.AddProfiles(
+                        new List<Profile>
+                        {
+                            new CommandToEntityProfile(),
+                            new EntityToViewProfile()
+                        }
+                    )).CreateMapper();
+            }).As<IMapper>().InstancePerLifetimeScope();
 
             // If this line isn't done, assemblies are loaded at launch. Using any symbol from the framework ensures they are.
             // https://dotnetcoretutorials.com/2020/07/03/getting-assemblies-is-harder-than-you-think-in-c/

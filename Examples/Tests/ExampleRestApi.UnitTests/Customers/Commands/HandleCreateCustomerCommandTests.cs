@@ -1,12 +1,14 @@
 ﻿namespace ExampleRestApi.UnitTests.Customers.Commands
 {
     using System;
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
     using Example.Domain.Customers.Commands;
     using Example.Entities;
+    using Example.Mappings;
     using FluentAssertions;
     using ModelBuilder;
     using NSubstitute;
@@ -16,6 +18,20 @@
 
     public class HandleCreateCustomerCommandTests
     {
+        private IMapper _mapper;
+
+        public HandleCreateCustomerCommandTests()
+        {
+            _mapper = new MapperConfiguration(c =>
+                    c.AddProfiles(
+                        new List<Profile>
+                        {
+                            new CommandToEntityProfile(),
+                            new EntityToViewProfile(),
+                        }
+                    ))
+                .CreateMapper();
+        }
 
         [Fact]
         public async Task HandlePassesCorrectEntityToCreate()
@@ -25,7 +41,6 @@
             // Arrange
             var db = Substitute.For<IWriteEntities>();
             var userService = Substitute.For<IUserService>();
-            var mapper = Substitute.For<IMapper>();
             var claimsIdentity = Substitute.For<ClaimsIdentity>();
 
             userService.ClaimsIdentity.Returns(claimsIdentity);
@@ -39,7 +54,7 @@
             };
             
             // Act
-            var sut = new HandleCreateCustomerCommand(db, userService, mapper);
+            var sut = new HandleCreateCustomerCommand(db, userService, _mapper);
             await sut.Handle(command, CancellationToken.None).ConfigureAwait(false);
 
             // Assert

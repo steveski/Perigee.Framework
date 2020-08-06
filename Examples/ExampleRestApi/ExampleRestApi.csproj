@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Perigee.Framework.Web\Perigee.Framework.Web.csproj" />
     <ProjectReference Include="..\Example.Domain\Example.Domain.csproj" />
+    <ProjectReference Include="..\Example.Mappings\Example.Mappings.csproj" />
     <ProjectReference Include="..\Example.Services\Example.Services.csproj" />
     <ProjectReference Include="..\ExampleRestApi.Contract\ExampleRestApi.Contract.csproj" />
   </ItemGroup>

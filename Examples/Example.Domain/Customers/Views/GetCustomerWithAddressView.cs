@@ -13,6 +13,7 @@
 
         public string EmailAddress { get; set; }
 
+        public int AddrId { get; set; }
         public AddressView Address { get; set; }
 
 
@@ -22,7 +23,8 @@
             FirstName = cust.FirstName,
             LastName = cust.LastName,
             EmailAddress = cust.EmailAddress,
-
+            AddrId = cust.AddressId.Value,
+            
             Address = cust.Address == null ? null : new AddressView
             {
                 Id = cust.Address.Id,

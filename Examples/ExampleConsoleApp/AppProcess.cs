@@ -14,6 +14,11 @@
     using Example.Domain.Customers.Views;
     using Perigee.Framework.Base.Database;
     using Perigee.Framework.EntityFramework;
+    using Example.Domain.Addresses.Commands;
+    using Example.Domain.Addresses.Queries;
+    using Example.Domain.Employers.Commands;
+    using Example.Domain.CustomerEmployerMappings.Commands;
+    using Example.Domain.CustomerEmployerMappings.Queries;
 
     public class AppProcess
     {
@@ -29,14 +34,24 @@
         public async Task Run()
         {
             var tokenSource = new CancellationTokenSource();
-         
-            
-            
+
+            // Create 2 people at 1 address
+            var addAddressCommand1 = new CreateAddressCommand
+            {
+                Street = "15 My Street",
+                Suburb = "Springfield",
+                State = "My State",
+                Country = "Safe Country",
+                PostalCode = "12345"
+            };
+            await _processCommands.Execute(addAddressCommand1, tokenSource.Token).ConfigureAwait(false);
+
             var addCustomerCommand1 = new CreateCustomerCommand
             {
                 FirstName = "Bob",
                 LastName = "Jones",
                 EmailAddress = "bob.jones@home.com",
+                AddressId = addAddressCommand1.CreatedEntity.Id
                 //Commit = false
             };
 
@@ -45,61 +60,172 @@
                 FirstName = "Herbert",
                 LastName = "Scrackle",
                 EmailAddress = "herbert.scrackle@home.com",
+                AddressId = addAddressCommand1.CreatedEntity.Id
                 //Commit =  false
             };
 
-
-            //await Task.WhenAll(new[]
-            //{
-            //    _processCommands.Execute(addCustomerCommand1, tokenSource.Token),
-            //    _processCommands.Execute(addCustomerCommand2, tokenSource.Token)
-
-            //}).ConfigureAwait(false);
-            
             await _processCommands.Execute(addCustomerCommand1, tokenSource.Token).ConfigureAwait(false);
             await _processCommands.Execute(addCustomerCommand2, tokenSource.Token).ConfigureAwait(false);
 
-            var customersByQuery = new CustomersBy
+            // Now create 1 person at a second address
+            var addAddressCommand2 = new CreateAddressCommand
             {
-                FirstName = "Bob"
+                Street = "742 Evergreen Terrace",
+                Suburb = "Springfield",
+                State = "Unknown",
+                Country = "USA",
+                PostalCode = "Unknown"
             };
+            await _processCommands.Execute(addAddressCommand2, tokenSource.Token).ConfigureAwait(false);
 
-            var resultsList = new List<GetCustomerWithAddressView>();
-
-            // Query using "Projector" pattern where the mapping is done on Sql Server rather than in this application.
-            // This approach is more efficient as only the required data ever comes back to the application
-            var results = await _processQueries.Execute(customersByQuery, tokenSource.Token).ConfigureAwait(false);
-            if(results != null)
-                resultsList.AddRange(results.Where(x => x.Address != null));
-
-            // Query using Include expressions. There may be scenarios where an include is required. EF Core poses restrictions
-            // when using AsExpandable() from LinqKit, so this QueryHandler shows how to pass Include expressions to Query<TEntity>(...)
-            var customersWithIncludeByQuery = new CustomersWithIncludeBy()
+            var addCustomerCommand3 = new CreateCustomerCommand
             {
-                FirstName = "Bob"
+                FirstName = "Homer",
+                LastName = "Simpson",
+                EmailAddress = "homer.simpson@the.power.plan",
+                AddressId = addAddressCommand2.CreatedEntity.Id
+                //Commit = false
             };
+            await _processCommands.Execute(addCustomerCommand3, tokenSource.Token).ConfigureAwait(false);
 
-            var resultsUsingInclude = await _processQueries.Execute(customersWithIncludeByQuery, tokenSource.Token).ConfigureAwait(false);
-            if(resultsUsingInclude != null)
-                resultsList.AddRange(resultsUsingInclude.Where(x => x.Address != null));
+            Console.WriteLine("Records created: 2 addresses, 3 people");
 
-
-            Console.WriteLine("Records created: 2");
-            Console.WriteLine($"Querying after creation for Customer with First Name of 'Herbert' returns {resultsList?.Count ?? 0}");
-
-            if (resultsList != null && resultsList.Count > 0)
+            // Now test getting data back
             {
-                var json = JsonSerializer.Serialize(resultsList, new JsonSerializerOptions
+                // Query using "Projector" pattern where the mapping is done on Sql Server rather than in this application.
+                // This approach is more efficient as only the required data ever comes back to the application
+                var customersByQuery = new CustomersBy
                 {
-                    WriteIndented = true
-                });
+                    FirstName = "Bob"
+                };
 
-                Console.WriteLine("Query result:");
-                Console.WriteLine(json);
+                var results = await _processQueries.Execute(customersByQuery, tokenSource.Token).ConfigureAwait(false);
+                var resultsList = results?.ToList();
+                Console.WriteLine($"Querying for Customer with First Name of '{customersByQuery.FirstName}' returns {resultsList?.Count ?? 0}");
+                if (resultsList != null && resultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(resultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result:");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
             }
 
+            {
+                // Query using Include expressions. There may be scenarios where an include is required. EF Core poses restrictions
+                // when using AsExpandable() from LinqKit, so this QueryHandler shows how to pass Include expressions to Query<TEntity>(...)
+                var customersWithIncludeByQuery = new CustomersWithIncludeBy()
+                {
+                    FirstName = "Bob"
+                };
+
+                var resultsUsingInclude = await _processQueries.Execute(customersWithIncludeByQuery, tokenSource.Token).ConfigureAwait(false);
+                var resultsList = resultsUsingInclude?.ToList();
+
+                Console.WriteLine($"Querying for Customer with First Name of '{customersWithIncludeByQuery.FirstName}' returns {resultsList?.Count ?? 0}");
+
+                if (resultsList != null && resultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(resultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result:");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
+            }
+
+            {
+                // Get a single address
+                var addressesByQuery = new AddressesBy
+                {
+                    Id = addAddressCommand1.CreatedEntity.Id
+                };
+
+                var addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
+                var addressResultsList = addressResults?.ToList();
+                Console.WriteLine($"Querying for Address with id {addAddressCommand1.CreatedEntity.Id} returns {addressResultsList?.Count ?? 0}");
+
+                if (addressResultsList != null && addressResultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(addressResultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result (1 address):");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
+            }
+
+            {
+                // Get all address
+                var addressesByQuery = new AddressesBy
+                {
+                };
+
+                var addressResults = await _processQueries.Execute(addressesByQuery, tokenSource.Token).ConfigureAwait(false);
+                var addressResultsList = addressResults?.ToList();
+                Console.WriteLine($"Querying for all Addresses returns {addressResultsList?.Count ?? 0}");
+
+                if (addressResultsList != null && addressResultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(addressResultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result (multiple addresses):");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
+            }
+
+            // Create an Employer, and a CustomerEmployerMapping for one of the Customers above
+            var addEmployerCommand = new CreateEmployerCommand
+            {
+                Name = "Springfield Power Plant"
+            };
+            await _processCommands.Execute(addEmployerCommand, tokenSource.Token);
+
+            var addCustomerEmployerMappingComand = new CreateCustomerEmployerMappingCommand
+            {
+                CustomerId = addCustomerCommand3.CreatedEntity.Id,
+                EmployerId = addEmployerCommand.CreatedEntity.Id
+            };
+            await _processCommands.Execute(addCustomerEmployerMappingComand, tokenSource.Token);
+
+            {
+                // And now show the full details of all CustomerEmployerMappings, includinging drilling down
+                var getAllCEMs = new GetCustomerEmployerMappings();
+                var cemResults = await _processQueries.Execute(getAllCEMs, tokenSource.Token).ConfigureAwait(false);
+                var cemResultsList = cemResults?.ToList();
+                Console.WriteLine($"Querying for all CustomerEmployerMappings returns {cemResultsList?.Count ?? 0}");
+
+                if (cemResultsList != null && cemResultsList.Count > 0)
+                {
+                    var json = JsonSerializer.Serialize(cemResultsList, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    Console.WriteLine("Query result:");
+                    Console.WriteLine(json);
+                }
+
+                Console.WriteLine();
+            }
         }
-
-
     }
 }

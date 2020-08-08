@@ -6,6 +6,7 @@
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Example.Domain.Addresses.Views;
     using Example.Entities;
     using Microsoft.EntityFrameworkCore;
@@ -23,10 +24,12 @@
     public class HandleCustomersWithIncludeByQuery : IHandleQuery<CustomersWithIncludeBy, IEnumerable<GetCustomerWithAddressView>>
     {
         private readonly IReadEntities _db;
+        private readonly IMapper _mapper;
 
-        public HandleCustomersWithIncludeByQuery(IReadEntities db)
+        public HandleCustomersWithIncludeByQuery(IReadEntities db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<GetCustomerWithAddressView>> Handle(CustomersWithIncludeBy query, CancellationToken cancellationToken)
@@ -50,18 +53,11 @@
             if (query.Id.HasValue)
             {
                 var theCustomer = await customersQuery.FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken).ConfigureAwait(false);
-                if(theCustomer == null)
-                    return new List<GetCustomerWithAddressView>();
+                var custView = _mapper.Map<Customer, GetCustomerWithAddressView>(theCustomer);
 
                 return new[]
                 {
-                    new GetCustomerWithAddressView
-                    {
-                        Id = theCustomer.Id,
-                        FirstName = theCustomer.FirstName,
-                        LastName = theCustomer.LastName,
-                        EmailAddress = theCustomer.EmailAddress
-                    }
+                    custView
                 };
             }
 
@@ -74,26 +70,9 @@
 
             // Execute the query and return the results
             var customers = await customersQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
-            var view = customers.Select(cust => new GetCustomerWithAddressView
-            {
-                Id = cust.Id,
-                FirstName = cust.FirstName,
-                LastName = cust.LastName,
-                EmailAddress = cust.EmailAddress,
 
-                Address = cust.Address == null ? null : new AddressView
-                {
-                    Id = cust.Address.Id,
-                    Street = cust.Address.Street,
-                    Suburb = cust.Address.Suburb,
-                    PostalCode = cust.Address.PostalCode,
-                    State = cust.Address.State,
-                    Country = cust.Address.Country
-
-                }
-            });
-
-            return view;
+            // Return the results
+            return _mapper.Map<IEnumerable<Customer>, IEnumerable<GetCustomerWithAddressView>>(customers);
         }
     }
 }

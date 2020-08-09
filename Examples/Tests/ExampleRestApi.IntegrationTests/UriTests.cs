@@ -88,6 +88,58 @@ namespace ExampleRestApi.IntegrationTests
 //            theGetResponseDto.firstName.Should().Be(theDto.firstName);
         }
 
+        [Fact]
+        public async Task UpdateCustomer()
+        {
+            string uri = "/customer";
+            var client = _factory.CreateClient();
+
+            // First seed the database with a customer.  An address is required for the get to work due to the Include
+            var addressCommand = new AddressDto
+            {
+                street="MyStreet",
+                suburb = "MySuburb",
+                state = "My State",
+                postalCode = "My Postcode",
+                country = "My Country"
+            };
+            var addressContent = addressCommand.ToHttpContent(_mediaType);
+            var addAddressResponse = await client.PostAsync("address", addressContent);
+            var addressDto = await addAddressResponse.Content.ReadAsJsonAsync<AddressDto>();
+
+            var customerToCreate = new CustomerDto
+            {
+                firstName = "Herbert",
+                lastName = "Scrackle",
+                emailAddress = "herby@home.com",
+                addressId = addressDto.id
+            };
+
+            var httpContent = customerToCreate.ToHttpContent(_mediaType);
+            var response = await client.PostAsync(uri, httpContent).ConfigureAwait(false);
+            var theDto = await response.Content.ReadAsJsonAsync<CustomerDto>();
+
+            // Now create the update command
+            var custUpdateDto = new CustomerDto
+            {
+                id = theDto.id,
+                firstName = "First name updated",
+                lastName = "Last name updated",
+                emailAddress = "Email address updated",
+                addressId = theDto.addressId
+            };
+
+            var httpContentForUpdate = custUpdateDto.ToHttpContent(_mediaType);
+
+            var updateResponse = await client.PutAsync(uri, httpContentForUpdate).ConfigureAwait(false);
+
+            // Get customers and ensure updated
+            var getResponse = await client.GetAsync(uri).ConfigureAwait(false);
+            var theGetResponseDto = await getResponse.Content.ReadAsJsonAsync<IEnumerable<CustomerDto>>();
+            var firstRecordResponseDto = theGetResponseDto.First();
+            firstRecordResponseDto.firstName.Should().NotBe(theDto.firstName);
+            firstRecordResponseDto.firstName.Should().Be(custUpdateDto.firstName);
+        }
 
 
     }

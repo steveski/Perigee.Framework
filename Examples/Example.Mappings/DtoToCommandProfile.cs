@@ -10,6 +10,7 @@ namespace Example.Mappings
         public DtoToCommandProfile()
         {
             CreateMap<CustomerDto, CreateCustomerCommand>();
+            CreateMap<CustomerDto, UpdateCustomerCommand>();
             CreateMap<AddressDto, CreateAddressCommand>();
         }
     }

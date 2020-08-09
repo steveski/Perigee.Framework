@@ -9,6 +9,7 @@ namespace ExampleRestApi.Controllers
     using AutoMapper;
     using Example.Domain.Customers.Commands;
     using Example.Domain.Customers.Queries;
+    using Example.Entities;
     using ExampleRestApi.Contract;
     using Perigee.Framework.Base.Transactions;
 
@@ -88,6 +89,18 @@ namespace ExampleRestApi.Controllers
             return Ok(contract);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateCustomer(CustomerDto customer, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var custUpdateCommand = _mapper.Map<CustomerDto, UpdateCustomerCommand>(customer);
+
+            await _commands.Execute(custUpdateCommand, cancellationToken);
+
+            return Ok();
+        }
 
 
     }

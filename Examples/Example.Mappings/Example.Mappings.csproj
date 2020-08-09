@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Example.Domain\Example.Domain.csproj" />
+    <ProjectReference Include="..\ExampleRestApi.Contract\ExampleRestApi.Contract.csproj" />
   </ItemGroup>
 
 </Project>

@@ -63,7 +63,9 @@ namespace ExampleRestApi
                         new List<Profile>
                         {
                             new CommandToEntityProfile(),
-                            new EntityToViewProfile()
+                            new DtoToCommandProfile(),
+                            new EntityToDtoProfile(),
+                            new EntityToViewProfile(),
                         }
                     )).CreateMapper();
             }).As<IMapper>().InstancePerLifetimeScope();

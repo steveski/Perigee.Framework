@@ -27,6 +27,8 @@
                         new List<Profile>
                         {
                             new CommandToEntityProfile(),
+                            new DtoToCommandProfile(),
+                            new EntityToDtoProfile(),
                             new EntityToViewProfile(),
                         }
                     ))

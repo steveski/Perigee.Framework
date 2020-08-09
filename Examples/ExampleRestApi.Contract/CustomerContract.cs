@@ -6,17 +6,18 @@
     public class CustomerDto
     {
         [DataMember]
-        public int Id { get; set; }
+        public int id { get; set; }
 
         [DataMember]
-        public string FirstName { get; set; }
+        public string firstName { get; set; }
 
         [DataMember]
-        public string LastName { get; set; }
+        public string lastName { get; set; }
 
         [DataMember]
-        public string EmailAddress { get; set; }
+        public string emailAddress { get; set; }
 
-
+        [DataMember]
+        public int? addressId { get; set; }
     }
 }

@@ -21,35 +21,25 @@ namespace ExampleRestApi.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<CustomerController> _logger;
 
-        public CustomerController(IProcessQueries queries, IProcessCommands commands, ILogger<CustomerController> logger)
+        public CustomerController(IProcessQueries queries, IProcessCommands commands, IMapper mapper, ILogger<CustomerController> logger)
         {
             _queries = queries;
             _commands = commands;
+            _mapper = mapper;
             _logger = logger;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddCustomer([FromBody] CustomerDto customer, CancellationToken cancellationToken)
         {
-            var command = new CreateCustomerCommand
-            {
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                EmailAddress = customer.EmailAddress
-            };
+            var command = _mapper.Map<CustomerDto, CreateCustomerCommand>(customer);
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             await _commands.Execute(command, cancellationToken).ConfigureAwait(false);
             if (command.CreatedEntity == null) return BadRequest();
 
-            var contract = new CustomerDto
-            {
-                Id = command.CreatedEntity.Id,
-                FirstName = command.CreatedEntity.FirstName,
-                LastName = command.CreatedEntity.LastName,
-                EmailAddress = command.CreatedEntity.EmailAddress
-            };
+            var contract = _mapper.Map<Customer, CustomerDto>(command.CreatedEntity);
 
             return CreatedAtAction(
                 "GetCustomer",
@@ -65,10 +55,10 @@ namespace ExampleRestApi.Controllers
 
             var contract = customers.Select(customer => new CustomerDto
             {
-                Id = customer.Id,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                EmailAddress = customer.EmailAddress
+                id = customer.Id,
+                firstName = customer.FirstName,
+                lastName = customer.LastName,
+                emailAddress = customer.EmailAddress
             });
 
             return Ok(contract);
@@ -89,10 +79,10 @@ namespace ExampleRestApi.Controllers
 
             var contract = new CustomerDto
             {
-                Id = customer.Id,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                EmailAddress = customer.EmailAddress
+                id = customer.Id,
+                firstName = customer.FirstName,
+                lastName = customer.LastName,
+                emailAddress = customer.EmailAddress
             };
 
             return Ok(contract);

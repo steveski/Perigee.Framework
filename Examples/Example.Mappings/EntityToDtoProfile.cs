@@ -9,6 +9,7 @@ namespace Example.Mappings
         public EntityToDtoProfile()
         {
             CreateMap<Customer, CustomerDto>();
+            CreateMap<Address, AddressDto>();
         }
     }
 }

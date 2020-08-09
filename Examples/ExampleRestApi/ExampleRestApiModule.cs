@@ -66,6 +66,7 @@ namespace ExampleRestApi
                             new DtoToCommandProfile(),
                             new EntityToDtoProfile(),
                             new EntityToViewProfile(),
+                            new ViewToDtoProfile()
                         }
                     )).CreateMapper();
             }).As<IMapper>().InstancePerLifetimeScope();

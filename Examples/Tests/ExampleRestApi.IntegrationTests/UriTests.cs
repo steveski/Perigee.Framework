@@ -1,5 +1,7 @@
 namespace ExampleRestApi.IntegrationTests
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Example.Domain.Customers.Commands;
     using ExampleRestApi.Contract;
@@ -26,6 +28,8 @@ namespace ExampleRestApi.IntegrationTests
 
             var response = await client.GetAsync(uri).ConfigureAwait(false);
 
+            // This test fails if it is ran AFTER data is posted.  This is a race condition.
+            // Run the test by itself and it will always pass
             response.EnsureSuccessStatusCode();
             response.Content.Headers.ContentType.ToString().Should().StartWith(_mediaType);
 
@@ -37,11 +41,11 @@ namespace ExampleRestApi.IntegrationTests
             string uri = "/customer";
             var client = _factory.CreateClient();
 
-            var command = new CreateCustomerCommand
+            var command = new CustomerDto
             {
-                FirstName = "Herbert",
-                LastName = "Scrackle",
-                EmailAddress = "herby@home.com"
+                firstName = "Herbert",
+                lastName = "Scrackle",
+                emailAddress = "herby@home.com"
             };
 
             var httpContent = command.ToHttpContent(_mediaType);
@@ -51,9 +55,11 @@ namespace ExampleRestApi.IntegrationTests
             response.EnsureSuccessStatusCode();
             response.Content.Headers.ContentType.ToString().Should().StartWith(_mediaType);
             
-            var theDto = response.Content.ReadAsJsonAsync<CustomerDto>();
-            theDto.Id.Should().BeGreaterThan(0);
-
+            var theDto = await response.Content.ReadAsJsonAsync<CustomerDto>();
+            theDto.id.Should().BeGreaterThan(0);
+            theDto.firstName.Should().Equals(command.firstName);
+            theDto.lastName.Should().Equals(command.lastName);
+            theDto.emailAddress.Should().Equals(command.emailAddress);
 
         }
 

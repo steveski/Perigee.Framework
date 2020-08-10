@@ -8,11 +8,9 @@
 
     public interface IReadUnfilteredEntities
     {
-        IQueryable<TEntity> QueryUnfiltered<TEntity>() where TEntity : class, IEntity;
-        IQueryable<TEntity> QueryUnfiltered<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete;
+        IQueryable<TEntity> QueryUnfiltered<TEntity>(bool includeSoftDeleted = false) where TEntity : class, IEntity;
         
-        IQueryable<TEntity> QueryUnfiltered<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes) where TEntity : class, IEntity;
-        IQueryable<TEntity> QueryUnfiltered<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes, bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete;
-
+        IQueryable<TEntity> QueryUnfiltered<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes, bool includeSoftDeleted = false) where TEntity : class, IEntity;
+       
     }
 }

@@ -93,7 +93,8 @@
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
                 query = AddIsDeletedClause<TEntity>(query.Cast<ISoftDelete>(), includeSoftDeleted);
 
-            return query.AsExpandable();
+            return query;
+            //return query.AsExpandable();
         }
 
         public IQueryable<TEntity> QueryUnfiltered<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes, bool includeSoftDeleted = false) where TEntity : class, IEntity
@@ -108,7 +109,8 @@
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
                 query = AddIsDeletedClause<TEntity>(query.Cast<ISoftDelete>(), includeSoftDeleted);
 
-            return query.AsExpandable();
+            return query;
+            //return query.AsExpandable();
         }
 
         private IQueryable<TEntity> AddIsDeletedClause<TEntity>(IQueryable<ISoftDelete> query, bool includeSoftDeleted) where TEntity : class, IEntity
@@ -131,7 +133,8 @@
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
                 query = AddIsDeletedClause<TEntity>(query.Cast<ISoftDelete>(), includeSoftDeleted);
 
-            return query.AsExpandable().Where(_recordAuthority.Clause<TEntity>());
+            return query.Where(_recordAuthority.Clause<TEntity>());
+            //return query.AsExpandable().Where(_recordAuthority.Clause<TEntity>());
         }
 
         public void Create<TEntity>(TEntity entity) where TEntity : class, IEntity

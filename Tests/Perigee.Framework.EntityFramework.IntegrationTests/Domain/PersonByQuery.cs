@@ -32,7 +32,9 @@
         public async Task<IEnumerable<PersonByView>> Handle(PersonByQuery query, CancellationToken cancellationToken)
         {
             var personQuery = _db.Query<Person>(query.IncludeDeleted);
-            personQuery = personQuery.Where(p => p.Name == query.Name);
+
+            if(string.IsNullOrWhiteSpace(query.Name) == false)
+                personQuery = personQuery.Where(p => p.Name == query.Name);
 
             return await personQuery.Select(PersonByView.Projector).ToListAsync(cancellationToken);
         }

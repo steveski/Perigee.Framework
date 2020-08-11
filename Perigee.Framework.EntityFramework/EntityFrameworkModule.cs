@@ -56,6 +56,7 @@
                     };
                 })
                 .AsImplementedInterfaces()
+                .AsSelf()
                 .InstancePerLifetimeScope();
 
 

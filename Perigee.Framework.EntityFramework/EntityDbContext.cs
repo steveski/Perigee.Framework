@@ -119,7 +119,7 @@
             predicate = predicate.Or(e => e.IsDeleted == false);
             predicate = predicate.Or(e => e.IsDeleted == includeSoftDeleted);
 
-            return query.Where(predicate).Cast<TEntity>();
+            return query.IgnoreQueryFilters().Where(predicate).Cast<TEntity>();
         }
 
         #endregion

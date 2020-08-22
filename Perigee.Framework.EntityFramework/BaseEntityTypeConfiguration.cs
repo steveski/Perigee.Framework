@@ -59,7 +59,7 @@
         public static void ConfigureSoftDelete<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class, ISoftDelete
         {
             builder.Property(p => p.IsDeleted).HasColumnName("IsDeleted").HasColumnType("bit");
-
+            builder.HasQueryFilter(x => x.IsDeleted == false);
         }
 
     }

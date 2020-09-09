@@ -115,11 +115,10 @@
 
         private IQueryable<TEntity> AddIsDeletedClause<TEntity>(IQueryable<ISoftDelete> query, bool includeSoftDeleted) where TEntity : class, IEntity
         {
-            var predicate = PredicateBuilder.New<ISoftDelete>();
-            predicate = predicate.Or(e => e.IsDeleted == false);
-            predicate = predicate.Or(e => e.IsDeleted == includeSoftDeleted);
+            if(includeSoftDeleted)
+                return query.IgnoreQueryFilters().Cast<TEntity>();
 
-            return query.IgnoreQueryFilters().Where(predicate).Cast<TEntity>();
+            return query.Cast<TEntity>();
         }
 
         #endregion

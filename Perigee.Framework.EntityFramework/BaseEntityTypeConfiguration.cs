@@ -59,7 +59,11 @@
         public static void ConfigureSoftDelete<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class, ISoftDelete
         {
             builder.Property(p => p.IsDeleted).HasColumnName("IsDeleted").HasColumnType("bit");
+
+            // Note: The problem is you are only allowed one query filter per entity type, so if you want to use soft delete with a multi-tenant system then you must combine both parts to form the query filter
+            // https://www.thereformedprogrammer.net/ef-core-in-depth-soft-deleting-data-with-global-query-filters/
             builder.HasQueryFilter(x => x.IsDeleted == false);
+
         }
 
     }

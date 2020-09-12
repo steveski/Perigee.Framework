@@ -1,11 +1,14 @@
 ﻿namespace ExampleRestApi.UnitTests.Customers.Commands
 {
     using System;
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Example.Domain.Customers.Commands;
     using Example.Entities;
+    using Example.Mappings;
     using FluentAssertions;
     using ModelBuilder;
     using NSubstitute;
@@ -15,6 +18,20 @@
 
     public class HandleCreateCustomerCommandTests
     {
+        private IMapper _mapper;
+
+        public HandleCreateCustomerCommandTests()
+        {
+            _mapper = new MapperConfiguration(c =>
+                    c.AddProfiles(
+                        new List<Profile>
+                        {
+                            new CommandToEntityProfile(),
+                            new EntityToViewProfile(),
+                        }
+                    ))
+                .CreateMapper();
+        }
 
         [Fact]
         public async Task HandlePassesCorrectEntityToCreate()
@@ -37,8 +54,8 @@
             };
             
             // Act
-            var sut = new HandleCreateCustomerCommand(db, userService);
-            await sut.Handle(command, CancellationToken.None);
+            var sut = new HandleCreateCustomerCommand(db, userService, _mapper);
+            await sut.Handle(command, CancellationToken.None).ConfigureAwait(false);
 
             // Assert
             db.Received(1).Create(
@@ -60,9 +77,10 @@
         public void CreateThrowsExceptionWithNullDb()
         {
             var userService = Substitute.For<IUserService>();
+            var mapper = Substitute.For<IMapper>();
 
             // ReSharper disable once ObjectCreationAsStatement
-            Action action = () => new HandleCreateCustomerCommand(null, userService);
+            Action action = () => new HandleCreateCustomerCommand(null, userService, mapper);
 
             action.Should().Throw<ArgumentNullException>();
 
@@ -72,9 +90,10 @@
         public void CreateThrowsExceptionWithNullUserService()
         {
             var db = Substitute.For<IWriteEntities>();
+            var mapper = Substitute.For<IMapper>();
 
             // ReSharper disable once ObjectCreationAsStatement
-            Action action = () => new HandleCreateCustomerCommand(db, null);
+            Action action = () => new HandleCreateCustomerCommand(db, null, mapper);
 
             action.Should().Throw<ArgumentNullException>();
 

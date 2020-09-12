@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
     using EnsureThat;
@@ -74,53 +75,67 @@
         #endregion
 
         #region Queries
-
-        public new IQueryable<TEntity> Query<TEntity>() where TEntity : class, IEntity
+        
+        public IQueryable<TEntity> Query<TEntity>(bool includeSoftDeleted = false) where TEntity : class, IEntity
         {
             // AsNoTracking returns entities that are not attached to the DbContext
-            return QueryUnfiltered<TEntity>().Where(_recordAuthority.Clause<TEntity>());
+            return QueryUnfiltered<TEntity>(includeSoftDeleted).Where(_recordAuthority.Clause<TEntity>());
         }
 
-        public IQueryable<TEntity> Query<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete
+        public IQueryable<TEntity> Query<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes, bool includeSoftDeleted = false) where TEntity : class, IEntity
         {
-            var query = Query<TEntity>();
-            if (includeSoftDeleted)
-                query = query.Where(x => x.IsDeleted);
-
-            return query;
+            return QueryUnfiltered(includes, includeSoftDeleted).Where(_recordAuthority.Clause<TEntity>());
         }
 
-        public IQueryable<TEntity> QueryUnfiltered<TEntity>() where TEntity : class, IEntity
+        public IQueryable<TEntity> QueryUnfiltered<TEntity>(bool includeSoftDeleted = false) where TEntity : class, IEntity
         {
             // AsNoTracking returns entities that are not attached to the DbContext
-            return Set<TEntity>().AsNoTracking().AsExpandable();
-        }
+            var query = Set<TEntity>().AsNoTracking();
 
-        public IQueryable<TEntity> QueryUnfiltered<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete
-        {
-            var query = QueryUnfiltered<TEntity>();
-            if (includeSoftDeleted)
-                query = query.Where(x => x.IsDeleted);
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+                query = AddIsDeletedClause<TEntity>(query.Cast<ISoftDelete>(), includeSoftDeleted);
 
             return query;
+            //return query.AsExpandable();
+        }
+
+        public IQueryable<TEntity> QueryUnfiltered<TEntity, TProperty>(IEnumerable<Expression<Func<TEntity, TProperty>>> includes, bool includeSoftDeleted = false) where TEntity : class, IEntity
+        {
+            var query = Set<TEntity>().AsNoTracking();
+
+            foreach (var expression in includes)
+            {
+                query = query.Include(expression);
+            }
+
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+                query = AddIsDeletedClause<TEntity>(query.Cast<ISoftDelete>(), includeSoftDeleted);
+
+            return query;
+            //return query.AsExpandable();
+        }
+
+        private IQueryable<TEntity> AddIsDeletedClause<TEntity>(IQueryable<ISoftDelete> query, bool includeSoftDeleted) where TEntity : class, IEntity
+        {
+            if(includeSoftDeleted)
+                return query.IgnoreQueryFilters().Cast<TEntity>();
+
+            return query.Cast<TEntity>();
         }
 
         #endregion
 
         #region Commands
 
-        public IQueryable<TEntity> Get<TEntity>() where TEntity : class, IEntity
+        public IQueryable<TEntity> Get<TEntity>(bool includeSoftDeleted = false) where TEntity : class, IEntity
         {
-            return Set<TEntity>().AsExpandable().Where(_recordAuthority.Clause<TEntity>());
-        }
+            var query = Set<TEntity>().AsQueryable();
 
-        public IQueryable<TEntity> Get<TEntity>(bool includeSoftDeleted) where TEntity : class, IEntity, ISoftDelete
-        {
-            var query = Get<TEntity>();
-            if (includeSoftDeleted)
-                query = query.Where(x => x.IsDeleted);
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+                query = AddIsDeletedClause<TEntity>(query.Cast<ISoftDelete>(), includeSoftDeleted);
 
-            return query;
+            return query.Where(_recordAuthority.Clause<TEntity>());
+            //return query.AsExpandable().Where(_recordAuthority.Clause<TEntity>());
         }
 
         public void Create<TEntity>(TEntity entity) where TEntity : class, IEntity

@@ -1,6 +1,7 @@
 ﻿namespace Example.Entities
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Perigee.Framework.Base.Entities;
 
@@ -10,7 +11,7 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        [Encrypted]
+        //[Encrypted]
         public string EmailAddress { get; set; }
 
         public string ManagedBy { get; set; }
@@ -18,6 +19,7 @@
         public int? AddressId { get; set; }
         public Address Address { get; set; }
 
+        public IEnumerable<CustomerEmployerMapping> CustomerEmployerMappings { get; set; }
 
         #region IAuditedEntity Implementation
 

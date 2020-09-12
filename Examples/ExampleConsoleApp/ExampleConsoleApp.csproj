@@ -19,6 +19,7 @@
     <ProjectReference Include="..\Example.Domain\Example.Domain.csproj" />
     <ProjectReference Include="..\..\Perigee.Framework.EntityFramework\Perigee.Framework.EntityFramework.csproj" />
     <ProjectReference Include="..\..\Perigee.Framework.Services\Perigee.Framework.Services.csproj" />
+    <ProjectReference Include="..\Example.Mappings\Example.Mappings.csproj" />
     <ProjectReference Include="..\Example.Services\Example.Services.csproj" />
   </ItemGroup>
 

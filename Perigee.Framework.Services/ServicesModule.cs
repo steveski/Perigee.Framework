@@ -62,7 +62,7 @@
 
         public void RegisterQueryTransactions(ContainerBuilder builder, Assembly[] assemblies)
         {
-            builder.RegisterType<QueryProcessor>().As<IProcessQueries>().SingleInstance();
+            builder.RegisterType<QueryProcessor>().As<IProcessQueries>().InstancePerDependency();
 
             builder.RegisterAssemblyTypes(assemblies).AsClosedTypesOf(typeof(IHandleQuery<,>));
 
@@ -85,7 +85,7 @@
 
         public void RegisterCommandTransactions(ContainerBuilder builder, Assembly[] assemblies)
         {
-            builder.RegisterType<CommandProcessor>().As<IProcessCommands>().SingleInstance();
+            builder.RegisterType<CommandProcessor>().As<IProcessCommands>().InstancePerDependency();
 
             builder.RegisterAssemblyTypes(assemblies).AsClosedTypesOf(typeof(IHandleCommand<>));
 

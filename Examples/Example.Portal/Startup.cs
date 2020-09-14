@@ -48,6 +48,7 @@ namespace Example.Portal
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages().RequireAuthorization();
+                endpoints.MapControllers();
             });
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Example.Portal.Entities.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace Example.Portal.DbMigrations
 {
@@ -14,6 +15,13 @@ namespace Example.Portal.DbMigrations
             {
                 Database.Migrate();
             }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new CustomerConfiguration());
         }
     }
 }

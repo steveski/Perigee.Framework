@@ -1,7 +1,9 @@
 ﻿using Example.Portal.Domain.Customer.Commands;
 using Example.Portal.Domain.Customer.Queries;
 using Perigee.Framework.Base.Transactions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +12,9 @@ namespace Example.Portal.Services
     public interface ICustomerDataService : IExamplePortalDataService
     {
         public Task<IEnumerable<Entities.Customer>> getCustomers();
+        public Task<Entities.Customer> getCustomer(Guid id);
         public Task<Entities.Customer> addCustomer(string customerName);
+        public Task updateCustomerName(Guid id, string newCustomerName);
     }
 
     public class CustomerDataService : ICustomerDataService
@@ -31,6 +35,16 @@ namespace Example.Portal.Services
             return data;
         }
 
+        public async Task<Entities.Customer> getCustomer(Guid id)
+        {
+            var query = new CustomerQuery
+            {
+                id = id
+            };
+            var data = await _processQueries.Execute(query, CancellationToken.None);
+            return data.FirstOrDefault();
+        }
+
         public async Task<Entities.Customer> addCustomer(string customerName)
         {
             var cmd = new AddCustomerCommand
@@ -41,6 +55,17 @@ namespace Example.Portal.Services
             await _processCommands.Execute(cmd, CancellationToken.None);
 
             return cmd.CreatedEntity;
+        }
+
+        public async Task updateCustomerName(Guid id, string newCustomerName)
+        {
+            var cmd = new UpdateCustomerNameCommand
+            {
+                id = id,
+                customerName = newCustomerName
+            };
+
+            await _processCommands.Execute(cmd, CancellationToken.None);
         }
     }
 }

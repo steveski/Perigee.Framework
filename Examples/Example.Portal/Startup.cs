@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -45,12 +41,21 @@ namespace Example.Portal
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            // These have to be after UseRouting
+            app.UseAuthentication(); // Who are you?
+            app.UseAuthorization(); // Are you allowed access
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapRazorPages().RequireAuthorization();
             });
+        }
+
+        // Register Autofac dependencies here.
+        // This is called by the AutofacServiceProviderFactory configured in Program.cs
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule<ExampleModule>();
         }
     }
 }

@@ -4,6 +4,7 @@ using Example.Portal.Domain.Customer.Queries;
 using Example.Portal.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Perigee.Framework.Base.Database;
 using Perigee.Framework.Base.Services;
 using Perigee.Framework.EntityFramework;
 using Perigee.Framework.Services;
@@ -87,7 +88,9 @@ namespace Example.Portal
             }).As<IEncryptionProvider>();
 */
 
-            // builder.RegisterType<AllAuthorisedRecordAuthority>().As<IRecordAuthority>().InstancePerLifetimeScope();
+            builder.RegisterType<AllAuthorisedRecordAuthority>()
+                .As<IRecordAuthority>()
+                .InstancePerLifetimeScope();
 
             // If this line isn't done, assemblies aren't loaded at launch. Using any symbol from the framework ensures they are.
             var ignoreThisCommand = new CustomerQuery();

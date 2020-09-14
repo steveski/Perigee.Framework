@@ -1,0 +1,32 @@
+﻿@page
+@model Example.Portal.Pages.Customers.CreateModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form method="post" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="customer.customerName" class="control-label"></label>
+                <input asp-for="customer.customerName" class="form-control" />
+                <span asp-validation-for="customer.customerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

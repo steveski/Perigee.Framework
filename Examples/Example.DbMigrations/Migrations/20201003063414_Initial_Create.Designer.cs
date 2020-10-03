@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Example.DbMigrations.Migrations
 {
     [DbContext(typeof(ExampleDbContext))]
-    [Migration("20200802065401_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201003063414_Initial_Create")]
+    partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -145,11 +145,65 @@ namespace Example.DbMigrations.Migrations
                     b.ToTable("Customer");
                 });
 
+            modelBuilder.Entity("Example.Entities.CustomerEmployerMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("EmployerId");
+
+                    b.ToTable("CustomerEmployerMapping");
+                });
+
+            modelBuilder.Entity("Example.Entities.Employer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employer");
+                });
+
             modelBuilder.Entity("Example.Entities.Customer", b =>
                 {
                     b.HasOne("Example.Entities.Address", "Address")
                         .WithMany("Customers")
                         .HasForeignKey("AddressId");
+                });
+
+            modelBuilder.Entity("Example.Entities.CustomerEmployerMapping", b =>
+                {
+                    b.HasOne("Example.Entities.Customer", "Customer")
+                        .WithMany("CustomerEmployerMappings")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Example.Entities.Employer", "Employer")
+                        .WithMany("CustomerEmployerMappings")
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -45,9 +45,14 @@
                     IEncryptionProvider encryptionProvider = null;
                     if (c.IsRegistered<IEncryptionProvider>())
                         encryptionProvider = c.Resolve<IEncryptionProvider>();
+                    
+                    
+                    var optionsBuilder = c.Resolve<DbContextOptionsBuilder<EntityDbContext>>();
+                    //optionsBuilder.EnableTemporalTableQueries();
+                    optionsBuilder.UseInternalServiceProvider(provider);
 
                     return new EntityDbContext(
-                        c.Resolve<DbContextOptions<EntityDbContext>>(),
+                        optionsBuilder.Options,
                         c.Resolve<IRecordAuthority>(),
                         c.Resolve<IAuditedEntityUpdater>(),
                         encryptionProvider)

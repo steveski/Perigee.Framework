@@ -55,13 +55,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleRestApi.IntegrationT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleRestApi.UnitTests", "Examples\Tests\ExampleRestApi.UnitTests\ExampleRestApi.UnitTests.csproj", "{D8BD0E15-E7C4-4451-8020-13C6E57054AF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkCore.TemporalTables", "..\..\3rdPartyRepos\EntityFrameworkCore.TemporalTables\EntityFrameworkCore.TemporalTables\EntityFrameworkCore.TemporalTables.csproj", "{65877495-63C0-4FC7-BBD3-1CE56A1B3395}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Mappings", "Examples\Example.Mappings\Example.Mappings.csproj", "{B372B7EF-A170-4BA2-9E19-49B98AE1893C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleConsoleApp.UnitTests", "Examples\Tests\ExampleConsoleApp.UnitTests\ExampleConsoleApp.UnitTests.csproj", "{D7EC99D2-0E46-47ED-875A-B45BF14DA5D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perigee.Framework.EntityFramework.IntegrationTests", "Tests\Perigee.Framework.EntityFramework.IntegrationTests\Perigee.Framework.EntityFramework.IntegrationTests.csproj", "{48B8A772-F8B8-4E8E-84F4-F3E22ECCB0DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perigee.Framework.EntityFramework.IntegrationTests", "Tests\Perigee.Framework.EntityFramework.IntegrationTests\Perigee.Framework.EntityFramework.IntegrationTests.csproj", "{48B8A772-F8B8-4E8E-84F4-F3E22ECCB0DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,10 +155,6 @@ Global
 		{48B8A772-F8B8-4E8E-84F4-F3E22ECCB0DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48B8A772-F8B8-4E8E-84F4-F3E22ECCB0DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48B8A772-F8B8-4E8E-84F4-F3E22ECCB0DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65877495-63C0-4FC7-BBD3-1CE56A1B3395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65877495-63C0-4FC7-BBD3-1CE56A1B3395}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65877495-63C0-4FC7-BBD3-1CE56A1B3395}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65877495-63C0-4FC7-BBD3-1CE56A1B3395}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

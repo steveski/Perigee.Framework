@@ -22,11 +22,12 @@ namespace ExampleRestApi
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule<ConfigurationModule<JsonResolver<Config>>>();
+            //builder.RegisterModule<ConfigurationModule<JsonResolver<Config>>>();
 
             var principal = new ClaimsPrincipal(new GenericIdentity("xx4321")); // TODO: Sort out how to get the actual logged on ClaimsPrincipal for non Blazor application
             builder.Register(c => new PrincipalProvider(principal)).As<IPrincipalProvider>();
 
+            // Perigee expects the Builder, so don't dereference to the .Options property
             builder.Register(c =>
             { // TODO: Do some logging in case required fields on the config aren't specified
                 var config = c.Resolve<IDatabaseConfig>();
@@ -36,7 +37,7 @@ namespace ExampleRestApi
                     ? optionsBuilder.UseInMemoryDatabase(config.InMemory.Name)
                     : optionsBuilder.UseSqlServer(config.ConnectionString);
 
-                return optionsBuilder.Options;
+                return optionsBuilder;
             }).InstancePerLifetimeScope();
 
             builder.RegisterModule<EntityFrameworkModule>();

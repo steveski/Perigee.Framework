@@ -1,5 +1,7 @@
 ﻿namespace Perigee.Framework.EntityFramework
 {
+    using System;
+    using EntityFrameworkCore.TemporalTables.Extensions;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Perigee.Framework.Base.Entities;
@@ -32,6 +34,13 @@
                     .Invoke(null, new object[] { builder });
             }
 
+            if (typeof(ITemporalTable).IsAssignableFrom(typeof(TEntity)))
+            {
+                typeof(EntityBaseConfigurationExtensions).GetMethod(nameof(EntityBaseConfigurationExtensions.ConfigureTemporalTable))
+                    ?.MakeGenericMethod(typeof(TEntity))
+                    .Invoke(null, new object[] { builder });
+            }
+
 
         }
 
@@ -50,7 +59,6 @@
             builder.Property(p => p.UpdatedBy).HasColumnName("UpdatedBy").HasColumnType("nvarchar(50)").HasMaxLength(50);
 
         }
-
         public static void ConfigureTimestamp<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class, ITimestampEnabled
         {
             builder.Property(p => p.Version).HasColumnName("Version").IsRowVersion();
@@ -65,6 +73,14 @@
             builder.HasQueryFilter(x => x.IsDeleted == false);
 
         }
+
+        public static void ConfigureTemporalTable<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class, ITemporalTable
+        {
+            //builder.HasTemporalTable();
+            builder.UseTemporalTable();
+
+        }
+
 
     }
 

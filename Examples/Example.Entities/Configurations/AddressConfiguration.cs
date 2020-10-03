@@ -2,9 +2,10 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using Perigee.Framework.Base.Entities;
     using Perigee.Framework.EntityFramework;
 
-    public class AddressConfiguration : BaseEntityTypeConfiguration<Address>
+    public class AddressConfiguration : BaseEntityTypeConfiguration<Address>, ITemporalTable
     {
         public override void ConfigureEntity(EntityTypeBuilder<Address> builder)
         {

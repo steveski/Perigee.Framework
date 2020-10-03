@@ -7,6 +7,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using EnsureThat;
+    using EntityFrameworkCore.TemporalTables.Extensions;
     using LinqKit;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -60,13 +61,13 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.PreventTemporalTables(); // Prevent temporal tables by default
+
             ModelCreator ??= new DefaultDbModelCreator();
             ModelCreator.Create(modelBuilder);
 
             if(_encryptionProvider != null)
                 modelBuilder.UseEncryption(_encryptionProvider);
-
-
 
 
             base.OnModelCreating(modelBuilder);

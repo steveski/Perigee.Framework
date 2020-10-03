@@ -38,6 +38,15 @@ namespace ExampleRestApi
             services.AddHealthChecks()
                 .AddCheck("HealthCheck", () => HealthCheckResult.Healthy(DateTime.Now.ToLongTimeString()));
 
+
+
+
+            //services.AddDbContext<EntityDbContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("DefaultConnection"))
+            //    .EnableTemporalTableQueries());
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

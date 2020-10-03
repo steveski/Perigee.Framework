@@ -33,6 +33,7 @@
 
             containerBuilder.Populate(serviceCollection);
 
+            // Perigee expects the Builder, so don't dereference to the .Options property
             containerBuilder.Register(c =>
             {
                 var optionsBuilder = new DbContextOptionsBuilder<EntityDbContext>();
@@ -40,7 +41,7 @@
                     ? optionsBuilder.UseInMemoryDatabase(databaseConfig.InMemory.Name)
                     : optionsBuilder.UseSqlServer(databaseConfig.ConnectionString);
 
-                    return optionsBuilder.Options;
+                return optionsBuilder;
             });
 
             containerBuilder.RegisterModule<EntityFrameworkModule>();

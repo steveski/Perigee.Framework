@@ -1,14 +1,16 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches:
+      - '**'
+    tags:
+      - 'v*.*.*'
   pull_request:
-    branches: [ master ]
+    branches:
+      - '**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -20,7 +22,32 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Fetch all history for all tags and branches
+      run: git fetch --prune --unshallow --tags
+      
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.4
+      with:
+          versionSpec: '5.3.x'
+      
+    - name: Use GitVersion
+      id: gitversion # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v0.9.4
+      with:
+        useConfigFile: true
+        configFilePath: ./GitVersion.yml
+      
+    - name: Update project version
+      uses: roryprimrose/set-vs-sdk-project-version@v1
+      with:
+        version: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
+        assemblyVersion: ${{ steps.gitversion.outputs.AssemblySemVer }}
+        fileVersion: ${{ steps.gitversion.outputs.MajorMinorPatch }}
+        informationalVersion: ${{ steps.gitversion.outputs.InformationalVersion }}
+        
       
     - name: Setup .NET
       uses: actions/setup-dotnet@v1

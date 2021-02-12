@@ -13,6 +13,8 @@
             builder.Property(p => p.Name).HasColumnType("nvarchar(100)").HasMaxLength(100).HasColumnName("Name").IsRequired();
             builder.Property(p => p.Age).HasColumnType("int").HasColumnName("Age");
             builder.Property(p => p.Description).HasColumnType("nvarchar(200)").HasMaxLength(200).HasColumnName("Description").IsRequired();
+            builder.Property(p => p.Dead).HasColumnType("bit").HasDefaultValue(0);
+            builder.Property(p => p.Alive).HasColumnType("bit").HasDefaultValue(1);
 
         }
     }

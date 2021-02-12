@@ -11,8 +11,9 @@
     {
         public string Name { get; set; }
         public int? Age { get; set; }
-        public string Description { get; set; }
-
+        public string Description { get; set; } = "No Description Set";
+        public bool Dead { get; set; } = false;
+        public bool Alive { get; set; } = true;
     }
 
     public class HandleCreatePersonCommand : IHandleCommand<CreatePersonCommand>

@@ -78,6 +78,8 @@ namespace Perigee.Framework.EntityFramework.IntegrationTests
             createdPerson.Alive.Should().Be(createPersonCommand.Alive);
             createdPerson.Dead.Should().Be(createPersonCommand.Dead);
 
+            createdPerson.Alive.Should().Be(true);
+            createdPerson.Dead.Should().Be(false);
         }
 
         [Fact]
@@ -98,6 +100,8 @@ namespace Perigee.Framework.EntityFramework.IntegrationTests
             createdPerson.Alive.Should().Be(createPersonCommand.Alive);
             createdPerson.Dead.Should().Be(createPersonCommand.Dead);
 
+            createdPerson.Alive.Should().Be(true);
+            createdPerson.Dead.Should().Be(false);
         }
 
         [Fact]
@@ -118,6 +122,8 @@ namespace Perigee.Framework.EntityFramework.IntegrationTests
             createdPerson.Alive.Should().Be(createPersonCommand.Alive);
             createdPerson.Dead.Should().Be(createPersonCommand.Dead);
 
+            createdPerson.Alive.Should().Be(false);
+            createdPerson.Dead.Should().Be(false);
         }
 
         [Fact]
@@ -138,6 +144,8 @@ namespace Perigee.Framework.EntityFramework.IntegrationTests
             createdPerson.Alive.Should().Be(createPersonCommand.Alive);
             createdPerson.Dead.Should().Be(createPersonCommand.Dead);
 
+            createdPerson.Alive.Should().Be(true);
+            createdPerson.Dead.Should().Be(true);
         }
     }
 }

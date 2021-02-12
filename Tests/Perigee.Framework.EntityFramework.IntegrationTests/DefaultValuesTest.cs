@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Perigee.Framework.Base.Database;
@@ -8,6 +9,7 @@ using Perigee.Framework.EntityFramework.IntegrationTests.Domain;
 using Perigee.Framework.Services;
 using Perigee.Framework.Services.Security;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -33,6 +35,18 @@ namespace Perigee.Framework.EntityFramework.IntegrationTests
 
                 return optionsBuilder.Options;
             });
+
+            builder.Register(c =>
+            {
+                var scope = c.Resolve<ILifetimeScope>();
+                return new MapperConfiguration(mc =>
+                    mc.AddProfiles(
+                    new List<Profile>
+                    {
+                        new Mappings(),
+                    }
+                )).CreateMapper();
+            }).As<IMapper>().InstancePerLifetimeScope();
 
             var userIdentity = new GenericIdentity(Environment.UserDomainName + "\\" + Environment.UserName, "Anonymous");
             var principal = new ClaimsPrincipal(userIdentity);
